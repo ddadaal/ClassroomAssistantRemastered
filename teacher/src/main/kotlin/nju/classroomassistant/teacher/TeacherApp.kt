@@ -1,5 +1,6 @@
 package nju.classroomassistant.teacher
 
+import nju.classroomassistant.teacher.views.LoginView
 import tornadofx.App
 import tornadofx.launch
 

@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">ClassroomAssistantStudent</string>
     <string name="title_function_detail">Function Detail</string>
+    <!-- Strings related to login -->
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_studentId">Student Id</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="error_invalid_email">This student id is invalid</string>
+    <string name="error_field_required">This field is required</string>
 </resources>
