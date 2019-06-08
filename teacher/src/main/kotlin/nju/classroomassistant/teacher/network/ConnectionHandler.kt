@@ -1,9 +1,7 @@
 package nju.classroomassistant.teacher.network
 
-import nju.classroomassistant.shared.messages.LoginMessage
-import nju.classroomassistant.shared.messages.LogoutMessage
-import nju.classroomassistant.shared.messages.Message
-import nju.classroomassistant.teacher.log.Logger
+import nju.classroomassistant.shared.log.Logger
+import nju.classroomassistant.shared.messages.*
 import java.io.Closeable
 import java.io.IOException
 import java.io.ObjectInputStream
@@ -30,6 +28,8 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap): R
             try {
                 when (val message = readMessage()) {
                     is LoginMessage -> {
+                        verbose("User ${message.studentId} logs in")
+                        writeMessage(LoginResponseMessage(LoginResponse.INITIAL_LOGIN))
                         studentId = message.studentId
                         studentMap.login(message.studentId, this)
                     }
@@ -54,6 +54,10 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap): R
         val m = `in`.readObject() as Message
         verbose("Message Received: $m")
         return m
+    }
+
+    private fun writeMessage(message: Message) {
+        out.writeObject(message)
     }
 
 

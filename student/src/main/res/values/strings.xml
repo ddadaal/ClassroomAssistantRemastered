@@ -7,4 +7,5 @@
     <string name="action_sign_in">Sign in</string>
     <string name="error_invalid_email">This student id is invalid</string>
     <string name="error_field_required">This field is required</string>
+    <string name="login_logo_title">Classroom Assistant</string>
 </resources>

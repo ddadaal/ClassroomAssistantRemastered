@@ -1,4 +1,4 @@
-package nju.classroomassistant.teacher.log
+package nju.classroomassistant.shared.log
 
 enum class LogSeverity {
     VERBOSE, WARNING, ERROR

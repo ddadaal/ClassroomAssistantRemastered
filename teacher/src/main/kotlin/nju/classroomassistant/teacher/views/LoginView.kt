@@ -5,15 +5,22 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import kfoenix.jfxbutton
+import nju.classroomassistant.shared.log.Logger
 import nju.classroomassistant.teacher.network.Server
 import nju.classroomassistant.teacher.network.StudentMap
 import tornadofx.*
 import java.util.*
 
-class LoginView : View("My View"), Observer {
+class LoginView : View("My View"), Observer, Logger {
     override fun update(o: Observable?, arg: Any?) {
+
+        verbose("updated. observable: $o")
+
+
         if (o is StudentMap) {
-            loggedCount.value = o.allStudents.size
+            runLater {
+                loggedCount.value = o.allStudents.size
+            }
         }
     }
 

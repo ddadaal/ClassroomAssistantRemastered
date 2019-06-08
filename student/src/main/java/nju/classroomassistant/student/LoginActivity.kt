@@ -3,38 +3,36 @@ package nju.classroomassistant.student
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
-import android.content.pm.PackageManager
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import android.app.LoaderManager.LoaderCallbacks
-import android.content.CursorLoader
-import android.content.Loader
-import android.database.Cursor
-import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.text.TextUtils
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
-import android.widget.TextView
 
-import java.util.ArrayList
-import android.Manifest.permission.READ_CONTACTS
-import android.content.Intent
+import android.content.Context
 
 import kotlinx.android.synthetic.main.activity_login.*
+import nju.classroomassistant.shared.messages.LoginResponse
+import nju.classroomassistant.student.extensions.dialog
+import nju.classroomassistant.student.extensions.jumpTo
+import nju.classroomassistant.student.extensions.snackbar
+import nju.classroomassistant.student.network.SocketClient
+import java.io.IOException
 
 /**
  * A login screen that offers login via email/password.
  */
-class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
+class LoginActivity : AppCompatActivity() {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private var mAuthTask: UserLoginTask? = null
+
+    private val STUDENT_ID_HISTORY = "STUDENT_ID_HISTORY"
+
+
+    private var history = mutableSetOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +40,43 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         // Set up the login form.
         populateAutoComplete()
 
-        email_sign_in_button.setOnClickListener { attemptLogin() }
+        sign_in_button.setOnClickListener { attemptLogin() }
     }
 
     private fun populateAutoComplete() {
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        if (sharedPref.contains(STUDENT_ID_HISTORY)) {
+            history.addAll(sharedPref.getStringSet(STUDENT_ID_HISTORY, null)!!)
+        } else {
+            with(sharedPref.edit()) {
+                putStringSet(STUDENT_ID_HISTORY, history)
+                apply()
+            }
+        }
 
+        val adapter = ArrayAdapter(
+            this@LoginActivity,
+            android.R.layout.simple_dropdown_item_1line, history.toList()
+        )
+
+        input_student_id.setAdapter(adapter)
+    }
+
+    private fun syncAutoCompleteList() {
+        // write to shared preferences
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putStringSet(STUDENT_ID_HISTORY, history)
+            apply()
+        }
+
+        // notify change
+        (input_student_id.adapter as ArrayAdapter<String>).notifyDataSetChanged()
+    }
+
+    private fun setInputEnabled(enabled: Boolean) {
+        input_student_id.isEnabled = enabled
+        sign_in_button.isEnabled = enabled
     }
 
     /**
@@ -55,15 +85,12 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
      * errors are presented and no actual login attempt is made.
      */
     private fun attemptLogin() {
-        if (mAuthTask != null) {
-            return
-        }
 
         // Reset errors.
-        email.error = null
+        input_student_id.error = null
 
         // Store values at the time of the login attempt.
-        val emailStr = email.text.toString()
+        val emailStr = input_student_id.text.toString()
 
         var cancel = false
         var focusView: View? = null
@@ -71,29 +98,63 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(emailStr)) {
-            email.error = getString(R.string.error_field_required)
-            focusView = email
+            input_student_id.error = getString(R.string.error_field_required)
+            focusView = input_student_id
             cancel = true
-        } else if (!isEmailValid(emailStr)) {
-            email.error = getString(R.string.error_invalid_email)
-            focusView = email
+        } else if (!isStudentIdValid(emailStr)) {
+            input_student_id.error = getString(R.string.error_invalid_email)
+            focusView = input_student_id
             cancel = true
         }
 
-            if (cancel) {
-                // There was an error; don't attempt login and focus the first
-                // form field with an error.
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
             focusView?.requestFocus()
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true)
-            mAuthTask = UserLoginTask(emailStr)
-            mAuthTask!!.execute(null as Void?)
+
+            setInputEnabled(false)
+
+            // Add the input to auto complete list
+            val input = input_student_id.text.toString()
+            history.add(input)
+            syncAutoCompleteList()
+
+            AsyncTask.execute {
+                try {
+                    val client = SocketClient(input_student_id.text.toString())
+                    val response = client.login()
+
+                    if (response == LoginResponse.ERROR) {
+                        runOnUiThread {
+                            snackbar("登录出错，请重试。")
+                        }
+                    } else {
+                        SocketClient.current = client
+                        jumpTo<FunctionListActivity>()
+                    }
+                } catch (e: IOException) {
+                    runOnUiThread {
+                        dialog {
+                            it.setMessage("未能连接上服务器。\n请检查是否已连接上校园网，或者检查老师是否已经打开电脑端程序。")
+                            it.setPositiveButton("好", null)
+                        }
+                    }
+                }
+                runOnUiThread {
+                    setInputEnabled(true)
+                    showProgress(false)
+                }
+
+            }
+
         }
     }
 
-    private fun isEmailValid(email: String): Boolean {
+    private fun isStudentIdValid(studentId: String): Boolean {
         //TODO: Replace this with your own logic
         return true
     }
@@ -108,16 +169,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         // the progress spinner.
         val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
 
-        login_form.visibility = if (show) View.GONE else View.VISIBLE
-        login_form.animate()
-            .setDuration(shortAnimTime)
-            .alpha((if (show) 0 else 1).toFloat())
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    login_form.visibility = if (show) View.GONE else View.VISIBLE
-                }
-            })
-
         login_progress.visibility = if (show) View.VISIBLE else View.GONE
         login_progress.animate()
             .setDuration(shortAnimTime)
@@ -128,104 +179,5 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 }
             })
 
-    }
-
-    override fun onCreateLoader(i: Int, bundle: Bundle?): Loader<Cursor> {
-        return CursorLoader(
-            this,
-            // Retrieve data rows for the device user's 'profile' contact.
-            Uri.withAppendedPath(
-                ContactsContract.Profile.CONTENT_URI,
-                ContactsContract.Contacts.Data.CONTENT_DIRECTORY
-            ), ProfileQuery.PROJECTION,
-
-            // Select only email addresses.
-            ContactsContract.Contacts.Data.MIMETYPE + " = ?", arrayOf(
-                ContactsContract.CommonDataKinds.Email
-                    .CONTENT_ITEM_TYPE
-            ),
-
-            // Show primary email addresses first. Note that there won't be
-            // a primary email address if the user hasn't specified one.
-            ContactsContract.Contacts.Data.IS_PRIMARY + " DESC"
-        )
-    }
-
-    override fun onLoadFinished(cursorLoader: Loader<Cursor>, cursor: Cursor) {
-        val emails = ArrayList<String>()
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS))
-            cursor.moveToNext()
-        }
-
-        addEmailsToAutoComplete(emails)
-    }
-
-    override fun onLoaderReset(cursorLoader: Loader<Cursor>) {
-
-    }
-
-    private fun addEmailsToAutoComplete(emailAddressCollection: List<String>) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        val adapter = ArrayAdapter(
-            this@LoginActivity,
-            android.R.layout.simple_dropdown_item_1line, emailAddressCollection
-        )
-
-        email.setAdapter(adapter)
-    }
-
-    object ProfileQuery {
-        val PROJECTION = arrayOf(
-            ContactsContract.CommonDataKinds.Email.ADDRESS,
-            ContactsContract.CommonDataKinds.Email.IS_PRIMARY
-        )
-        val ADDRESS = 0
-        val IS_PRIMARY = 1
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    inner class UserLoginTask internal constructor(private val mStudentId: String) :
-        AsyncTask<Void, Void, Boolean>() {
-
-        override fun doInBackground(vararg params: Void): Boolean? {
-            // TODO: attempt authentication against a network service.
-
-            return true
-        }
-
-        override fun onPostExecute(success: Boolean?) {
-            mAuthTask = null
-            showProgress(false)
-
-            // 跳到功能窗口
-            if (success!!) {
-                val intent = Intent(baseContext, FunctionListActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
-        override fun onCancelled() {
-            mAuthTask = null
-            showProgress(false)
-        }
-    }
-
-    companion object {
-
-        /**
-         * Id to identity READ_CONTACTS permission request.
-         */
-        private val REQUEST_READ_CONTACTS = 0
-
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         * TODO: remove after connecting to a real authentication system.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
     }
 }
