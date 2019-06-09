@@ -1,6 +1,7 @@
-package nju.classroomassistant.student
+package nju.classroomassistant.student.systemstate
 
 import nju.classroomassistant.student.network.SocketClient
+import java.util.*
 
 // 记录系统状态，需要改写成观察者模式，允许Activity那边注册变化
 object SystemState {
@@ -9,13 +10,12 @@ object SystemState {
     // 当前登录的学生ID
     var studentId: String = ""
 
-    // 当前是否正在进行测试
+    // 练习相关状态
+    val exercise = ExerciseState()
 
+    // 讨论的相关状态
+    val discussion = DiscussionState()
 
-    // 讨论是否正在进行
-
-
-    // 实时通知是否已经开始
-
-
+    // 提问相关状态
+    val raiseQuestion = RaiseQuestionState()
 }

@@ -8,4 +8,8 @@
     <string name="error_invalid_email">Input student id with ONLY numbers</string>
     <string name="login_logo_title">ClassroomAssistant</string>
     <string name="title_function_list">Functions</string>
+    <string name="title_activity_discussion">Discussion</string>
+    <string name="discussion_prompt">Input content here</string>
+    <string name="discussion_submit">Submit</string>
+    <string name="discussion_disabled">No discussion is live.</string>
 </resources>

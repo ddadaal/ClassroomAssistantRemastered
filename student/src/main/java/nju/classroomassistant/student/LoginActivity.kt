@@ -19,6 +19,7 @@ import nju.classroomassistant.student.extensions.jumpTo
 import nju.classroomassistant.student.extensions.snackbar
 import nju.classroomassistant.student.views.functionlist.FunctionListActivity
 import nju.classroomassistant.student.network.SocketClient
+import nju.classroomassistant.student.systemstate.SystemState
 import nju.classroomassistant.student.util.HistoryStack
 import java.io.IOException
 
@@ -45,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
         input_student_id.setText(history.latest)
 
 
-        sign_in_button.setOnClickListener { attemptLogin() }
+        btn_send.setOnClickListener { attemptLogin() }
     }
 
     private fun persistHistory() {
@@ -84,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setInputEnabled(enabled: Boolean) {
         input_student_id.isEnabled = enabled
-        sign_in_button.isEnabled = enabled
+        btn_send.isEnabled = enabled
     }
 
     /**
@@ -129,7 +130,8 @@ class LoginActivity : AppCompatActivity() {
 
             AsyncTask.execute {
                 try {
-                    val client = SocketClient(input_student_id.text.toString())
+                    SystemState.studentId = input_student_id.text.toString()
+                    val client = SocketClient()
                     val response = client.login()
 
                     if (response == LoginResponse.ERROR) {
@@ -137,6 +139,7 @@ class LoginActivity : AppCompatActivity() {
                             snackbar("登录出错，请重试。")
                         }
                     } else {
+                        client.startListening()
                         SystemState.socket = client
                         jumpTo<FunctionListActivity>()
                     }

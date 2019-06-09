@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_padding"
+    android:id="@+id/discussion_main_layout"
+    tools:context=".views.discussion.DiscussionActivity">
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <EditText
+
+            android:id="@+id/input_student_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/discussion_prompt"
+            android:inputType="textMultiLine|textCapSentences"
+            android:lines="14"
+            android:singleLine="true"/>
+        <Button
+            android:id="@+id/btn_send"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/discussion_submit"
+            android:textStyle="bold"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

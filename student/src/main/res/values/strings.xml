@@ -8,4 +8,12 @@
     <string name="error_invalid_email">请输入纯数字的学号。</string>
     <string name="login_logo_title">课堂教学辅助系统 学生端</string>
     <string name="title_function_list">功能列表</string>
+
+    <string name="title_activity_discussion">讨论</string>
+    <string name="discussion_prompt">请输入讨论内容</string>
+    <string name="discussion_submit">发送</string>
+    <string name="discussion_disabled">讨论未开始</string>
+    <string name="function_discussion">讨论</string>
+    <string name="function_exercise">练习</string>
+    <string name="function_raisequestion">提问</string>
 </resources>

@@ -1,115 +1,81 @@
 package nju.classroomassistant.student.views.functionlist
 
-import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.provider.CalendarContract
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.content.ContextCompat
+import com.google.android.material.card.MaterialCardView
 
 import kotlinx.android.synthetic.main.activity_function_list.*
-import kotlinx.android.synthetic.main.function_list_content.view.*
-import kotlinx.android.synthetic.main.function_list.*
 import nju.classroomassistant.student.R
+import nju.classroomassistant.student.extensions.jumpTo
+import nju.classroomassistant.student.systemstate.DiscussionState
+import nju.classroomassistant.student.systemstate.SystemState
+import nju.classroomassistant.student.views.discussion.DiscussionActivity
+import java.util.*
 
-/**
- * An activity representing a list of Pings. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a [FunctionDetailActivity] representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
-class FunctionListActivity : AppCompatActivity() {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private var twoPane: Boolean = false
+class FunctionListActivity : AppCompatActivity(), Observer {
+    override fun update(observable: Observable?, params: Any?) {
+
+        // 这个方法是在Socket监听线程里调用到的，但是要操作UI，所以得runOnUiThread
+        // 为了简单，直接不管什么变化 都全部同步一遍
+
+        runOnUiThread {
+            syncToSystemState()
+        }
+    }
+
+    private fun syncToSystemState() {
+
+    }
+
+
+    private fun setEnabled(card: MaterialCardView, enabled: Boolean) {
+        card.isEnabled = enabled
+
+        card.setCardBackgroundColor(
+            ContextCompat.getColor(
+                baseContext,
+                if (enabled) {
+                    R.color.colorCardEnabled
+                } else {
+                    R.color.colorCardDisabled
+                }
+            )
+        )
+
+        card.cardElevation = if (enabled)  { 100f } else { 0f }
+
+        card.isClickable = enabled
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_function_list)
 
-        setSupportActionBar(toolbar)
-        toolbar.title = title
+        btn_discussion.setOnClickListener { jumpTo<DiscussionActivity>() }
 
-        if (function_detail_container != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            twoPane = true
-        }
+        syncToSystemState()
 
-        setupRecyclerView(function_list)
+//        setEnabled(btn_raise_question, true)
+
+        // 注册变化
+        SystemState.raiseQuestion.addObserver(this)
+        SystemState.exercise.addObserver(this)
+        SystemState.discussion.addObserver(this)
+
     }
 
-    private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter =
-            SimpleItemRecyclerViewAdapter(
-                this,
-                DummyContent.ITEMS,
-                twoPane
-            )
+    override fun onStop() {
+        super.onStop()
+
+        // 取消注册变化
+        SystemState.raiseQuestion.deleteObserver(this)
+        SystemState.exercise.deleteObserver(this)
+        SystemState.discussion.deleteObserver(this)
     }
 
-    class SimpleItemRecyclerViewAdapter(
-        private val parentActivity: FunctionListActivity,
-        private val values: List<DummyContent.DummyItem>,
-        private val twoPane: Boolean
-    ) :
-        RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
-
-        private val onClickListener: View.OnClickListener
-
-        init {
-            onClickListener = View.OnClickListener { v ->
-                val item = v.tag as DummyContent.DummyItem
-                if (twoPane) {
-                    val fragment = FunctionDetailFragment().apply {
-                        arguments = Bundle().apply {
-                            putString(FunctionDetailFragment.ARG_ITEM_ID, item.id)
-                        }
-                    }
-                    parentActivity.supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.function_detail_container, fragment)
-                        .commit()
-                } else {
-                    val intent = Intent(v.context, FunctionDetailActivity::class.java).apply {
-                        putExtra(FunctionDetailFragment.ARG_ITEM_ID, item.id)
-                    }
-                    v.context.startActivity(intent)
-                }
-            }
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.function_list_content, parent, false)
-            return ViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val item = values[position]
-            holder.idView.text = item.id
-            holder.contentView.text = item.content
-
-            with(holder.itemView) {
-                tag = item
-                setOnClickListener(onClickListener)
-            }
-        }
-
-        override fun getItemCount() = values.size
-
-        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val idView: TextView = view.id_text
-            val contentView: TextView = view.content
-        }
-    }
 }
