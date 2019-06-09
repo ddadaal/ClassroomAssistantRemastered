@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.widget.ArrayAdapter
 
@@ -19,6 +18,7 @@ import nju.classroomassistant.student.extensions.dialog
 import nju.classroomassistant.student.extensions.jumpTo
 import nju.classroomassistant.student.extensions.snackbar
 import nju.classroomassistant.student.network.SocketClient
+import nju.classroomassistant.student.util.HistoryStack
 import java.io.IOException
 
 /**
@@ -32,7 +32,8 @@ class LoginActivity : AppCompatActivity() {
     private val STUDENT_ID_HISTORY = "STUDENT_ID_HISTORY"
 
 
-    private var history = mutableSetOf<String>()
+    // 自动填充并记住最新的输入
+    private lateinit var history: HistoryStack
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,23 +41,33 @@ class LoginActivity : AppCompatActivity() {
         // Set up the login form.
         populateAutoComplete()
 
+        input_student_id.setText(history.latest)
+
+
         sign_in_button.setOnClickListener { attemptLogin() }
+    }
+
+    private fun persistHistory() {
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+
+        with(sharedPref.edit()) {
+            putString(STUDENT_ID_HISTORY, history.serialize())
+            apply()
+        }
     }
 
     private fun populateAutoComplete() {
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         if (sharedPref.contains(STUDENT_ID_HISTORY)) {
-            history.addAll(sharedPref.getStringSet(STUDENT_ID_HISTORY, null)!!)
+            history = HistoryStack.fromSerialized(sharedPref.getString(STUDENT_ID_HISTORY, null)!!)
         } else {
-            with(sharedPref.edit()) {
-                putStringSet(STUDENT_ID_HISTORY, history)
-                apply()
-            }
+            history = HistoryStack()
+            persistHistory()
         }
 
         val adapter = ArrayAdapter(
             this@LoginActivity,
-            android.R.layout.simple_dropdown_item_1line, history.toList()
+            android.R.layout.simple_dropdown_item_1line, history
         )
 
         input_student_id.setAdapter(adapter)
@@ -64,11 +75,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun syncAutoCompleteList() {
         // write to shared preferences
-        val sharedPref = getPreferences(Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            putStringSet(STUDENT_ID_HISTORY, history)
-            apply()
-        }
+        persistHistory()
 
         // notify change
         (input_student_id.adapter as ArrayAdapter<String>).notifyDataSetChanged()
@@ -97,11 +104,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(emailStr)) {
-            input_student_id.error = getString(R.string.error_field_required)
-            focusView = input_student_id
-            cancel = true
-        } else if (!isStudentIdValid(emailStr)) {
+        if (!isStudentIdValid(emailStr)) {
             input_student_id.error = getString(R.string.error_invalid_email)
             focusView = input_student_id
             cancel = true
@@ -120,7 +123,7 @@ class LoginActivity : AppCompatActivity() {
 
             // Add the input to auto complete list
             val input = input_student_id.text.toString()
-            history.add(input)
+            history.append(input)
             syncAutoCompleteList()
 
             AsyncTask.execute {
@@ -155,8 +158,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun isStudentIdValid(studentId: String): Boolean {
-        //TODO: Replace this with your own logic
-        return true
+
+        return studentId.toIntOrNull() != null
     }
 
     /**

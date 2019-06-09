@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">ClassroomAssistantStudent</string>
-    <string name="title_function_detail">Function Detail</string>
+    <string name="app_name">课堂教学辅助系统 学生端</string>
+    <string name="title_function_detail">功能列表</string>
     <!-- Strings related to login -->
-    <string name="title_activity_login">Sign in</string>
-    <string name="prompt_studentId">Student Id</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="error_invalid_email">This student id is invalid</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="login_logo_title">Classroom Assistant</string>
+    <string name="title_activity_login">登录</string>
+    <string name="prompt_studentId">学号</string>
+    <string name="action_sign_in">登录</string>
+    <string name="error_invalid_email">请输入纯数字的学号。</string>
+    <string name="login_logo_title">课堂教学辅助系统 学生端</string>
 </resources>

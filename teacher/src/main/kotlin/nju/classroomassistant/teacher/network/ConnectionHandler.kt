@@ -45,6 +45,7 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap): R
 
                 verbose("User $studentId disconnected unexpectedly")
                 studentMap.logout(studentId!!)
+                terminated = true
             }
 
         }
