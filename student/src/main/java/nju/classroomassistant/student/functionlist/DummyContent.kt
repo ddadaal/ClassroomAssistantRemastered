@@ -1,4 +1,4 @@
-package nju.classroomassistant.student.dummy
+package nju.classroomassistant.student.functionlist
 
 import java.util.ArrayList
 import java.util.HashMap
@@ -32,7 +32,7 @@ object DummyContent {
 
     private fun addItem(item: DummyItem) {
         ITEMS.add(item)
-        ITEM_MAP.put(item.id, item)
+        ITEM_MAP[item.id] = item
     }
 
     private fun createDummyItem(position: Int): DummyItem {

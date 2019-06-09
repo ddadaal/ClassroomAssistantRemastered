@@ -13,10 +13,11 @@ import android.widget.ArrayAdapter
 import android.content.Context
 
 import kotlinx.android.synthetic.main.activity_login.*
-import nju.classroomassistant.shared.messages.LoginResponse
+import nju.classroomassistant.shared.messages.login.LoginResponse
 import nju.classroomassistant.student.extensions.dialog
 import nju.classroomassistant.student.extensions.jumpTo
 import nju.classroomassistant.student.extensions.snackbar
+import nju.classroomassistant.student.functionlist.FunctionListActivity
 import nju.classroomassistant.student.network.SocketClient
 import nju.classroomassistant.student.util.HistoryStack
 import java.io.IOException

@@ -1,11 +1,10 @@
 package nju.classroomassistant.student.network
 
-import android.util.Log
 import nju.classroomassistant.shared.PORT
 import nju.classroomassistant.shared.log.Logger
-import nju.classroomassistant.shared.messages.LoginMessage
-import nju.classroomassistant.shared.messages.LoginResponse
-import nju.classroomassistant.shared.messages.LoginResponseMessage
+import nju.classroomassistant.shared.messages.login.LoginMessage
+import nju.classroomassistant.shared.messages.login.LoginResponse
+import nju.classroomassistant.shared.messages.login.LoginResponseMessage
 import nju.classroomassistant.shared.messages.Message
 import java.io.Closeable
 import java.io.ObjectInputStream

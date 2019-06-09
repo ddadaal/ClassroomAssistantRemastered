@@ -1,13 +1,13 @@
-package nju.classroomassistant.student
+package nju.classroomassistant.student.functionlist
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import nju.classroomassistant.student.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_function_detail.*
 import kotlinx.android.synthetic.main.function_detail.view.*
+import nju.classroomassistant.student.R
 
 /**
  * A fragment representing a single Function detail screen.

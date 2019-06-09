@@ -2,6 +2,10 @@ package nju.classroomassistant.teacher.network
 
 import nju.classroomassistant.shared.log.Logger
 import nju.classroomassistant.shared.messages.*
+import nju.classroomassistant.shared.messages.login.LoginMessage
+import nju.classroomassistant.shared.messages.login.LoginResponse
+import nju.classroomassistant.shared.messages.login.LoginResponseMessage
+import nju.classroomassistant.shared.messages.login.LogoutMessage
 import java.io.Closeable
 import java.io.IOException
 import java.io.ObjectInputStream

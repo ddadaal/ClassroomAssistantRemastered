@@ -1,19 +1,18 @@
-package nju.classroomassistant.student
+package nju.classroomassistant.student.functionlist
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 
-import nju.classroomassistant.student.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_function_list.*
 import kotlinx.android.synthetic.main.function_list_content.view.*
 import kotlinx.android.synthetic.main.function_list.*
+import nju.classroomassistant.student.R
 
 /**
  * An activity representing a list of Pings. This activity
@@ -38,11 +37,6 @@ class FunctionListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-
         if (function_detail_container != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
@@ -55,7 +49,12 @@ class FunctionListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
+        recyclerView.adapter =
+            SimpleItemRecyclerViewAdapter(
+                this,
+                DummyContent.ITEMS,
+                twoPane
+            )
     }
 
     class SimpleItemRecyclerViewAdapter(
