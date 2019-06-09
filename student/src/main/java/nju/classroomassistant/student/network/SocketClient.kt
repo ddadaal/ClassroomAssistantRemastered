@@ -15,10 +15,6 @@ class SocketClient(
     val studentId: String
 ): Closeable, Logger {
 
-    companion object {
-        var current: SocketClient? = null
-    }
-
     val socket = Socket("10.0.2.2", PORT)
     val out: ObjectOutputStream
     val `in`: ObjectInputStream

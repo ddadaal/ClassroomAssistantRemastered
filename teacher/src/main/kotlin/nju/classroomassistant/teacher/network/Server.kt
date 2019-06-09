@@ -6,6 +6,9 @@ import java.net.ServerSocket
 
 object Server: Logger {
 
+    // 在这里注册系统的状态
+
+    // 学生列表
     val studentMap = StudentMap()
 
     fun start() {

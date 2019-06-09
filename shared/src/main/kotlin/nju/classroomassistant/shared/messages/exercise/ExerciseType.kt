@@ -9,3 +9,13 @@ class ChoiceExerciseType(
 ): ExerciseType()
 
 class FillBlankExerciseType: ExerciseType()
+
+open class ExerciseAnswer: Serializable
+
+class ChoiceExerciseAnswer(
+    val answers: ArrayList<String>
+): ExerciseAnswer()
+
+class FillBlankExerciseAnswer(
+    val answer: String
+): ExerciseAnswer()

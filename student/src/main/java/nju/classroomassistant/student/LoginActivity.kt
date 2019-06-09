@@ -17,7 +17,7 @@ import nju.classroomassistant.shared.messages.login.LoginResponse
 import nju.classroomassistant.student.extensions.dialog
 import nju.classroomassistant.student.extensions.jumpTo
 import nju.classroomassistant.student.extensions.snackbar
-import nju.classroomassistant.student.functionlist.FunctionListActivity
+import nju.classroomassistant.student.views.functionlist.FunctionListActivity
 import nju.classroomassistant.student.network.SocketClient
 import nju.classroomassistant.student.util.HistoryStack
 import java.io.IOException
@@ -137,7 +137,7 @@ class LoginActivity : AppCompatActivity() {
                             snackbar("登录出错，请重试。")
                         }
                     } else {
-                        SocketClient.current = client
+                        SystemState.socket = client
                         jumpTo<FunctionListActivity>()
                     }
                 } catch (e: IOException) {

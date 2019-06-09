@@ -1,4 +1,4 @@
-package nju.classroomassistant.student.functionlist
+package nju.classroomassistant.student.views.functionlist
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

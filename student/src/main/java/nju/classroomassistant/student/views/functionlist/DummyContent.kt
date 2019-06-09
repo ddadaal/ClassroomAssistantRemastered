@@ -1,4 +1,4 @@
-package nju.classroomassistant.student.functionlist
+package nju.classroomassistant.student.views.functionlist
 
 import java.util.ArrayList
 import java.util.HashMap

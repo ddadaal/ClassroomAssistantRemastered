@@ -33,7 +33,19 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap): R
                 when (val message = readMessage()) {
                     is LoginMessage -> {
                         verbose("User ${message.studentId} logs in")
+
+                        // 登录后给客户端如下的Message
+                        // 1. 登录响应
                         writeMessage(LoginResponseMessage(LoginResponse.INITIAL_LOGIN))
+
+                        // 2. 如果目前讨论正在进行，发一个DiscussionStartMessage通知客户端；如果没有（客户端默认没有开始），就什么都不发
+
+                        // 3. 如果目前做题正在进行，发一个ExerciseStartMessage通知客户端；如果没有进行（客户端默认没有进行），就什么都不发
+
+                        // 4. 发一个NotificationSettingChangeMessage，告诉客户端目前实时提醒是否已经打开
+
+
+                        // 记录登录信息
                         studentId = message.studentId
                         studentMap.login(message.studentId, this)
                     }

@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".functionlist.FunctionListActivity"
+            android:name="nju.classroomassistant.student.views.functionlist.FunctionListActivity"
             android:label="@string/title_function_list"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -28,13 +28,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".functionlist.FunctionDetailActivity"
+            android:name="nju.classroomassistant.student.views.functionlist.FunctionDetailActivity"
             android:label="@string/title_function_detail"
-            android:parentActivityName=".functionlist.FunctionListActivity"
+            android:parentActivityName="nju.classroomassistant.student.views.functionlist.FunctionListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="nju.classroomassistant.student.functionlist.FunctionListActivity" />
+                android:value="nju.classroomassistant.student.views.functionlist.FunctionListActivity" />
         </activity>
         <activity
             android:name=".LoginActivity"
