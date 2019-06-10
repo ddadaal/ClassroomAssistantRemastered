@@ -1,0 +1,17 @@
+.border {
+    -fx-border-style: solid;
+    -fx-border-color: #BDBDBD;
+}
+
+.floatingPane {
+    -fx-background-color: #FFFFFF;
+}
+
+.exteriorLine {
+    -fx-border-color: #1A237E;
+    -fx-border-width: 1;
+}
+
+.loginBackground {
+    -fx-background-image: url(../img/login_background.png);
+}

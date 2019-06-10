@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">ClassroomAssistant</string>
+
+    <!-- 登录部分 -->
+    <string name="title_activity_login">登录</string>
+    <string name="prompt_email">学号</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in">登录</string>
+    <string name="invalid_username">学号不符合规范</string>
+    <string name="invalid_password">密码不得为空</string>
+    <string name="username_failed">学号不正确</string>
+    <string name="password_failed">密码不正确</string>
+
+    <string name="login_logo_title">教学辅助系统</string>
+
+    <!-- menu -->
+    <string name="quit_login">登出</string>
+
+    <!-- main -->
+    <string name="question">提问</string>
+    <string name="discussion_inactive">讨论</string>
+    <string name="discussion_active">讨论(进行中)</string>
+    <string name="practise_inactive">练习</string>
+    <string name="practise_active">练习(进行中)</string>
+
+    <!-- common -->
+    <string name="network_error">网络连接失败</string>
+    <string name="commit">提交</string>
+    <string name="commit_success">提交成功</string>
+
+    <!-- 提问 -->
+    <string name="remind_active">教师端已开启实时提醒</string>
+    <string name="remind_inactive">教师端未开启实时提醒</string>
+    <string name="remind_start">教师开启了实时提醒</string>
+    <string name="remind_stop">教师关闭了实时提醒</string>
+
+    <!-- 讨论 -->
+    <string name="discussion_finish">讨论已结束</string>
+</resources>
+
