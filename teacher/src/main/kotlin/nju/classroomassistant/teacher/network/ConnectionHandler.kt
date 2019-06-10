@@ -2,6 +2,7 @@ package nju.classroomassistant.teacher.network
 
 import nju.classroomassistant.shared.log.Logger
 import nju.classroomassistant.shared.messages.*
+import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
 import nju.classroomassistant.shared.messages.login.LoginMessage
 import nju.classroomassistant.shared.messages.login.LoginResponse
 import nju.classroomassistant.shared.messages.login.LoginResponseMessage
@@ -53,7 +54,9 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap): R
                         studentMap.logout(studentId!!)
                     }
                     // login message handler here
+                    is StudentSendDiscussionMessage -> {
 
+                    }
                     else -> error("Non-supported message type: ${message.javaClass.simpleName}")
                 }
             } catch (e: IOException) {

@@ -1,5 +1,6 @@
 package nju.classroomassistant.teacher.views.question
 
+import nju.classroomassistant.teacher.extension.PageController
 import tornadofx.*
 
 class Question : View("提问") {
@@ -7,3 +8,5 @@ class Question : View("提问") {
         label("这是${title}页面")
     }
 }
+
+class QuestionController: PageController(Question::class)
