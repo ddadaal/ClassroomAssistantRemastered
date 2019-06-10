@@ -2,6 +2,9 @@ package nju.classroomassistant.teacher.network
 
 import nju.classroomassistant.shared.log.Logger
 import nju.classroomassistant.shared.messages.*
+import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage
+import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
+import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
 import nju.classroomassistant.shared.messages.login.LoginMessage
 import nju.classroomassistant.shared.messages.login.LoginResponse
 import nju.classroomassistant.shared.messages.login.LoginResponseMessage
@@ -39,6 +42,9 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap): R
                         writeMessage(LoginResponseMessage(LoginResponse.OK))
 
                         // 2. 如果目前讨论正在进行，发一个DiscussionStartMessage通知客户端；如果没有（客户端默认没有开始），就什么都不发
+                        if (GlobalVariables.discussionStart) {
+                            writeMessage(DiscussionStartMessage())
+                        }
 
                         // 3. 如果目前做题正在进行，发一个ExerciseStartMessage通知客户端；如果没有进行（客户端默认没有进行），就什么都不发
 
@@ -54,6 +60,14 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap): R
                     }
                     // login message handler here
 
+                    is StudentSendDiscussionMessage -> {
+                        verbose("User sends the message ${message.content} to server")
+                        if (GlobalVariables.discussionStart) {
+                            // Add this message to the queue
+                            GlobalVariables.currentDiscussionQueue.add(message.content)
+                        }
+                    }
+
                     else -> error("Non-supported message type: ${message.javaClass.simpleName}")
                 }
             } catch (e: IOException) {
@@ -65,6 +79,14 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap): R
             }
 
         }
+    }
+
+    fun sendDiscussionEndMessage() {
+        writeMessage(DiscussionEndMessage())
+    }
+
+    fun sendDiscussionStartMessage() {
+        writeMessage(DiscussionStartMessage())
     }
 
     private fun readMessage(): Message {
