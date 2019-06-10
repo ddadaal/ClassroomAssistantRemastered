@@ -3,6 +3,7 @@ package nju.classroomassistant.student.service;
 import android.arch.lifecycle.MutableLiveData;
 import nju.classroomassistant.shared.messages.exercise.ExerciseAnswer;
 import nju.classroomassistant.shared.messages.exercise.ExerciseType;
+import nju.classroomassistant.shared.messages.exercise.FillBlankExerciseType;
 
 /**
  * Created on 2019-06-10.
@@ -35,9 +36,10 @@ public class GlobalVariables {
     public static void init() {
         inDiscussion = new MutableLiveData<>();
         inDiscussion.setValue(true);
-        exercise = null;
+        exercise = new FillBlankExerciseType();
         reminder = new MutableLiveData<>();
         inExercise = new MutableLiveData<>();
+        inExercise.setValue(true);
         exerciseAnswer = null;
     }
 
