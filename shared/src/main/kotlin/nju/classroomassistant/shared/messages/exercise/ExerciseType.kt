@@ -13,7 +13,7 @@ class FillBlankExerciseType: ExerciseType()
 open class ExerciseAnswer: Serializable
 
 class ChoiceExerciseAnswer(
-    val answers: ArrayList<String>
+    val answers: List<String>
 ): ExerciseAnswer()
 
 class FillBlankExerciseAnswer(
