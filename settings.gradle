@@ -1,3 +1,4 @@
-include ':student', ':shared', ':teacher'
-rootProject.name = 'classroomassistant'
+rootProject.name = 'ClassroomAssistantRemastered'
+
+include 'student', 'shared', 'teacher'
 

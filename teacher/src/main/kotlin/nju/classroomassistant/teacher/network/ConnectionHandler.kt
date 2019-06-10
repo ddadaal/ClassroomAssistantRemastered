@@ -36,7 +36,7 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap): R
 
                         // 登录后给客户端如下的Message
                         // 1. 登录响应
-                        writeMessage(LoginResponseMessage(LoginResponse.INITIAL_LOGIN))
+                        writeMessage(LoginResponseMessage(LoginResponse.OK))
 
                         // 2. 如果目前讨论正在进行，发一个DiscussionStartMessage通知客户端；如果没有（客户端默认没有开始），就什么都不发
 

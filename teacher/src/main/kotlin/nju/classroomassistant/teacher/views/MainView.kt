@@ -4,6 +4,7 @@ import javafx.scene.layout.BorderPane
 import kfoenix.jfxbutton
 import nju.classroomassistant.teacher.views.discussion.Discussion
 import nju.classroomassistant.teacher.views.exercise.Exercise
+import nju.classroomassistant.teacher.views.login.LoginView
 import nju.classroomassistant.teacher.views.question.Question
 import tornadofx.*
 

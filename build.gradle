@@ -9,12 +9,12 @@ buildscript {
     }
 
     dependencies {
+//        classpath 'com.android.tools.build:gradle:3.4.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.android.tools.build:gradle:3.4.1'
     }
 }
 
-subprojects {
+allprojects {
     repositories {
         maven {url 'http://maven.aliyun.com/nexus/content/groups/public/'}
 
