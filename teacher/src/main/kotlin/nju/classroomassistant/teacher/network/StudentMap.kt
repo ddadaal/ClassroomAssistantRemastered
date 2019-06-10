@@ -1,14 +1,17 @@
 package nju.classroomassistant.teacher.network
 
+import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
+import tornadofx.observable
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 
 class StudentInfo(
     val handler: ConnectionHandler,
     val nickname: String
 )
 
-class StudentMap: Observable() {
+class StudentMap : Observable() {
 
     private val NICKNAME_LIST = listOf("小黑", "小白", "小红", "小明", "小刚")
 
@@ -30,6 +33,5 @@ class StudentMap: Observable() {
         setChanged()
         notifyObservers()
     }
-
 
 }
