@@ -1,13 +1,24 @@
 package nju.classroomassistant.student.service;
 
+import android.util.Log;
 import nju.classroomassistant.shared.messages.Message;
+import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage;
+import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage;
+import nju.classroomassistant.shared.messages.exercise.ExerciseEndMessage;
+import nju.classroomassistant.shared.messages.exercise.ExerciseStartMessage;
+import nju.classroomassistant.shared.messages.exercise.ExerciseType;
+import nju.classroomassistant.shared.messages.login.LoginMessage;
+import nju.classroomassistant.shared.messages.login.LoginResponse;
+import nju.classroomassistant.shared.messages.login.LoginResponseMessage;
+import nju.classroomassistant.shared.messages.login.LogoutMessage;
+import nju.classroomassistant.shared.messages.raisequestion.NotificationSettingChangeMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-class CommunicationBasicService {
+public class CommunicationBasicService {
 
     private static volatile CommunicationBasicService instance;
 
@@ -25,7 +36,25 @@ class CommunicationBasicService {
                 try {
                     Message obj = (Message) in.readObject();
                     // do something if success
-                    continue;
+                    if (obj instanceof LogoutMessage) {
+                        // do nothing
+                    } else if (obj instanceof ExerciseStartMessage) {
+                        ExerciseType exerciseType = ((ExerciseStartMessage) obj).getExerciseType();
+                        GlobalVariables.setExercise(exerciseType);
+                    } else if (obj instanceof ExerciseEndMessage) {
+                        GlobalVariables.setExercise(null);
+                        GlobalVariables.setExerciseAnswer(null);
+                    } else if (obj instanceof NotificationSettingChangeMessage) {
+                        GlobalVariables.setReminderState(((NotificationSettingChangeMessage) obj).
+                                getInstantNotificationEnabled());
+                    } else if (obj instanceof DiscussionEndMessage) {
+                        GlobalVariables.setDiscussionState(false);
+                    } else if (obj instanceof DiscussionStartMessage) {
+                        GlobalVariables.setDiscussionState(true);
+                    } else {
+                        // do nothing
+                        Log.d(CommunicationBasicService.class.getName(), "" + obj);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -95,4 +124,21 @@ class CommunicationBasicService {
     public boolean isConnected() {
         return connected;
     }
+
+    public LoginResponse login(String username) {
+        if (!isConnected())
+            tryConnect();
+
+        LoginMessage loginMessage = new LoginMessage(username);
+        try {
+            out.writeObject(loginMessage);
+            LoginResponse response = ((LoginResponseMessage) in.readObject()).getResponse();
+            return response;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return LoginResponse.ERROR;
+
+    }
+
 }

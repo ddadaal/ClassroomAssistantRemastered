@@ -7,20 +7,19 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import nju.classroomassistant.shared.messages.exercise.ExerciseType;
 import nju.classroomassistant.student.R;
+import nju.classroomassistant.student.service.GlobalVariables;
 import nju.classroomassistant.student.ui.discussion.DiscussionActivity;
 import nju.classroomassistant.student.ui.practise.PractiseActivity;
 import nju.classroomassistant.student.ui.question.QuestionActivity;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final int PRACTISE_RETURN_CODE = 1;
 
     private MainViewModel viewModel;
 
@@ -57,14 +56,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, PractiseActivity.class);
-                startActivityForResult(intent, PRACTISE_RETURN_CODE);
+                startActivity(intent);
             }
         });
 
-        viewModel.getInDiscussion().observe(this, new Observer<Boolean>() {
+        GlobalVariables.getInDiscussion().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
-                Log.d("Discussion", "" + aBoolean);
                 if (aBoolean == null)
                     return;
                 if (aBoolean) {
@@ -77,12 +75,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getInPractise().observe(this, new Observer<Boolean>() {
+        GlobalVariables.getExercise().observe(this, new Observer<ExerciseType>() {
             @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == null)
-                    return;
-                if (aBoolean) {
+            public void onChanged(@Nullable ExerciseType exerciseType) {
+                if (exerciseType == null) {
                     practiseButton.setEnabled(true);
                     practiseButton.setText(R.string.practise_active);
                 } else {
@@ -110,22 +106,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        switch (requestCode) {
-            case PRACTISE_RETURN_CODE:
-                if (resultCode == RESULT_OK) {
-                    viewModel.setInPractiseState(false);
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.quit_login:
+                viewModel.logout();
                 finish();
                 break;
             default:

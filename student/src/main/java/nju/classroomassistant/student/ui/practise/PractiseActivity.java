@@ -24,16 +24,6 @@ public class PractiseActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(true);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        setResult(RESULT_CANCELED);
-        return super.onSupportNavigateUp();
-    }
 
-    @Override
-    public void onBackPressed() {
-        setResult(RESULT_CANCELED);
-        super.onBackPressed();
-    }
+
 }

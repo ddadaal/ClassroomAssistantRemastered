@@ -9,7 +9,7 @@ public class DiscussionViewModel extends ViewModel {
 
     private MutableLiveData<OperationResult> sendCommentResult = new MutableLiveData<>();
 
-    private MutableLiveData<Boolean> discussionInProgress = new MutableLiveData<>();
+
 
 
 }

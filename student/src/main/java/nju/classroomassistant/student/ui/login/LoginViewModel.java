@@ -3,11 +3,14 @@ package nju.classroomassistant.student.ui.login;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
+import nju.classroomassistant.shared.messages.login.LoginResponse;
 import nju.classroomassistant.student.R;
+import nju.classroomassistant.student.service.CommunicationBasicService;
 import nju.classroomassistant.student.ui.OperationResult;
 
-class LoginViewModel extends ViewModel {
+public class LoginViewModel extends ViewModel {
 
+    private CommunicationBasicService basicService = CommunicationBasicService.getInstance();
 
     private MutableLiveData<LoginFormError> loginFormError = new MutableLiveData<>();
 
@@ -23,7 +26,20 @@ class LoginViewModel extends ViewModel {
     }
 
     void login(String username) {
-        loginResult.setValue(new OperationResult(true, null));
+        LoginResponse response = basicService.login(username);
+        switch (response) {
+            case OK:
+                loginResult.setValue(new OperationResult(true, null));
+                break;
+            case ERROR:
+                loginResult.setValue(new OperationResult(false, R.string.network_error));
+                break;
+            case NOT_ALLOWED:
+                loginResult.setValue(new OperationResult(false, R.string.invalid_username));
+                break;
+            default:
+                break;
+        }
     }
 
     void loginDataChanged(String username) {

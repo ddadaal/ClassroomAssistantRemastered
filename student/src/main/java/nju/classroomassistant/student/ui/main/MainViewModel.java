@@ -1,32 +1,16 @@
 package nju.classroomassistant.student.ui.main;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import nju.classroomassistant.student.service.CommunicationBasicService;
+import nju.classroomassistant.student.service.GlobalVariables;
 
 public class MainViewModel extends ViewModel {
 
-    private MutableLiveData<Boolean> inDiscussion = new MutableLiveData<>();
+    private CommunicationBasicService basicService = CommunicationBasicService.getInstance();
 
-    private MutableLiveData<Boolean> inPractise = new MutableLiveData<>();
-
-    public MainViewModel() {
-        inDiscussion.setValue(true);
-        inPractise.setValue(true);
+    public void logout() {
+        GlobalVariables.clear();
+        basicService.close();
     }
 
-    MutableLiveData<Boolean> getInDiscussion() {
-        return inDiscussion;
-    }
-
-    MutableLiveData<Boolean> getInPractise() {
-        return inPractise;
-    }
-
-    public void setInDiscussionState(boolean state) {
-        this.inDiscussion.setValue(state);
-    }
-
-    public void setInPractiseState(boolean state) {
-        this.inPractise.setValue(state);
-    }
 }

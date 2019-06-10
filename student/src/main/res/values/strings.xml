@@ -33,4 +33,8 @@
     <string name="remind_inactive">教师端未开启实时提醒</string>
     <string name="remind_start">教师开启了实时提醒</string>
     <string name="remind_stop">教师关闭了实时提醒</string>
+
+    <!-- 讨论 -->
+    <string name="discussion_finish">讨论已结束</string>
 </resources>
+

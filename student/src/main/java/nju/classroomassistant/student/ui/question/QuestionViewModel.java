@@ -11,7 +11,6 @@ public class QuestionViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> canCommit = new MutableLiveData<>();
 
-    private MutableLiveData<Boolean> realTimeRemind = new MutableLiveData<>();
 
     MutableLiveData<OperationResult> getQuestionResult() {
         return questionResult;
@@ -29,12 +28,5 @@ public class QuestionViewModel extends ViewModel {
         questionResult.setValue(new OperationResult(true, null));
     }
 
-    public void setRealTimeRemind(boolean state) {
-        realTimeRemind.setValue(state);
-    }
-
-    MutableLiveData<Boolean> getRealTimeRemind() {
-        return realTimeRemind;
-    }
 
 }

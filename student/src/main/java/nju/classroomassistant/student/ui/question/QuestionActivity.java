@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import nju.classroomassistant.student.R;
+import nju.classroomassistant.student.service.GlobalVariables;
 import nju.classroomassistant.student.ui.OperationResult;
 
 public class QuestionActivity extends AppCompatActivity {
@@ -42,7 +43,7 @@ public class QuestionActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getCanCommit().observe(this, new Observer<Boolean>() {
+        GlobalVariables.getReminder().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (aBoolean == null)
