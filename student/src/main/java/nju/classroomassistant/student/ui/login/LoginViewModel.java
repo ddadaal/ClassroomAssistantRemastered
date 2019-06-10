@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel;
 import nju.classroomassistant.shared.messages.login.LoginResponse;
 import nju.classroomassistant.student.R;
 import nju.classroomassistant.student.service.CommunicationBasicService;
+import nju.classroomassistant.student.service.GlobalVariables;
 import nju.classroomassistant.student.ui.OperationResult;
 
 public class LoginViewModel extends ViewModel {
@@ -26,7 +27,9 @@ public class LoginViewModel extends ViewModel {
     }
 
     void login(String username) {
-        LoginResponse response = basicService.login(username);
+        GlobalVariables.init();
+    //    LoginResponse response = basicService.login(username);
+        LoginResponse response = LoginResponse.OK;
         switch (response) {
             case OK:
                 loginResult.setValue(new OperationResult(true, null));

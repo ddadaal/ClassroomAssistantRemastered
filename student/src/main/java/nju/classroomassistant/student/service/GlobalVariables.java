@@ -20,7 +20,9 @@ public class GlobalVariables {
 
     private static MutableLiveData<Boolean> inDiscussion;
 
-    private static MutableLiveData<ExerciseType> exercise;
+    private static ExerciseType exercise;
+
+    private static MutableLiveData<Boolean> inExercise;
 
     private static ExerciseAnswer exerciseAnswer = null;
 
@@ -32,13 +34,16 @@ public class GlobalVariables {
 
     public static void init() {
         inDiscussion = new MutableLiveData<>();
-        exercise = new MutableLiveData<>();
+        inDiscussion.setValue(true);
+        exercise = null;
         reminder = new MutableLiveData<>();
+        inExercise = new MutableLiveData<>();
         exerciseAnswer = null;
     }
 
     public static void clear() {
         inDiscussion = null;
+        inExercise = null;
         exercise = null;
         exerciseAnswer = null;
         reminder = null;
@@ -57,7 +62,7 @@ public class GlobalVariables {
     }
 
     static void setExercise(ExerciseType exerciseType) {
-        exercise.setValue(exerciseType);
+        exercise = exerciseType;
     }
 
     public static void setExerciseAnswer(ExerciseAnswer exerciseAnswer) {
@@ -68,11 +73,19 @@ public class GlobalVariables {
         return inDiscussion;
     }
 
-    public static MutableLiveData<ExerciseType> getExercise() {
+    public static ExerciseType getExercise() {
         return exercise;
     }
 
     public static ExerciseAnswer getExerciseAnswer() {
         return exerciseAnswer;
+    }
+
+    public static void setInDiscussion(boolean inDiscussion) {
+        GlobalVariables.inDiscussion.setValue(inDiscussion);
+    }
+
+    public static MutableLiveData<Boolean> getInExercise() {
+        return inExercise;
     }
 }

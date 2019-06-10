@@ -75,16 +75,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        GlobalVariables.getExercise().observe(this, new Observer<ExerciseType>() {
+        GlobalVariables.getInExercise().observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(@Nullable ExerciseType exerciseType) {
-                if (exerciseType == null) {
-                    practiseButton.setEnabled(true);
-                    practiseButton.setText(R.string.practise_active);
-                } else {
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (aBoolean == null || !aBoolean) {
                     practiseButton.setEnabled(false);
                     practiseButton.setText(R.string.practise_inactive);
+                } else {
+                    practiseButton.setEnabled(true);
+                    practiseButton.setText(R.string.practise_active);
                 }
+
             }
         });
 

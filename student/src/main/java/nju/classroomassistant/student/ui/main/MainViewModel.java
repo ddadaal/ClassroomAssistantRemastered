@@ -10,7 +10,9 @@ public class MainViewModel extends ViewModel {
 
     public void logout() {
         GlobalVariables.clear();
-        basicService.close();
+        if (basicService.isConnected()) {
+            basicService.close();
+        }
     }
 
 }
