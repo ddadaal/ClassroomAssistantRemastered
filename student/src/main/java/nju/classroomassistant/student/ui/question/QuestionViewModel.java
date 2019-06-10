@@ -30,12 +30,12 @@ public class QuestionViewModel extends ViewModel {
     }
 
     void commitQuestion(String question) {
-//        if (basicService.writeToServer(new StudentRaiseQuestionMessage(question))) {
-//            questionResult.setValue(new OperationResult(true, null));
-//        } else {
-//            questionResult.setValue(new OperationResult(false, R.string.network_error));
-//        }
-        questionResult.setValue(new OperationResult(true, null));
+        if (basicService.writeToServer(new StudentRaiseQuestionMessage(question))) {
+            questionResult.setValue(new OperationResult(true, null));
+        } else {
+            questionResult.setValue(new OperationResult(false, R.string.network_error));
+        }
+//        questionResult.setValue(new OperationResult(true, null));
     }
 
 
