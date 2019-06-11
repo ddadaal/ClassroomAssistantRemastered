@@ -22,7 +22,9 @@ import com.sun.javaws.ui.SplashScreen.hide
 import java.util.Collections.addAll
 import com.jfoenix.controls.JFXAutoCompletePopup
 import nju.classroomassistant.shared.util.HistoryQueue
+import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.repository.TeacherIdHistoryRepository
+import nju.classroomassistant.teacher.util.executeLater
 import tornadofx.Stylesheet.Companion.textField
 
 
@@ -55,15 +57,23 @@ class LoginView : View("My View"), Observer, Logger {
             // you can do other actions here when text completed
         }
 
+
         // filtering options
         idProperty.addListener { _, old, newValue ->
             autoCompletePopup.filter { string -> string.toLowerCase().contains(newValue) }
-            if (autoCompletePopup.filteredSuggestions.isEmpty() || newValue.isEmpty()) {
+            if (autoCompletePopup.filteredSuggestions.isEmpty()) {
                 autoCompletePopup.hide()
             } else {
                 autoCompletePopup.show(idField)
             }
         }
+
+
+        idField.setOnMouseClicked {
+            autoCompletePopup.filter { true }
+            autoCompletePopup.show(idField)
+        }
+
     }
 
 
@@ -76,93 +86,106 @@ class LoginView : View("My View"), Observer, Logger {
 
         loggingInProperty.set(true)
 
-        // record into history
+        // 记录输入历史
         TeacherIdHistoryRepository.data.add(idProperty.get())
         TeacherIdHistoryRepository.save()
 
-        // login
+        // 强行停1s
+
+        executeLater(500) {
+            loggingInProperty.set(false)
+
+            // 登录，设置全局变量，跳到课程选择界面
+            GlobalVariables.teacherId.set(idProperty.get())
+            view.switch(find(CourseSelectionView::class).customView)
+        }
 
 
-
-
-        replaceWith<MainView>(sizeToScene = true, centerOnScreen = true)
     }
 
-    override val root = find<LoginCommonView>(mapOf(
-        LoginCommonView::content to vbox {
-            alignment = Pos.BOTTOM_CENTER
+    val customView = vbox {
+        alignment = Pos.BOTTOM_CENTER
 
 //            prefHeight = 80.0
 //            prefWidth = 40.0
-            spacing = 100.0
 
-            hbox {
-                alignment = Pos.CENTER
-                spacing = 10.0
+        hbox {
+            alignment = Pos.CENTER
+            spacing = 10.0
 
-                this += MaterialIconView(MaterialIcon.PERSON, "32")
+            this += MaterialIconView(MaterialIcon.PERSON, "32")
 
-                idField = jfxtextfield(this@LoginView.idProperty, "学号", true) {
-                    validators.add(idValidator)
-
+            idField = jfxtextfield(this@LoginView.idProperty, "学号", true) {
+                validators.add(idValidator)
 
 
-                    prefHeight = 32.0
-                    prefWidth = 300.0
 
-                    focusedProperty().addListener { _, _, newValue ->
-                        if (!newValue) {
-                            this@jfxtextfield.validate()
-                        }
-                    }
+                prefHeight = 32.0
+                prefWidth = 300.0
 
-                    enableWhen { loggingInProperty.booleanBinding { it != true } }
-
-                    setOnKeyPressed {
-                        if (it.code == KeyCode.ENTER) {
-                            login()
-                        }
+                focusedProperty().addListener { _, _, newValue ->
+                    if (!newValue) {
+                        this@jfxtextfield.validate()
                     }
                 }
-            }
 
-            vbox {
-                spacing = 20.0
+                enableWhen { loggingInProperty.not() }
 
-                jfxbutton(loggingInProperty.stringBinding { if (it == true) { "登录中" } else { "登录"} }) {
-                    setOnAction {
+                setOnKeyPressed {
+                    if (it.code == KeyCode.ENTER) {
                         login()
                     }
+                }
+            }
+        }
 
-                    enableWhen { loggingInProperty.not() }
+        vbox {
+            spacing = 20.0
 
-                    prefHeight = 32.0
-                    prefWidth = 340.0
-                    style {
-                        backgroundColor += c("#3F51B5")
-                        textFill = c("#FFFFFF")
-                    }
+            paddingTop = 80.0
 
-                    graphic = MaterialIconView(MaterialIcon.CHECK, "24").apply {
-                        fill = c("#FFFFFF")
-                    }
+            jfxbutton(loggingInProperty.stringBinding { if (it == true) { "登录中" } else { "登录"} }) {
+                setOnAction {
+                    login()
                 }
 
-                jfxbutton("退出", JFXButton.ButtonType.RAISED) {
-                    setOnAction {
-                        primaryStage.close()
-                    }
-                    prefHeight = 32.0
-                    prefWidth = 340.0
+                enableWhen { loggingInProperty.not() }
 
-                    style {
-                        backgroundColor += c("E8EAF6")
-                        textFill = c("#000000")
-                    }
+                prefHeight = 32.0
+                prefWidth = 340.0
+                style {
+                    backgroundColor += c("#3F51B5")
+                    textFill = c("#FFFFFF")
+                }
+
+                graphic = MaterialIconView(MaterialIcon.CHECK, "24").apply {
+                    fill = c("#FFFFFF")
                 }
             }
 
+            jfxbutton("退出", JFXButton.ButtonType.RAISED) {
+                setOnAction {
+                    primaryStage.close()
+                }
+                prefHeight = 32.0
+                prefWidth = 340.0
 
+                style {
+                    backgroundColor += c("E8EAF6")
+                    textFill = c("#000000")
+                }
+
+                graphic = MaterialIconView(MaterialIcon.EXIT_TO_APP, "24")
+
+            }
         }
-    )).root
+
+
+    }
+
+    private val view = find<LoginCommonView>(mapOf(
+            LoginCommonView::content to customView
+    ))
+
+    override val root = view.root
 }

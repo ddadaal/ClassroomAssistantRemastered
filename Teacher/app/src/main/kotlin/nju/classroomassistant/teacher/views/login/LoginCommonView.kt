@@ -4,6 +4,7 @@ import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.StackPane
@@ -14,16 +15,24 @@ import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
 import tornadofx.*
 
-class LoginCommonView: Fragment() {
+class LoginCommonView: View() {
 
     var rootPane: BorderPane by singleAssign()
 
     val content: Parent by param()
 
+    lateinit var current: Parent
+
+    fun switch(node: Parent) {
+        current.replaceWith(node, ViewTransition.Metro(0.3.seconds), sizeToScene = true, centerOnScreen = true)
+        current = node
+    }
 
     override fun onDock() {
 //        primaryStage.makeResizeable()
         primaryStage.makeDraggable(rootPane)
+
+        current = content
     }
 
     override val root = stackpane {

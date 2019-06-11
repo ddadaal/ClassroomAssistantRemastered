@@ -1,5 +1,6 @@
 package nju.classroomassistant.teacher.network
 
+import javafx.beans.property.SimpleStringProperty
 import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage
 import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
 import tornadofx.*
@@ -36,4 +37,14 @@ object GlobalVariables {
             s.handler.writeMessage(DiscussionStartMessage())
         }
     }
+
+
+    // 登录信息
+
+    // 老师ID
+    var teacherId = SimpleStringProperty("")
+
+    // 老师姓名
+
+
 }
