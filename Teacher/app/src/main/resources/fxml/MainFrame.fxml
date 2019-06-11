@@ -1,0 +1,161 @@
+
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import de.jensd.fx.glyphs.materialicons.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<StackPane fx:id="dialogContainer" prefHeight="604" prefWidth="804" styleClass="exteriorLine" stylesheets="@../css/main.css"
+           xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+>
+    <AnchorPane style="-fx-background-image: url(../img/1.jpg); -fx-background-repeat: no-repeat;">
+        <HBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <GridPane fx:id="drawer" style="-fx-background-color: white" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0">
+                <columnConstraints>
+                    <ColumnConstraints prefWidth="200" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints prefHeight="250.0" vgrow="SOMETIMES" />
+                    <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+                <VBox GridPane.rowIndex="0" >
+                    <Label fx:id="promptLabel" contentDisplay="CENTER" style="-fx-text-fill: #FFFFFF" text="Hello!">
+                        <graphic>
+                            <ImageView fitHeight="100.0" fitWidth="200.0">
+                                <image>
+                                    <Image url="@../img/2.jpg" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Label>
+                    <JFXButton onAction="#onBtnHomeClicked" prefHeight="60" prefWidth="200" text="主界面" textFill="#000000">
+                        <graphic>
+                            <FontAwesomeIconView glyphName="HOME" glyphSize="20" />
+                        </graphic>
+                    </JFXButton>
+                    <!--功能按钮区-->
+                    <JFXButton onAction="#onBtnExerciseClicked" prefHeight="60" prefWidth="200" text="练习" textFill="#000000">
+                        <graphic>
+                            <FontAwesomeIconView glyphName="CHECK" glyphSize="18" fill="black" />
+                        </graphic>
+                    </JFXButton>
+                    <JFXButton onAction="#onBtnRaiseQuestionClicked" prefHeight="60" prefWidth="200" text="提问" textFill="#000000">
+                        <graphic>
+                            <MaterialDesignIconView glyphName="FACE" glyphSize="18" fill="black" />
+                        </graphic>
+                    </JFXButton>
+                    <JFXButton onAction="#onBtnDiscussionClicked" prefHeight="60" prefWidth="200" text="讨论" textFill="#000000">
+                        <graphic>
+                            <MaterialDesignIconView glyphName="CLOUD_OUTLINE" glyphSize="18" fill="black" />
+                        </graphic>
+                    </JFXButton>
+                    <!--功能按钮区完-->
+                    <Separator prefHeight="5" prefWidth="200" />
+                </VBox>
+                <VBox alignment="BOTTOM_CENTER" GridPane.rowIndex="1">
+                    <JFXButton onAction="#onBtnAboutClicked" prefHeight="60" prefWidth="200" text="关于系统" textFill="#000000">
+                        <graphic>
+                            <MaterialIconView glyphName="SENTIMENT_VERY_SATISFIED" glyphSize="20" />
+                        </graphic>
+                    </JFXButton>
+                    <!--复制这里-->
+                </VBox>
+            </GridPane>
+            <BorderPane AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+                <top>
+                    <GridPane fx:id="titleBar" style="-fx-background-color: #232e5f;">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+
+                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="0">
+                            <padding>
+                                <Insets left="20" />
+                            </padding>
+                            <Text fx:id="titleText" fill="white" text="功能">
+                                <font>
+                                    <Font size="24.0" />
+                                </font>
+                            </Text>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="50" GridPane.columnIndex="1">
+                            <JFXButton ripplerFill="aliceblue" text="" onMouseClicked="#onBtnMinimizeClicked">
+                                <graphic>
+                                    <MaterialIconView glyphName="REMOVE" glyphSize="26" glyphStyle="-fx-fill: #FFFFFF;" />
+                                </graphic>
+                            </JFXButton>
+                            <JFXButton ripplerFill="aliceblue" text="" onMouseClicked="#onBtnMaximizeClicked">
+                                <graphic>
+                                    <MaterialIconView fx:id="maximizeButtonGlyph" glyphSize="26" glyphStyle="-fx-fill: #FFFFFF;" />
+                                </graphic>
+                            </JFXButton>
+                            <JFXButton ripplerFill="red" text="" onMouseClicked="#onBtnCloseClicked">
+                                <graphic>
+                                    <MaterialIconView glyphName="CLOSE" glyphSize="26" glyphStyle="-fx-fill: #FFFFFF;" />
+                                </graphic>
+                            </JFXButton>
+                        </HBox>
+                    </GridPane>
+
+                    <!--<HBox fx:id="titleBar" prefHeight="50" style="-fx-background-image: url(../../img/1.jpg);">-->
+                    <!--</HBox>-->
+                </top>
+                <center>
+                    <StackPane fx:id="contentPane" alignment="CENTER" styleClass="floatingPane">
+                        <BorderPane.margin>
+                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        </BorderPane.margin>
+                        <children>
+                            <GridPane>
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                            </GridPane>
+                        </children>
+                    </StackPane>
+                </center>
+                <bottom>
+                    <GridPane fx:id="bottomBar" styleClass="floatingPane" BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints prefWidth="1000" />
+                            <ColumnConstraints prefWidth="1000" />
+                            <ColumnConstraints prefWidth="1000" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+
+
+                        <HBox alignment="CENTER" GridPane.columnIndex="0">
+                            <JFXButton onAction="#onLogButtonClicked" text="日志" />
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" spacing="5" GridPane.columnIndex="2">
+                            <MaterialIconView glyphName="SIGNAL_CELLULAR_4_BAR" glyphSize="16" glyphStyle="-fx-background-color: #DDDDDD" />
+                            <Text fx:id="timeText" text="2017/10/25 21:50:00" />
+                        </HBox>
+                        <padding>
+                            <Insets left="5.0" right="5.0" />
+                        </padding>
+
+                    </GridPane>
+                </bottom>
+            </BorderPane>
+        </HBox>
+    </AnchorPane>
+</StackPane>

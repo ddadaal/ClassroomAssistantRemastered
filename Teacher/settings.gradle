@@ -1,4 +1,2 @@
-rootProject.name = "ClassroomAssistant.Teacher"
-
 includeFlat 'Shared'
-
+include 'app'
