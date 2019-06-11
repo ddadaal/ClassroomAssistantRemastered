@@ -28,14 +28,16 @@ import nju.classroomassistant.teacher.util.executeLater
 import tornadofx.Stylesheet.Companion.textField
 
 
-class LoginView : View("My View"), Observer, Logger {
-    override fun update(o: Observable?, arg: Any?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+class LoginView : View("登录"), Logger {
+
+
 
     val idValidator = RequiredFieldValidator().apply {
         message = "请输入教师ID"
     }
+
+    val switchTo: (page: LoginRelatedPage, direction: ViewTransition.Direction) -> Unit by param()
+
 
     private val idProperty = SimpleStringProperty("")
     private val loggingInProperty = SimpleBooleanProperty(false)
@@ -44,8 +46,8 @@ class LoginView : View("My View"), Observer, Logger {
 
 
     override fun onDock() {
-        primaryStage.makeResizeable()
-        primaryStage.makeDraggable(root)
+//        primaryStage.makeResizeable()
+//        primaryStage.makeDraggable(root)
 
         // initialize auto suggestion
         val autoCompletePopup = JFXAutoCompletePopup<String>()
@@ -90,24 +92,18 @@ class LoginView : View("My View"), Observer, Logger {
         TeacherIdHistoryRepository.data.add(idProperty.get())
         TeacherIdHistoryRepository.save()
 
-        // 强行停1s
 
-        executeLater(500) {
-            loggingInProperty.set(false)
+        loggingInProperty.set(false)
 
-            // 登录，设置全局变量，跳到课程选择界面
-            GlobalVariables.teacherId.set(idProperty.get())
-            view.switch(find(CourseSelectionView::class).customView)
-        }
-
-
+        // 登录，设置全局变量，跳到课程选择界面
+        GlobalVariables.teacherId.set(idProperty.get())
+        switchTo(LoginRelatedPage.COURSE_SELECTION, ViewTransition.Direction.LEFT)
     }
 
-    val customView = vbox {
+    override val root = vbox {
         alignment = Pos.BOTTOM_CENTER
 
-//            prefHeight = 80.0
-//            prefWidth = 40.0
+            prefHeight = 80.0
 
         hbox {
             alignment = Pos.CENTER
@@ -182,10 +178,4 @@ class LoginView : View("My View"), Observer, Logger {
 
 
     }
-
-    private val view = find<LoginCommonView>(mapOf(
-            LoginCommonView::content to customView
-    ))
-
-    override val root = view.root
 }

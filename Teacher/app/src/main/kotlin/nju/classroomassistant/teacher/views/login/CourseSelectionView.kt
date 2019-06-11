@@ -1,35 +1,82 @@
 package nju.classroomassistant.teacher.views.login
 
 import com.jfoenix.controls.JFXButton
+import com.jfoenix.controls.JFXTreeTableColumn
+import com.jfoenix.controls.JFXTreeTableView
+import com.jfoenix.controls.RecursiveTreeItem
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
+import javafx.beans.property.SimpleStringProperty
+import javafx.collections.FXCollections
 import javafx.geometry.Pos
 import javafx.scene.input.KeyCode
 import javafx.scene.text.Font
+import jdk.nashorn.internal.objects.Global
 import kfoenix.jfxbutton
 import kfoenix.jfxtextfield
+import nju.classroomassistant.teacher.models.CourseInfo
 import nju.classroomassistant.teacher.network.GlobalVariables
+import nju.classroomassistant.teacher.repository.CourseInfoRepository
 import tornadofx.*
 
-class CourseSelectionView: View() {
+
+class CourseInfoObservable(courseInfo: CourseInfo) : RecursiveTreeObject<CourseInfoObservable>() {
+    val courseName = SimpleStringProperty(courseInfo.name)
+    val time = SimpleStringProperty(courseInfo.time)
+}
+
+class CourseSelectionView : View("选择课程") {
+
+    val switchTo: (page: LoginRelatedPage, direction: ViewTransition.Direction) -> Unit by param()
+    val courses = FXCollections.observableArrayList<CourseInfoObservable>()
 
 
-    private fun select() {
+
+    val nameColumn = JFXTreeTableColumn<CourseInfoObservable, String>("课程名")
+    val timeColumn = JFXTreeTableColumn<CourseInfoObservable, String>("时间")
+
+    val table = JFXTreeTableView<CourseInfoObservable>()
+
+
+
+    override fun onDock() {
+
+        // initialize table
+
+        nameColumn.setCellValueFactory { it.value.value.courseName }
+        timeColumn.setCellValueFactory { it.value.value.time }
+
+        table.isShowRoot = false
+        table.isEditable = false
+        table.root = RecursiveTreeItem<CourseInfoObservable>(courses) { it.children }
+        table.columns.setAll(nameColumn, timeColumn)
+
+
+
+        // get course info
+        courses.clear()
+        CourseInfoRepository.data.computeIfAbsent(GlobalVariables.teacherId.get()) { arrayListOf() }.forEach {
+            courses.add(CourseInfoObservable(it))
+        }
+//
 
     }
 
-    val customView = vbox {
-        alignment = Pos.BOTTOM_CENTER
-
-//            prefHeight = 80.0
-//            prefWidth = 40.0
+    override val root = vbox {
         spacing = 20.0
 
         label(GlobalVariables.teacherId.stringBinding { "欢迎，$it" }) {
             font = Font(28.0)
         }
 
-        hbox {
+        // initialize table
+
+        vbox {
+
+            prefHeight = 300.0
+
+            this += table
         }
 
         vbox {
@@ -37,7 +84,6 @@ class CourseSelectionView: View() {
 
             jfxbutton("选择") {
                 setOnAction {
-                    select()
                 }
 
 //                enableWhen { loggingInProperty.not() }
@@ -54,9 +100,29 @@ class CourseSelectionView: View() {
                 }
             }
 
+
+            jfxbutton("从教务网导入课程") {
+                setOnAction {
+                    switchTo(LoginRelatedPage.IMPORT, ViewTransition.Direction.LEFT)
+                }
+
+//                enableWhen { loggingInProperty.not() }
+
+                prefHeight = 32.0
+                prefWidth = 340.0
+                style {
+                    backgroundColor += c("#3F51B5")
+                    textFill = c("#FFFFFF")
+                }
+
+                graphic = MaterialIconView(MaterialIcon.IMPORT_EXPORT, "24").apply {
+                    fill = c("#FFFFFF")
+                }
+            }
+
             jfxbutton("返回登录", JFXButton.ButtonType.RAISED) {
                 setOnAction {
-                    view.switch(find(LoginView::class).customView)
+                    switchTo(LoginRelatedPage.LOGIN, ViewTransition.Direction.RIGHT)
                 }
                 prefHeight = 32.0
                 prefWidth = 340.0
@@ -87,14 +153,4 @@ class CourseSelectionView: View() {
 
 
     }
-
-
-    private val view = find<LoginCommonView>(mapOf(
-            LoginCommonView::content to vbox {
-                alignment = Pos.CENTER
-
-            }
-    ))
-
-    override val root = view.root
 }

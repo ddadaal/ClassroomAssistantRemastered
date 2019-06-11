@@ -4,10 +4,12 @@ import javafx.stage.Stage
 import javafx.stage.StageStyle
 import nju.classroomassistant.teacher.network.Server
 import nju.classroomassistant.teacher.views.common.MainCss
+import nju.classroomassistant.teacher.views.login.CourseSelectionView
+import nju.classroomassistant.teacher.views.login.LoginCommonView
 import nju.classroomassistant.teacher.views.login.LoginView
 import tornadofx.*
 
-class TeacherApp: App(LoginView::class, MainCss::class){
+class TeacherApp: App(LoginCommonView::class, MainCss::class){
     init {
         reloadStylesheetsOnFocus()
     }
