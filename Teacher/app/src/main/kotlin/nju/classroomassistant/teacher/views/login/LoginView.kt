@@ -1,18 +1,15 @@
 package nju.classroomassistant.teacher.views.login
 
 import com.jfoenix.controls.JFXButton
+import com.jfoenix.controls.JFXTextField
+import com.jfoenix.validation.RequiredFieldValidator
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
-import javafx.beans.property.SimpleDoubleProperty
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
-import javafx.event.ActionEvent
-import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.scene.layout.BorderPane
-import javafx.scene.layout.StackPane
-import javafx.scene.text.Font
+import javafx.scene.input.KeyCode
 import kfoenix.jfxbutton
-import kfoenix.jfxcombobox
 import kfoenix.jfxtextfield
 import nju.classroomassistant.shared.log.Logger
 import nju.classroomassistant.teacher.TeacherApp
@@ -27,13 +24,35 @@ class LoginView : View("My View"), Observer, Logger {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onDock() {
+    val idValidator = RequiredFieldValidator().apply {
+        message = "请输入教师ID"
+    }
 
+    override fun onDock() {
         primaryStage.makeResizeable()
         primaryStage.makeDraggable(root)
     }
 
-    private val studentId = SimpleStringProperty("")
+    private val idProperty = SimpleStringProperty("")
+    private val loggingInProperty = SimpleBooleanProperty(false)
+
+    var idField: JFXTextField by singleAssign()
+
+    fun login() {
+
+        if (!idField.validate()) {
+            return
+        }
+
+        loggingInProperty.set(true)
+
+        // login
+
+
+
+
+        replaceWith<MainView>(sizeToScene = true, centerOnScreen = true)
+    }
 
     override val root = find<LoginCommonView>(mapOf(
         LoginCommonView::center to vbox {
@@ -49,9 +68,25 @@ class LoginView : View("My View"), Observer, Logger {
 
                 this += MaterialIconView(MaterialIcon.PERSON, "32")
 
-                jfxtextfield(studentId, "学号", true) {
+                idField = jfxtextfield(this@LoginView.idProperty, "学号", true) {
+                    validators.add(idValidator)
+
                     prefHeight = 32.0
                     prefWidth = 300.0
+
+                    focusedProperty().addListener { _, _, newValue ->
+                        if (!newValue) {
+                            this@jfxtextfield.validate()
+                        }
+                    }
+
+                    enableWhen { loggingInProperty.booleanBinding { it != true } }
+
+                    setOnKeyPressed {
+                        if (it.code == KeyCode.ENTER) {
+                            login()
+                        }
+                    }
                 }
             }
         },
@@ -60,10 +95,13 @@ class LoginView : View("My View"), Observer, Logger {
             spacing = 20.0
             prefWidth = 340.0
 
-            jfxbutton("登录") {
+            jfxbutton(loggingInProperty.stringBinding { if (it == true) { "登录中" } else { "登录"} }) {
                 setOnAction {
-                    replaceWith<MainView>(sizeToScene = true, centerOnScreen = true)
+                    login()
                 }
+
+                enableWhen { loggingInProperty.booleanBinding { it != true }}
+
                 prefHeight = 32.0
                 prefWidth = 340.0
                 style {
@@ -78,7 +116,7 @@ class LoginView : View("My View"), Observer, Logger {
 
             jfxbutton("退出", JFXButton.ButtonType.RAISED) {
                 setOnAction {
-                    TeacherApp.exit()
+                    primaryStage.close()
                 }
                 prefHeight = 32.0
                 prefWidth = 340.0

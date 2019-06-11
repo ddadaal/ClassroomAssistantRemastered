@@ -13,30 +13,17 @@ class TeacherApp: App(LoginView::class, MainCss::class){
     }
 
     override fun start(stage: Stage) {
-        TeacherApp.stage = stage
         stage.initStyle(StageStyle.UNDECORATED)
 
         super.start(stage)
     }
 
     companion object {
-
-        val serverThread = Thread { Server.start() }
-        lateinit var stage: Stage
-
         @JvmStatic
         fun main(args: Array<String>) {
-            // Start Server
-            serverThread.start()
+
             launch<TeacherApp>(args)
         }
-
-        fun exit() {
-            serverThread.interrupt()
-            stage.close()
-        }
-
-
 
     }
 }
