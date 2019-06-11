@@ -1,6 +1,8 @@
 package nju.classroomassistant.shared.messages.login;
 
-public class LoginMessage {
+import nju.classroomassistant.shared.messages.Message;
+
+public class LoginMessage extends Message {
     private String studentId;
 
     public LoginMessage(String studentId) {

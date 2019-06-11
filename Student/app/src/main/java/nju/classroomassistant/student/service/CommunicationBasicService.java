@@ -117,7 +117,12 @@ public class CommunicationBasicService {
             }
             failureCount++;
         }
-        return false;
+        close();
+        tryConnect();
+        if (isConnected())
+            return writeToServer(message);
+        else
+            return false;
     }
 
     public boolean isConnected() {
