@@ -18,9 +18,8 @@ class LoginCommonView: Fragment() {
 
     var rootPane: BorderPane by singleAssign()
 
-    val center: Parent by param()
+    val content: Parent by param()
 
-    val bottom: Parent by param()
 
     override fun onDock() {
 //        primaryStage.makeResizeable()
@@ -63,9 +62,7 @@ class LoginCommonView: Fragment() {
 
             }
 
-            center = this@LoginCommonView.center
-
-            bottom = this@LoginCommonView.bottom
+            center = this@LoginCommonView.content
         }
     }
 }

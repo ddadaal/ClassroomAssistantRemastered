@@ -18,6 +18,13 @@ import nju.classroomassistant.teacher.extensions.makeResizeable
 import nju.classroomassistant.teacher.views.common.MainView
 import tornadofx.*
 import java.util.*
+import com.sun.javaws.ui.SplashScreen.hide
+import java.util.Collections.addAll
+import com.jfoenix.controls.JFXAutoCompletePopup
+import nju.classroomassistant.shared.util.HistoryQueue
+import nju.classroomassistant.teacher.repository.TeacherIdHistoryRepository
+import tornadofx.Stylesheet.Companion.textField
+
 
 class LoginView : View("My View"), Observer, Logger {
     override fun update(o: Observable?, arg: Any?) {
@@ -28,15 +35,38 @@ class LoginView : View("My View"), Observer, Logger {
         message = "请输入教师ID"
     }
 
-    override fun onDock() {
-        primaryStage.makeResizeable()
-        primaryStage.makeDraggable(root)
-    }
-
     private val idProperty = SimpleStringProperty("")
     private val loggingInProperty = SimpleBooleanProperty(false)
 
     var idField: JFXTextField by singleAssign()
+
+
+    override fun onDock() {
+        primaryStage.makeResizeable()
+        primaryStage.makeDraggable(root)
+
+        // initialize auto suggestion
+        val autoCompletePopup = JFXAutoCompletePopup<String>()
+        autoCompletePopup.suggestions.addAll(TeacherIdHistoryRepository.data.history.reversed())
+
+        autoCompletePopup.setSelectionHandler { event ->
+            idProperty.set(event.`object`)
+
+            // you can do other actions here when text completed
+        }
+
+        // filtering options
+        idProperty.addListener { _, old, newValue ->
+            autoCompletePopup.filter { string -> string.toLowerCase().contains(newValue) }
+            if (autoCompletePopup.filteredSuggestions.isEmpty() || newValue.isEmpty()) {
+                autoCompletePopup.hide()
+            } else {
+                autoCompletePopup.show(idField)
+            }
+        }
+    }
+
+
 
     fun login() {
 
@@ -45,6 +75,10 @@ class LoginView : View("My View"), Observer, Logger {
         }
 
         loggingInProperty.set(true)
+
+        // record into history
+        TeacherIdHistoryRepository.data.add(idProperty.get())
+        TeacherIdHistoryRepository.save()
 
         // login
 
@@ -55,12 +89,12 @@ class LoginView : View("My View"), Observer, Logger {
     }
 
     override val root = find<LoginCommonView>(mapOf(
-        LoginCommonView::center to vbox {
-            alignment = Pos.CENTER
+        LoginCommonView::content to vbox {
+            alignment = Pos.BOTTOM_CENTER
 
-            prefHeight = 80.0
-            prefWidth = 40.0
-            spacing = 40.0
+//            prefHeight = 80.0
+//            prefWidth = 40.0
+            spacing = 100.0
 
             hbox {
                 alignment = Pos.CENTER
@@ -70,6 +104,8 @@ class LoginView : View("My View"), Observer, Logger {
 
                 idField = jfxtextfield(this@LoginView.idProperty, "学号", true) {
                     validators.add(idValidator)
+
+
 
                     prefHeight = 32.0
                     prefWidth = 300.0
@@ -89,43 +125,44 @@ class LoginView : View("My View"), Observer, Logger {
                     }
                 }
             }
-        },
-        LoginCommonView::bottom to vbox {
-            alignment = Pos.TOP_CENTER
-            spacing = 20.0
-            prefWidth = 340.0
 
-            jfxbutton(loggingInProperty.stringBinding { if (it == true) { "登录中" } else { "登录"} }) {
-                setOnAction {
-                    login()
+            vbox {
+                spacing = 20.0
+
+                jfxbutton(loggingInProperty.stringBinding { if (it == true) { "登录中" } else { "登录"} }) {
+                    setOnAction {
+                        login()
+                    }
+
+                    enableWhen { loggingInProperty.not() }
+
+                    prefHeight = 32.0
+                    prefWidth = 340.0
+                    style {
+                        backgroundColor += c("#3F51B5")
+                        textFill = c("#FFFFFF")
+                    }
+
+                    graphic = MaterialIconView(MaterialIcon.CHECK, "24").apply {
+                        fill = c("#FFFFFF")
+                    }
                 }
 
-                enableWhen { loggingInProperty.booleanBinding { it != true }}
+                jfxbutton("退出", JFXButton.ButtonType.RAISED) {
+                    setOnAction {
+                        primaryStage.close()
+                    }
+                    prefHeight = 32.0
+                    prefWidth = 340.0
 
-                prefHeight = 32.0
-                prefWidth = 340.0
-                style {
-                    backgroundColor += c("#3F51B5")
-                    textFill = c("#FFFFFF")
-                }
-
-                graphic = MaterialIconView(MaterialIcon.CHECK, "24").apply {
-                    fill = c("#FFFFFF")
+                    style {
+                        backgroundColor += c("E8EAF6")
+                        textFill = c("#000000")
+                    }
                 }
             }
 
-            jfxbutton("退出", JFXButton.ButtonType.RAISED) {
-                setOnAction {
-                    primaryStage.close()
-                }
-                prefHeight = 32.0
-                prefWidth = 340.0
 
-                style {
-                    backgroundColor += c("E8EAF6")
-                    textFill = c("#000000")
-                }
-            }
         }
     )).root
 }
