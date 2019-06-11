@@ -1,6 +1,6 @@
 package nju.classroomassistant.teacher.views.question
 
-import nju.classroomassistant.teacher.extension.PageController
+import nju.classroomassistant.teacher.extensions.PageController
 import tornadofx.*
 
 class Question : View("提问") {

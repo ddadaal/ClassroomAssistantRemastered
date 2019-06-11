@@ -1,6 +1,6 @@
 package nju.classroomassistant.teacher.views.exercise
 
-import nju.classroomassistant.teacher.extension.PageController
+import nju.classroomassistant.teacher.extensions.PageController
 
 
 

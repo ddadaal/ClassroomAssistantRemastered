@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<VBox prefHeight="800.0" prefWidth="800.0" maxHeight="2000" spacing="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" >
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="300.0" spacing="20">
+        <Label text="Light x00" textFill="#000000">
+            <font>
+                <Font name="System Bold" size="42.0" />
+            </font>
+        </Label>
+        <Label text="课堂教学辅助系统" textFill="#000000">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+    </HBox>
+    <HBox spacing="50">
+        <VBox spacing="10">
+            <Label text="版本：v1.0">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <Label text="发布时间：2019/6/11">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+
+            <Label onMouseClicked="#onRepositoryAddressClicked" text="仓库地址：http://github.com/viccrubs/ClassroomAssistantRemastered">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+        </VBox>
+        <VBox spacing="10">
+            <Label onMouseClicked="#onRepositoryAddressClicked" text="支持我们！（支付宝）">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <HBox spacing="20">
+            <ImageView fitHeight="100" fitWidth="100">
+                <image>
+                    <Image url="@../img/CJDPaymentCode.jpg" />
+                </image>
+            </ImageView>
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <Separator />
+
+    <Label text="Trap x00软件使用条约（BSD License），点击内容复制">
+        <font>
+            <Font size="16.0" />
+        </font>
+    </Label>
+
+<!--    <Label onMouseClicked="#onLabelClicked" fx:id="textLicense"/>-->
+    
+
+</VBox>

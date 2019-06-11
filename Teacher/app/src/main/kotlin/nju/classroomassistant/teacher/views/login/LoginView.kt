@@ -15,14 +15,22 @@ import kfoenix.jfxbutton
 import kfoenix.jfxcombobox
 import kfoenix.jfxtextfield
 import nju.classroomassistant.shared.log.Logger
+import nju.classroomassistant.teacher.TeacherApp
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
+import nju.classroomassistant.teacher.views.common.MainView
 import tornadofx.*
 import java.util.*
 
 class LoginView : View("My View"), Observer, Logger {
     override fun update(o: Observable?, arg: Any?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onDock() {
+
+        primaryStage.makeResizeable()
+        primaryStage.makeDraggable(root)
     }
 
     private val studentId = SimpleStringProperty("")
@@ -54,8 +62,7 @@ class LoginView : View("My View"), Observer, Logger {
 
             jfxbutton("登录") {
                 setOnAction {
-
-
+                    replaceWith<MainView>(sizeToScene = true, centerOnScreen = true)
                 }
                 prefHeight = 32.0
                 prefWidth = 340.0
@@ -71,7 +78,7 @@ class LoginView : View("My View"), Observer, Logger {
 
             jfxbutton("退出", JFXButton.ButtonType.RAISED) {
                 setOnAction {
-                    primaryStage.close()
+                    TeacherApp.exit()
                 }
                 prefHeight = 32.0
                 prefWidth = 340.0

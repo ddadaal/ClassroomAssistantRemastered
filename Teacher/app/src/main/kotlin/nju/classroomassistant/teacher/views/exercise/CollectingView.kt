@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleDoubleProperty
 import javafx.scene.paint.Color
 import kfoenix.jfxbutton
 import kfoenix.jfxspinner
-import nju.classroomassistant.teacher.MyStyle
+import nju.classroomassistant.teacher.views.common.MainCss
 import tornadofx.*
 import tornadofx.Stylesheet.Companion.button
 import javax.swing.text.html.StyleSheet
@@ -25,7 +25,7 @@ class CollectingView : View("Collecting View") {
                 jfxspinner() {
                     progress = progressProperty.value
                     setPrefSize(200.0, 200.0)
-                    addClass(MyStyle.`blue-spinner`)
+                    addClass(MainCss.`blue-spinner`)
                 }
 
                 jfxbutton("结束",JFXButton.ButtonType.RAISED){

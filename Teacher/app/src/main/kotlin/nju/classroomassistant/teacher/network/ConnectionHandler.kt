@@ -15,7 +15,7 @@ import java.io.ObjectOutputStream
 import java.net.Socket
 
 
-class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap): Runnable, Logger, Closeable {
+class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap) : Runnable, Logger, Closeable {
 
     override fun close() {
         socketClient.close()
@@ -80,21 +80,13 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap): R
         }
     }
 
-    fun sendDiscussionEndMessage() {
-        writeMessage(DiscussionEndMessage())
-    }
-
-    fun sendDiscussionStartMessage() {
-        writeMessage(DiscussionStartMessage())
-    }
-
-    private fun readMessage(): Message {
+    fun readMessage(): Message {
         val m = `in`.readObject() as Message
         verbose("Message Received: $m")
         return m
     }
 
-    private fun writeMessage(message: Message) {
+    fun writeMessage(message: Message) {
         out.writeObject(message)
     }
 

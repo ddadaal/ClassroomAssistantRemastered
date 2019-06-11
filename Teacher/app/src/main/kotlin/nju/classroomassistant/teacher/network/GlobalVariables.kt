@@ -1,5 +1,7 @@
 package nju.classroomassistant.teacher.network
 
+import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage
+import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
 import tornadofx.*
 import kotlin.properties.Delegates
 
@@ -24,13 +26,14 @@ object GlobalVariables {
 
     private fun sendDiscussionEndingMessage() {
         for (s in Server.studentMap.allStudents) {
-            s.handler.sendDiscussionEndMessage()
+            s.handler.writeMessage(DiscussionEndMessage())
+
         }
     }
 
     private fun sendDiscussionStartMessage() {
         for (s in Server.studentMap.allStudents) {
-            s.handler.sendDiscussionStartMessage()
+            s.handler.writeMessage(DiscussionStartMessage())
         }
     }
 }
