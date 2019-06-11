@@ -74,8 +74,11 @@ class MainView : View() {
 
     private fun to(page: Page) {
         val target = find(find(page.controller!!).view).root
-        current.replaceWith(target, ViewTransition.Metro(0.3.seconds))
-        current = target
+        if (target != current) {
+            current.replaceWith(target, ViewTransition.Metro(0.3.seconds), true, true)
+            current = target
+
+        }
 
     }
 
@@ -108,7 +111,7 @@ class MainView : View() {
     }
 
     fun onBtnCloseClicked(mouseEvent: MouseEvent) {
-        TeacherApp.exit()
+//        TeacherApp.exit()/
 
     }
 
