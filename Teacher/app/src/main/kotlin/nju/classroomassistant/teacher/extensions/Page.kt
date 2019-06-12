@@ -10,7 +10,7 @@ abstract class PageController(initial: KClass<out View>): Controller() {
     var view = initial
 
     inline fun <reified T: View> to() {
-        find(view).replaceWith(T::class, ViewTransition.NewsFlash(0.3.seconds))
+        find(view).replaceWith(T::class, ViewTransition.Metro(0.3.seconds))
         view = T::class
     }
 }

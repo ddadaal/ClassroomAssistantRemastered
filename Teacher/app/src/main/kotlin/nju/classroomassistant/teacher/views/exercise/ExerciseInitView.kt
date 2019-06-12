@@ -19,21 +19,27 @@ class ExerciseInitView : View("练习") {
     val controller: ExerciseController by inject()
 
     override val root = vbox {
-        hbox {
-            label("题型") {
+        borderpane {
+            left=label("题型") {
                 textAlignment = TextAlignment.LEFT
                 prefWidth = 80.0
             }
-            togglegroup {
-                jfxradiobutton("填空题", value = true)
-                        .setOnAction {
+            right= hbox{
+                togglegroup {
+                    jfxradiobutton("填空题"){
+                        setOnAction {
                             isBlankProperty.set(true)
                         }
-                jfxradiobutton("选择题")
-                        .setOnAction {
-                            isBlankProperty.set(false)
-                        }
-                spacing = 20.0
+                        isSelected=true
+                    }
+
+
+                    jfxradiobutton("选择题")
+                            .setOnAction {
+                                isBlankProperty.set(false)
+                            }
+                    spacing = 20.0
+                }
             }
             alignment = Pos.BASELINE_LEFT
         }

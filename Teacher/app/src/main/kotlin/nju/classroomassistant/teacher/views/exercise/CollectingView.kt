@@ -2,7 +2,9 @@ package nju.classroomassistant.teacher.views.exercise
 
 import com.jfoenix.controls.JFXButton
 import javafx.beans.property.SimpleDoubleProperty
+import javafx.geometry.Pos
 import javafx.scene.paint.Color
+import javafx.scene.text.TextAlignment
 import kfoenix.jfxbutton
 import kfoenix.jfxspinner
 import nju.classroomassistant.teacher.views.common.MainCss
@@ -19,14 +21,25 @@ class CollectingView : View("Collecting View") {
     val controller: ExerciseController by inject()
 
 
-    override val root = borderpane {
 
+
+    override val root = borderpane {
+        importStylesheet("/css/jfoenix-main-demo.css")
             center= vbox{
-                jfxspinner {
+                borderpane{
+                    left=label("作答人数")
+                    right=label("160人")
+                    style{
+                        fontSize=16.px
+                    }
+                }
+
+                jfxspinner() {
                     progress = progressProperty.value
                     setPrefSize(200.0, 200.0)
-                    addClass(MainCss.`blue-spinner`)
+//                    addClass(MainCss.`blue-spinner`)
                 }
+
 
                 jfxbutton("结束",JFXButton.ButtonType.RAISED){
                     setOnAction {
