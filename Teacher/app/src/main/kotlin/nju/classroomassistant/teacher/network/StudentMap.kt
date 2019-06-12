@@ -7,8 +7,9 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
 class StudentInfo(
-    val handler: ConnectionHandler,
-    val nickname: String
+        val studentId: String,
+        val handler: ConnectionHandler,
+        val nickname: String
 )
 
 class StudentMap : Observable() {
@@ -20,11 +21,14 @@ class StudentMap : Observable() {
     val allStudents: Collection<StudentInfo>
         get() = infoMap.values
 
-    fun login(studentId: String, handler: ConnectionHandler) {
-        infoMap[studentId] = StudentInfo(handler, NICKNAME_LIST[studentId.toInt() % 5])
+    fun login(studentId: String, handler: ConnectionHandler): StudentInfo {
+        val info = StudentInfo(studentId, handler, NICKNAME_LIST[studentId.toInt() % 5])
+        infoMap[studentId] = info
 
         setChanged()
         notifyObservers()
+
+        return info
     }
 
     fun logout(studentId: String) {
@@ -32,6 +36,10 @@ class StudentMap : Observable() {
 
         setChanged()
         notifyObservers()
+    }
+
+    fun getStudentById(studentId: String): StudentInfo? {
+        return infoMap[studentId]
     }
 
 }

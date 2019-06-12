@@ -9,6 +9,11 @@ import javafx.scene.text.TextAlignment
 import kfoenix.jfxbutton
 import kfoenix.jfxcombobox
 import kfoenix.jfxradiobutton
+import nju.classroomassistant.shared.messages.exercise.ExerciseStartMessage
+import nju.classroomassistant.shared.messages.exercise.type.ChoiceExerciseType
+import nju.classroomassistant.shared.messages.exercise.type.FillBlankExerciseType
+import nju.classroomassistant.teacher.network.GlobalVariables
+import nju.classroomassistant.teacher.network.Server
 import tornadofx.*
 
 
@@ -19,21 +24,27 @@ class ExerciseInitView : View("练习") {
     val controller: ExerciseController by inject()
 
     override val root = vbox {
-        hbox {
-            label("题型") {
+        borderpane {
+            left=label("题型") {
                 textAlignment = TextAlignment.LEFT
                 prefWidth = 80.0
             }
-            togglegroup {
-                jfxradiobutton("填空题", value = true)
-                        .setOnAction {
+            right= hbox{
+                togglegroup {
+                    jfxradiobutton("填空题"){
+                        setOnAction {
                             isBlankProperty.set(true)
                         }
-                jfxradiobutton("选择题")
-                        .setOnAction {
-                            isBlankProperty.set(false)
-                        }
-                spacing = 20.0
+                        isSelected=true
+                    }
+
+
+                    jfxradiobutton("选择题")
+                            .setOnAction {
+                                isBlankProperty.set(false)
+                            }
+                    spacing = 20.0
+                }
             }
             alignment = Pos.BASELINE_LEFT
         }
@@ -53,7 +64,7 @@ class ExerciseInitView : View("练习") {
         jfxbutton("发布", JFXButton.ButtonType.RAISED) {
 
             action {
-                controller.to<CollectingView>()
+                publish()
             }
             prefWidth = 300.0
             prefHeight = 30.0
@@ -69,6 +80,22 @@ class ExerciseInitView : View("练习") {
         maxHeight = 300.0
         spacing = 40.0
 
+
+    }
+
+    private fun publish() {
+
+        val exercise = if (isBlankProperty.get()) {
+            FillBlankExerciseType()
+        } else {
+            ChoiceExerciseType(choiceNumberProperty.get())
+        }
+
+        GlobalVariables.exerciseSession.start(exercise)
+
+        Server.writeToAllStudentsAsync(ExerciseStartMessage(exercise))
+
+        controller.to<CollectingView>()
 
     }
 

@@ -8,20 +8,20 @@ import kfoenix.jfxlistview
 import kfoenix.jfxtextfield
 import kfoenix.jfxtogglebutton
 import nju.classroomassistant.teacher.extensions.PageController
-import nju.classroomassistant.teacher.network.QuestionSession
+import nju.classroomassistant.teacher.network.GlobalVariables
 import tornadofx.*
 
 class QuestionView : View("提问") {
 
     private val controller: QuestionController by inject()
 
-    private val questionList = QuestionSession.questionList
+    private val session = GlobalVariables.questionSession
 
     override val root = borderpane {
 
         importStylesheet("/css/main.css")
 
-        center = jfxlistview(questionList) {
+        center = jfxlistview(session.questionList) {
 
             cellFormat {
                 graphic = cache {
@@ -69,7 +69,6 @@ class QuestionView : View("提问") {
                 prefHeight = 30.0
 
                 action {
-                    QuestionSession.isNotificationOpen = !QuestionSession.isNotificationOpen
                     if (isSelected) {
                         // Open message notification
                     } else {
@@ -84,7 +83,7 @@ class QuestionView : View("提问") {
 
                 action {
                     // Clear all questions
-                    questionList.clear()
+                    session.questionList.clear()
                     center.getChildList()!!.clear()
                 }
 

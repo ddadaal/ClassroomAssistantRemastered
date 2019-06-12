@@ -3,12 +3,10 @@ package nju.classroomassistant.teacher.views.common
 import javafx.scene.paint.Color
 import tornadofx.*
 
-class MainCss: Stylesheet() {
+class MainCss : Stylesheet() {
     companion object {
         val exteriorLine by cssclass()
-        val `blue-spinner` by cssclass()
-        val arc by cssclass()
-        val track by cssclass()
+        val chartBar by cssclass()
     }
 
     init {
@@ -17,14 +15,8 @@ class MainCss: Stylesheet() {
             borderWidth += box(1.px)
         }
 
-        `blue-spinner` {
-            arc {
-                stroke = Color.RED
-            }
-
-            track {
-                stroke = Color.BLACK
-            }
+        chartBar {
+            barFill = c("#5264AE")
         }
 
     }

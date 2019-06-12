@@ -2,11 +2,16 @@ package nju.classroomassistant.teacher.network
 
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.collections.FXCollections
 import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage
 import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
 import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
+import nju.classroomassistant.shared.messages.exercise.answer.ExerciseAnswer
+import nju.classroomassistant.shared.messages.exercise.type.ExerciseType
 import nju.classroomassistant.teacher.models.CourseInfo
-import nju.classroomassistant.teacher.views.discussion.DiscussionItem
+import nju.classroomassistant.teacher.network.session.DiscussionSession
+import nju.classroomassistant.teacher.network.session.ExerciseSession
+import nju.classroomassistant.teacher.network.session.QuestionSession
 import tornadofx.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -19,50 +24,20 @@ import kotlin.properties.Delegates
  */
 object GlobalVariables {
 
-    private val DISCUSSION_INITIAL_SIZE = 30
-
-    var discussionStart: Boolean by Delegates.observable(false) { _, _, newValue ->
-        // Send ending message to student clients when quit discussion
-        if (!newValue) {
-            Thread { sendDiscussionEndingMessage() }.start()
-        } else {
-            // Start a new discussion, clear previous discussion content and increment discussionCount
-            Thread { sendDiscussionStartMessage() }.start()
-            currentDiscussionQueue.clear()
-            discussionCount++
-        }
-    }
-
-    var discussionCount = 0
-
-    val currentDiscussionQueue = ArrayList<DiscussionItem>().apply {
-        addAll(
-            Collections.nCopies(
-                DISCUSSION_INITIAL_SIZE,
-                DiscussionItem(StudentSendDiscussionMessage("ok\nok"), "12")
-            )
-        )
-    }.observable()
-
-
-    fun addDiscussionMessage(studentId: String?, message: StudentSendDiscussionMessage) {
-        currentDiscussionQueue.add(DiscussionItem(message, studentId))
-    }
-
-    private fun sendDiscussionEndingMessage() {
-        for (s in Server.studentMap.allStudents) {
-            s.handler.writeMessage(DiscussionEndMessage())
-
-        }
-    }
-
-    private fun sendDiscussionStartMessage() {
-        for (s in Server.studentMap.allStudents) {
-            s.handler.writeMessage(DiscussionStartMessage())
-        }
-    }
-
     // 登录信息
     val teacherId = SimpleStringProperty()
     val course = SimpleObjectProperty<CourseInfo>()
+
+    // 练习信息
+    val exerciseSession = ExerciseSession()
+
+    // 讨论信息
+    val discussionSession = DiscussionSession()
+
+    // 提问信息
+    val questionSession = QuestionSession()
 }
+
+
+
+
