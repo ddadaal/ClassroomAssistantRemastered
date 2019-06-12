@@ -1,5 +1,6 @@
 package nju.classroomassistant.student.service;
 
+import android.os.Handler;
 import android.util.Log;
 
 import nju.classroomassistant.shared.Config;
@@ -34,28 +35,33 @@ public class CommunicationBasicService {
         public void run() {
 
             while (!terminated) {
+
+                final Handler handler = new Handler();
+
                 try {
                     Message obj = (Message) in.readObject();
                     // do something if success
-                    if (obj instanceof LogoutMessage) {
-                        // do nothing
-                    } else if (obj instanceof ExerciseStartMessage) {
-                        ExerciseType exerciseType = ((ExerciseStartMessage) obj).getExerciseType();
-                        GlobalVariables.setExercise(exerciseType);
-                    } else if (obj instanceof ExerciseEndMessage) {
-                        GlobalVariables.setExercise(null);
-                        GlobalVariables.setExerciseAnswer(null);
-                    } else if (obj instanceof NotificationSettingChangeMessage) {
-                        GlobalVariables.setReminderState(((NotificationSettingChangeMessage) obj).
-                                isInstantNotificationEnabled());
-                    } else if (obj instanceof DiscussionEndMessage) {
-                        GlobalVariables.setDiscussionState(false);
-                    } else if (obj instanceof DiscussionStartMessage) {
-                        GlobalVariables.setDiscussionState(true);
-                    } else {
-                        // do nothing
-                        Log.d(CommunicationBasicService.class.getName(), "" + obj);
-                    }
+                    handler.post(() -> {
+                        if (obj instanceof LogoutMessage) {
+                            // do nothing
+                        } else if (obj instanceof ExerciseStartMessage) {
+                            ExerciseType exerciseType = ((ExerciseStartMessage) obj).getExerciseType();
+                            GlobalVariables.setExercise(exerciseType);
+                        } else if (obj instanceof ExerciseEndMessage) {
+                            GlobalVariables.setExercise(null);
+                            GlobalVariables.setExerciseAnswer(null);
+                        } else if (obj instanceof NotificationSettingChangeMessage) {
+                            GlobalVariables.setReminderState(((NotificationSettingChangeMessage) obj).
+                                    isInstantNotificationEnabled());
+                        } else if (obj instanceof DiscussionEndMessage) {
+                            GlobalVariables.setDiscussionState(false);
+                        } else if (obj instanceof DiscussionStartMessage) {
+                            GlobalVariables.setDiscussionState(true);
+                        } else {
+                            // do nothing
+                            Log.d(CommunicationBasicService.class.getName(), "" + obj);
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
