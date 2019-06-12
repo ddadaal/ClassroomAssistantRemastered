@@ -10,6 +10,7 @@ import javafx.scene.control.Label
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
+import kfoenix.jfxsnackbar
 import nju.classroomassistant.teacher.extensions.PageController
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
@@ -21,6 +22,7 @@ import nju.classroomassistant.teacher.views.exercise.ExerciseController
 import nju.classroomassistant.teacher.views.home.HomeController
 import nju.classroomassistant.teacher.views.question.QuestionController
 import tornadofx.*
+import java.time.LocalDateTime
 import kotlin.reflect.KClass
 
 class MainView : View() {
@@ -122,6 +124,11 @@ class MainView : View() {
         Server.stop()
         primaryStage.close()
 
+    }
+
+    fun onBtnExportClicked(actionEvent: ActionEvent) {
+        val filename = "${GlobalVariables.course.get().courseName}-${LocalDateTime.now()}.xlsx"
+        jfxsnackbar("已导出课堂信息到桌面：$filename", root)
     }
 
 

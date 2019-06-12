@@ -1,9 +1,12 @@
 package nju.classroomassistant.teacher.network
 
+import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleStringProperty
 import javafx.scene.layout.HBox
 import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage
 import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
 import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
+import nju.classroomassistant.teacher.models.CourseInfo
 import nju.classroomassistant.teacher.views.discussion.DiscussionItem
 import tornadofx.*
 import java.util.*
@@ -53,4 +56,8 @@ object GlobalVariables {
             s.handler.writeMessage(DiscussionStartMessage())
         }
     }
+
+    // 登录信息
+    val teacherId = SimpleStringProperty()
+    val course = SimpleObjectProperty<CourseInfo>()
 }

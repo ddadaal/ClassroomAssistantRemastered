@@ -76,6 +76,12 @@ class CourseSelectionView : View("选择课程") {
 
         }
 
+        table.setOnMouseClicked {
+            if (it.clickCount == 2) {
+                select()
+            }
+        }
+
 
         // get course info
         courses.clear()

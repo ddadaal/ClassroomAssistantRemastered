@@ -48,39 +48,37 @@ class LoginView : View("登录"), Logger {
 //        primaryStage.makeResizeable()
 //        primaryStage.makeDraggable(root)
 
-        // initialize auto suggestion
-        val autoCompletePopup = JFXAutoCompletePopup<String>()
-        autoCompletePopup.suggestions.addAll(TeacherIdHistoryRepository.data.history.reversed())
-
-        autoCompletePopup.setSelectionHandler { event ->
-            idProperty.set(event.`object`)
-
-            // you can do other actions here when text completed
-        }
-
-
-        idField.setOnMouseClicked {
-            autoCompletePopup.filter { true }
-            autoCompletePopup.show(idField)
-        }
-
+//        // initialize auto suggestion
+//        val autoCompletePopup = JFXAutoCompletePopup<String>()
+//        autoCompletePopup.suggestions.addAll(TeacherIdHistoryRepository.data.history.reversed())
+//
+//        autoCompletePopup.setSelectionHandler { event ->
+//            idProperty.set(event.`object`)
+//
+//            // you can do other actions here when text completed
+//        }
+//
+//
+//        idField.setOnMouseClicked {
+//            autoCompletePopup.filter { true }
+//            autoCompletePopup.show(idField)
+//        }
+//
         idField.setOnKeyPressed {
 
-            idField.requestFocus()
-
             if (it.code == KeyCode.ENTER) {
-                autoCompletePopup.hide()
                 login()
             }
-
-            autoCompletePopup.filter { string -> string.toLowerCase().contains(idField.text) }
-            if (autoCompletePopup.filteredSuggestions.isEmpty()) {
-                autoCompletePopup.hide()
-            } else {
-                autoCompletePopup.show(idField)
-            }
-
         }
+//
+//            autoCompletePopup.filter { string -> string.toLowerCase().contains(idField.text) }
+//            if (autoCompletePopup.filteredSuggestions.isEmpty()) {
+//                autoCompletePopup.hide()
+//            } else {
+//                autoCompletePopup.show(idField)
+//            }
+//
+//        }
 
     }
 
@@ -118,7 +116,7 @@ class LoginView : View("登录"), Logger {
 
             this += MaterialIconView(MaterialIcon.PERSON, "32")
 
-            idField = jfxtextfield(this@LoginView.idProperty, "学号", true) {
+            idField = jfxtextfield(this@LoginView.idProperty, "教师号", true) {
                 validators.add(idValidator)
 
                 prefHeight = 32.0
