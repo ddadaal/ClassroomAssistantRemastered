@@ -1,7 +1,8 @@
 package nju.classroomassistant.teacher.network
 
+import javafx.collections.FXCollections
 import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
-import tornadofx.observable
+import tornadofx.*
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
@@ -16,14 +17,19 @@ class StudentMap : Observable() {
 
     private val NICKNAME_LIST = listOf("小黑", "小白", "小红", "小明", "小刚")
 
-    private val infoMap = ConcurrentHashMap<String, StudentInfo>()
+    private val infoMap = FXCollections.observableHashMap<String, StudentInfo>()
+
+    val studentMapObservable get() = infoMap
 
     val allStudents: Collection<StudentInfo>
         get() = infoMap.values
 
     fun login(studentId: String, handler: ConnectionHandler): StudentInfo {
         val info = StudentInfo(studentId, handler, NICKNAME_LIST[studentId.toInt() % 5])
-        infoMap[studentId] = info
+
+        runLater {
+            infoMap[studentId] = info
+        }
 
         setChanged()
         notifyObservers()
@@ -31,8 +37,12 @@ class StudentMap : Observable() {
         return info
     }
 
+    val size get() = infoMap.size
+
     fun logout(studentId: String) {
-        infoMap.remove(studentId)
+        runLater {
+            infoMap.remove(studentId)
+        }
 
         setChanged()
         notifyObservers()

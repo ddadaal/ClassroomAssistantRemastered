@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import nju.classroomassistant.shared.messages.exercise.ExerciseSubmitMessage;
 import nju.classroomassistant.shared.messages.exercise.answer.ChoiceExerciseAnswer;
 import nju.classroomassistant.shared.messages.exercise.answer.FillBlankExerciseAnswer;
 import nju.classroomassistant.student.R;
@@ -57,7 +58,7 @@ public class ChoiceViewModel extends ViewModel {
 
             OperationResult tempOperationResult;
 
-            if (basicService.writeToServer(exerciseAnswer)) {
+            if (basicService.writeToServer(new ExerciseSubmitMessage(exerciseAnswer))) {
                 tempOperationResult = new OperationResult(true, null);
             } else {
                 tempOperationResult = new OperationResult(false, R.string.network_error);

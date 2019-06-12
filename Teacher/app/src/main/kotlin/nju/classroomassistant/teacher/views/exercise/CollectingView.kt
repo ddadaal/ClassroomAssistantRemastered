@@ -20,7 +20,6 @@ import javax.swing.text.html.StyleSheet
 
 class CollectingView : View("Collecting View") {
 
-    val progressProperty = SimpleDoubleProperty(0.8)
     val controller: ExerciseController by inject()
 
     val session = GlobalVariables.exerciseSession
@@ -30,24 +29,24 @@ class CollectingView : View("Collecting View") {
 
         alignment = Pos.CENTER
 
-        importStylesheet("/css/jfoenix-main-demo.css")
-
         maxWidth = 500.0
         maxHeight = 500.0
         spacing = 40.0
 
         borderpane {
             left = label("作答人数")
-            right = label(Bindings.createStringBinding(Callable { "${session.answers.size} / 160"  }))
+            right = label(Bindings.createStringBinding(Callable { "${session.answers.size} / ${Server.studentMap.size}"  },
+                    session.answers, Server.studentMap.studentMapObservable))
             style {
                 fontSize = 16.px
             }
         }
 
         jfxspinner {
-            progressProperty().bind(this@CollectingView.progressProperty)
+            progressProperty().bind(Bindings.createDoubleBinding(Callable { session.answers.size.toDouble() / Server.studentMap.size },
+                    session.answers, Server.studentMap.studentMapObservable))
             setPrefSize(200.0, 200.0)
-//                    addClass(MainCss.`blue-spinner`)
+            addClass("blue-spinner")
         }
 
         jfxbutton("结束", JFXButton.ButtonType.RAISED) {
