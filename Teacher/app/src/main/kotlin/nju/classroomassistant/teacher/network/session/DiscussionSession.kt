@@ -3,6 +3,7 @@ package nju.classroomassistant.teacher.network.session
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage
 import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
 import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
 import nju.classroomassistant.teacher.network.GlobalVariables
@@ -18,9 +19,7 @@ class DiscussionSession {
 
     var title = SimpleStringProperty("点击开始按钮开始一个讨论")
 
-    var discussionItems = ArrayList<DiscussionItem>().apply {
-        addAll(Collections.nCopies(30, DiscussionItem(StudentSendDiscussionMessage("ok\nok"), "12")))
-    }.observable()
+    var discussionItems = ArrayList<DiscussionItem>().observable()
 
     fun start() {
         started.set(true)
@@ -31,6 +30,7 @@ class DiscussionSession {
     fun stop() {
         started.set(false)
         discussionItems.clear()
+        Server.writeToAllStudentsAsync(DiscussionEndMessage())
     }
 
     fun toggle() {
@@ -42,7 +42,9 @@ class DiscussionSession {
     }
 
     fun add(studentInfo: StudentInfo, message: StudentSendDiscussionMessage) {
-        discussionItems.add(DiscussionItem(message, studentInfo.studentId))
+        runLater {
+            discussionItems.add(DiscussionItem(message, studentInfo.studentId))
+        }
     }
 }
 
