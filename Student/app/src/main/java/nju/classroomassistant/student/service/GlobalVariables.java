@@ -36,11 +36,12 @@ public class GlobalVariables {
 
     public static void init() {
         inDiscussion = new MutableLiveData<>();
-        inDiscussion.setValue(true);
-        exercise = new ChoiceExerciseType(2);
+        inDiscussion.setValue(false);
+  //      exercise = new ChoiceExerciseType(2);
         reminder = new MutableLiveData<>();
         inExercise = new MutableLiveData<>();
-        inExercise.setValue(true);
+  //      inExercise.setValue(true);
+        inExercise.setValue(false);
         exerciseAnswer = null;
     }
 
@@ -86,6 +87,10 @@ public class GlobalVariables {
 
     public static void setInDiscussion(boolean inDiscussion) {
         GlobalVariables.inDiscussion.setValue(inDiscussion);
+    }
+
+    public static void setInExercise(boolean inExercise) {
+        GlobalVariables.inExercise.setValue(inExercise);
     }
 
     public static MutableLiveData<Boolean> getInExercise() {

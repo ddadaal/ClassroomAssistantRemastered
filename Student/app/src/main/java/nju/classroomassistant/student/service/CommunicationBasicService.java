@@ -30,16 +30,20 @@ public class CommunicationBasicService {
 
     private ObjectOutputStream out;
 
+    private final Handler handler = new Handler();
+
     private Thread listener = new Thread(new Runnable() {
         @Override
         public void run() {
 
             while (!terminated) {
 
-                final Handler handler = new Handler();
+
 
                 try {
+                    Log.i(CommunicationBasicService.class.getName(), "wait for message from server...");
                     Message obj = (Message) in.readObject();
+                    Log.i(CommunicationBasicService.class.getName(), obj.toString() + " " + "o98k");
                     // do something if success
                     handler.post(() -> {
                         if (obj instanceof LogoutMessage) {
@@ -47,9 +51,11 @@ public class CommunicationBasicService {
                         } else if (obj instanceof ExerciseStartMessage) {
                             ExerciseType exerciseType = ((ExerciseStartMessage) obj).getExerciseType();
                             GlobalVariables.setExercise(exerciseType);
+                            GlobalVariables.setInExercise(true);
                         } else if (obj instanceof ExerciseEndMessage) {
                             GlobalVariables.setExercise(null);
                             GlobalVariables.setExerciseAnswer(null);
+                            GlobalVariables.setInExercise(false);
                         } else if (obj instanceof NotificationSettingChangeMessage) {
                             GlobalVariables.setReminderState(((NotificationSettingChangeMessage) obj).
                                     isInstantNotificationEnabled());
@@ -64,6 +70,7 @@ public class CommunicationBasicService {
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.exit(100);
                 }
                 // do something if failure
 
@@ -145,7 +152,9 @@ public class CommunicationBasicService {
         LoginMessage loginMessage = new LoginMessage(username);
         try {
             out.writeObject(loginMessage);
-            return ((LoginResponseMessage) in.readObject()).getResponse();
+            LoginResponseMessage.Response response = ((LoginResponseMessage) in.readObject()).getResponse();
+            start();
+            return response;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

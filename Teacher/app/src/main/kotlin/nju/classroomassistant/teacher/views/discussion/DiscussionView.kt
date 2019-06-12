@@ -1,6 +1,7 @@
 package nju.classroomassistant.teacher.views.discussion
 
 import com.jfoenix.controls.JFXButton
+import com.jfoenix.controls.JFXTextField
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Scene
@@ -27,8 +28,16 @@ class DiscussionView : View("讨论") {
 
     val session = GlobalVariables.discussionSession
 
-    override val root = borderpane {
 
+    var titleField: JFXTextField by singleAssign()
+
+    override fun onDock() {
+        super.onDock()
+    }
+
+    override val root = vbox {
+
+        alignment = Pos.CENTER
 
         paddingAll = 50.0
 
@@ -36,11 +45,11 @@ class DiscussionView : View("讨论") {
 
         importStylesheet("/css/main.css")
 
-        val discussionTitle = jfxtextfield(session.title) {
+        titleField = jfxtextfield(session.title) {
             text = "点击开始按钮开始一个讨论"
             isLabelFloat = true
 
-            editableProperty().bind(session.started)
+            disableProperty().bind(session.started.not())
 
             style {
                 fontSize = 20.px
@@ -50,9 +59,7 @@ class DiscussionView : View("讨论") {
 
         }
 
-        top = discussionTitle
-
-        center = stackpane {
+        stackpane {
 
             paddingTop = 50
 
@@ -68,7 +75,7 @@ class DiscussionView : View("讨论") {
         }
 
 
-        bottom = vbox(spacing = 20) {
+        vbox(spacing = 20) {
             padding = Insets(30.0, 5.0, 30.0, 5.0)
             alignment = Pos.CENTER
             maxWidth = 1000.0

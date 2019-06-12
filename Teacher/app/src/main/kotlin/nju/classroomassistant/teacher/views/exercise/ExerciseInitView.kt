@@ -93,7 +93,7 @@ class ExerciseInitView : View("练习") {
 
         GlobalVariables.exerciseSession.start(exercise)
 
-        Server.writeToAllStudentsAsync(ExerciseStartMessage(exercise))
+   //     Server.writeToAllStudentsAsync(ExerciseStartMessage(exercise))
 
         controller.to<CollectingView>()
 

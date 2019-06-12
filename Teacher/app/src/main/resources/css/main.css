@@ -136,3 +136,7 @@
 .jfx-snackbar-action {
     -fx-text-fill: #ff4081;
 }
+
+.jfx-spinner .track {
+    -fx-stroke: #d0d0d0;
+}
