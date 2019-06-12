@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.geometry.Pos
 import javafx.scene.paint.Color
+import javafx.scene.text.Font
 import javafx.scene.text.TextAlignment
 import kfoenix.jfxbutton
 import kfoenix.jfxcombobox
@@ -24,6 +25,11 @@ class ExerciseInitView : View("练习") {
     val controller: ExerciseController by inject()
 
     override val root = vbox {
+
+        label("选择题型") {
+            font = Font(28.0)
+        }
+
         borderpane {
             left=label("题型") {
                 textAlignment = TextAlignment.LEFT
@@ -46,7 +52,7 @@ class ExerciseInitView : View("练习") {
                     spacing = 20.0
                 }
             }
-            alignment = Pos.BASELINE_LEFT
+            alignment = Pos.CENTER
         }
 
         borderpane {
@@ -76,8 +82,8 @@ class ExerciseInitView : View("练习") {
         }
 
 
-        maxWidth = 300.0
-        maxHeight = 300.0
+        maxWidth = 400.0
+//        maxHeight = 400.0
         spacing = 40.0
 
 

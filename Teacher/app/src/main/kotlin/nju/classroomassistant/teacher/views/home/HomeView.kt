@@ -11,4 +11,4 @@ class HomeView: View() {
 
 }
 
-class HomeController: PageController(HomeView::class)
+class HomeController:  PageController(HomeView::class)

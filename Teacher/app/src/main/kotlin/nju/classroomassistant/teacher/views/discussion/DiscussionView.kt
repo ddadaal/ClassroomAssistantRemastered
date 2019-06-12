@@ -39,9 +39,11 @@ class DiscussionView : View("讨论") {
 
         alignment = Pos.CENTER
 
-        paddingAll = 50.0
+        paddingAll = 16.0
 
-        setPrefSize(600.0, 600.0)
+        spacing = 32.0
+
+        setPrefSize(600.0, 10000.0)
 
         importStylesheet("/css/main.css")
 
@@ -54,14 +56,13 @@ class DiscussionView : View("讨论") {
             style {
                 fontSize = 20.px
                 alignment = Pos.BOTTOM_CENTER
-                paddingTop = 20
             }
 
         }
 
         stackpane {
 
-            paddingTop = 50
+            prefHeight = 10000.0
 
             jfxlistview(session.discussionItems) {
                 selectionModel.selectionMode = SelectionMode.SINGLE
@@ -70,6 +71,7 @@ class DiscussionView : View("讨论") {
 //                setCellFactory {
 //                    ChatCellFactory(this.scene)
 //                }
+                prefHeight = 10000.0
 
 
                 style {
@@ -82,7 +84,7 @@ class DiscussionView : View("讨论") {
 
 
         vbox(spacing = 20) {
-            padding = Insets(30.0, 5.0, 30.0, 5.0)
+
             alignment = Pos.CENTER
             maxWidth = 1000.0
             maxHeight = 1000.0
