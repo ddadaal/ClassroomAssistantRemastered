@@ -1,6 +1,8 @@
 package nju.classroomassistant.student.service;
 
 import android.util.Log;
+
+import nju.classroomassistant.shared.Config;
 import nju.classroomassistant.shared.messages.Message;
 import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage;
 import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage;
@@ -69,16 +71,17 @@ public class CommunicationBasicService {
 
     public void tryConnect() {
         try {
-            socket  = new Socket("10.0.2.2", 2333);
-            in = new ObjectInputStream(socket.getInputStream());
+            socket = new Socket("10.0.2.2", Config.PORT);
             out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
             connected = true;
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
-    private CommunicationBasicService () {
+    private CommunicationBasicService() {
 
     }
 
