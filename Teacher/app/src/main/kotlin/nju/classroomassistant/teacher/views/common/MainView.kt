@@ -16,6 +16,7 @@ import nju.classroomassistant.teacher.extensions.makeResizeable
 import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.network.Server
 import nju.classroomassistant.teacher.views.about.AboutViewController
+import nju.classroomassistant.teacher.views.discussion.DiscussionController
 import nju.classroomassistant.teacher.views.exercise.ExerciseController
 import nju.classroomassistant.teacher.views.home.HomeController
 import nju.classroomassistant.teacher.views.question.QuestionController
@@ -75,7 +76,7 @@ class MainView : View() {
         HOME(HomeController::class, "主页"),
         EXERCISE(ExerciseController::class,"练习"),
         QUESTION(QuestionController::class,"提问"),
-        DISCUSSION(null,"讨论"),
+        DISCUSSION(DiscussionController::class,"讨论"),
         ABOUT(AboutViewController::class, "关于")
     }
 

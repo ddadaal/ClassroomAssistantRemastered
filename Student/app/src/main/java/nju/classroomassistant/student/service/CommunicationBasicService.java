@@ -117,8 +117,8 @@ public class CommunicationBasicService {
             }
             failureCount++;
         }
-        close();
-        tryConnect();
+        if (!isConnected())
+            tryConnect();
         if (isConnected())
             return writeToServer(message);
         else
