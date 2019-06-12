@@ -2,6 +2,8 @@ package nju.classroomassistant.student.ui.discussion;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.os.AsyncTask;
+import android.os.Handler;
 
 import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage;
 import nju.classroomassistant.student.R;
@@ -17,12 +19,24 @@ public class DiscussionViewModel extends ViewModel {
     private MutableLiveData<Boolean> canCommit = new MutableLiveData<>();
 
     public void setDiscussion(String content) {
-        StudentSendDiscussionMessage message = new StudentSendDiscussionMessage(content);
-        if (basicService.writeToServer(message)) {
-            sendDiscussionResult.setValue(new OperationResult(true, null));
-        } else {
-            sendDiscussionResult.setValue(new OperationResult(false, R.string.network_error));
-        }
+        final Handler handler = new Handler();
+        AsyncTask.execute(() -> {
+
+            StudentSendDiscussionMessage message = new StudentSendDiscussionMessage(content);
+
+            OperationResult operationResult;
+
+            if (basicService.writeToServer(message)) {
+                operationResult = new OperationResult(true, null);
+            } else {
+                operationResult = new OperationResult(false, R.string.network_error);
+            }
+            handler.post(() -> {
+                sendDiscussionResult.setValue(operationResult);
+            });
+
+        });
+
     }
 
     public MutableLiveData<OperationResult> getSendDiscussionResult() {
