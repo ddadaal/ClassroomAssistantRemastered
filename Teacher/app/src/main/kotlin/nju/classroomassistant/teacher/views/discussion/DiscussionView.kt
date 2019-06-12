@@ -39,11 +39,9 @@ class DiscussionView : View("讨论") {
 
         alignment = Pos.CENTER
 
-        paddingAll = 16.0
+        paddingAll = 50.0
 
-        spacing = 32.0
-
-        setPrefSize(600.0, 10000.0)
+        setPrefSize(600.0, 600.0)
 
         importStylesheet("/css/main.css")
 
@@ -56,23 +54,17 @@ class DiscussionView : View("讨论") {
             style {
                 fontSize = 20.px
                 alignment = Pos.BOTTOM_CENTER
+                paddingTop = 20
             }
 
         }
 
         stackpane {
 
-            prefHeight = 10000.0
+            paddingTop = 50
 
             jfxlistview(session.discussionItems) {
                 selectionModel.selectionMode = SelectionMode.SINGLE
-
-                // The codes below implements a bubble-like style but is ugly
-//                setCellFactory {
-//                    ChatCellFactory(this.scene)
-//                }
-                prefHeight = 10000.0
-
 
                 style {
                     effect = DropShadow(BlurType.THREE_PASS_BOX, Color.rgb(0, 0, 0, 0.8), 5.0, 0.0, 0.0, 0.0)
@@ -84,7 +76,7 @@ class DiscussionView : View("讨论") {
 
 
         vbox(spacing = 20) {
-
+            padding = Insets(30.0, 5.0, 30.0, 5.0)
             alignment = Pos.CENTER
             maxWidth = 1000.0
             maxHeight = 1000.0
@@ -130,6 +122,14 @@ class DiscussionView : View("讨论") {
     }
 }
 
+
+class DiscussionItem(message: StudentSendDiscussionMessage, private val nickname: String?) {
+    private val content = message.content
+
+    override fun toString(): String {
+        return "[$nickname] $content"
+    }
+}
 
 class ChatCellFactory(root: Scene) : ListCell<Pair<String?, String>>() {
 

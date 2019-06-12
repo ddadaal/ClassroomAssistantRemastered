@@ -11,6 +11,7 @@ import nju.classroomassistant.shared.messages.exercise.type.ExerciseType
 import nju.classroomassistant.teacher.models.CourseInfo
 import nju.classroomassistant.teacher.network.session.DiscussionSession
 import nju.classroomassistant.teacher.network.session.ExerciseSession
+import nju.classroomassistant.teacher.network.session.QuestionSession
 import tornadofx.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -33,6 +34,8 @@ object GlobalVariables {
     // 讨论信息
     val discussionSession = DiscussionSession()
 
+    // 提问信息
+    val questionSession = QuestionSession()
 }
 
 
