@@ -2,6 +2,8 @@ package nju.classroomassistant.student.ui.login;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.os.AsyncTask;
+import android.os.Handler;
 
 import nju.classroomassistant.shared.messages.login.LoginResponseMessage;
 import nju.classroomassistant.student.R;
@@ -26,24 +28,36 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
-    void login(String username) {
+    void login(final String username) {
         GlobalVariables.init();
-    //    LoginResponse response = basicService.login(username);
-        LoginResponseMessage.Response response = LoginResponseMessage.Response.OK;
-        switch (response) {
-            case OK:
-                loginResult.setValue(new OperationResult(true, null));
-                break;
-            case ERROR:
-                loginResult.setValue(new OperationResult(false, R.string.network_error));
-                break;
-            case NOT_ALLOWED:
-                loginResult.setValue(new OperationResult(false, R.string.invalid_username));
-                break;
-            default:
-                break;
-        }
+
+        final Handler handler = new Handler();
+
+
+        AsyncTask.execute(() -> {
+            final LoginResponseMessage.Response response = basicService.login(username);
+
+            handler.post(() -> {
+
+                switch (response) {
+                    case OK:
+                        loginResult.setValue(new OperationResult(true, null));
+                        break;
+                    case ERROR:
+                        loginResult.setValue(new OperationResult(false, R.string.network_error));
+                        break;
+                    case NOT_ALLOWED:
+                        loginResult.setValue(new OperationResult(false, R.string.invalid_username));
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
+
+
     }
+
 
     void loginDataChanged(String username) {
         Integer usernameError = null;
@@ -54,14 +68,15 @@ public class LoginViewModel extends ViewModel {
     }
 
     private boolean isUserNameValid(String username) {
-        if (username == null || username.length() != 1) {
+        if (username == null) {
             return false;
         }
         for (char c: username.toCharArray()) {
-            if (c - '0' < 0 || c - '9' > 0) {
+            if (c > '9' || c < '0') {
                 return false;
             }
         }
+
         return true;
     }
 }

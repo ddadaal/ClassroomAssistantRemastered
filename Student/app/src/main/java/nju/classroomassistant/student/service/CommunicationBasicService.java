@@ -1,6 +1,9 @@
 package nju.classroomassistant.student.service;
 
+import android.os.Handler;
 import android.util.Log;
+
+import nju.classroomassistant.shared.Config;
 import nju.classroomassistant.shared.messages.Message;
 import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage;
 import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage;
@@ -32,28 +35,33 @@ public class CommunicationBasicService {
         public void run() {
 
             while (!terminated) {
+
+                final Handler handler = new Handler();
+
                 try {
                     Message obj = (Message) in.readObject();
                     // do something if success
-                    if (obj instanceof LogoutMessage) {
-                        // do nothing
-                    } else if (obj instanceof ExerciseStartMessage) {
-                        ExerciseType exerciseType = ((ExerciseStartMessage) obj).getExerciseType();
-                        GlobalVariables.setExercise(exerciseType);
-                    } else if (obj instanceof ExerciseEndMessage) {
-                        GlobalVariables.setExercise(null);
-                        GlobalVariables.setExerciseAnswer(null);
-                    } else if (obj instanceof NotificationSettingChangeMessage) {
-                        GlobalVariables.setReminderState(((NotificationSettingChangeMessage) obj).
-                                isInstantNotificationEnabled());
-                    } else if (obj instanceof DiscussionEndMessage) {
-                        GlobalVariables.setDiscussionState(false);
-                    } else if (obj instanceof DiscussionStartMessage) {
-                        GlobalVariables.setDiscussionState(true);
-                    } else {
-                        // do nothing
-                        Log.d(CommunicationBasicService.class.getName(), "" + obj);
-                    }
+                    handler.post(() -> {
+                        if (obj instanceof LogoutMessage) {
+                            // do nothing
+                        } else if (obj instanceof ExerciseStartMessage) {
+                            ExerciseType exerciseType = ((ExerciseStartMessage) obj).getExerciseType();
+                            GlobalVariables.setExercise(exerciseType);
+                        } else if (obj instanceof ExerciseEndMessage) {
+                            GlobalVariables.setExercise(null);
+                            GlobalVariables.setExerciseAnswer(null);
+                        } else if (obj instanceof NotificationSettingChangeMessage) {
+                            GlobalVariables.setReminderState(((NotificationSettingChangeMessage) obj).
+                                    isInstantNotificationEnabled());
+                        } else if (obj instanceof DiscussionEndMessage) {
+                            GlobalVariables.setDiscussionState(false);
+                        } else if (obj instanceof DiscussionStartMessage) {
+                            GlobalVariables.setDiscussionState(true);
+                        } else {
+                            // do nothing
+                            Log.d(CommunicationBasicService.class.getName(), "" + obj);
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -69,16 +77,17 @@ public class CommunicationBasicService {
 
     public void tryConnect() {
         try {
-            socket  = new Socket("10.0.2.2", 2333);
-            in = new ObjectInputStream(socket.getInputStream());
+            socket = new Socket("10.0.2.2", Config.PORT);
             out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
             connected = true;
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
-    private CommunicationBasicService () {
+    private CommunicationBasicService() {
 
     }
 

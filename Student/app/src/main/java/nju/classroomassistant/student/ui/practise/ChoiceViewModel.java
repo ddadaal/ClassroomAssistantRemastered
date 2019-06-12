@@ -2,6 +2,8 @@ package nju.classroomassistant.student.ui.practise;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -13,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 import nju.classroomassistant.shared.messages.exercise.answer.ChoiceExerciseAnswer;
+import nju.classroomassistant.shared.messages.exercise.answer.FillBlankExerciseAnswer;
 import nju.classroomassistant.student.R;
 import nju.classroomassistant.student.service.CommunicationBasicService;
 import nju.classroomassistant.student.ui.OperationResult;
@@ -46,12 +49,24 @@ public class ChoiceViewModel extends ViewModel {
     private MutableLiveData<OperationResult> operationResult = new MutableLiveData<>();
 
     public void commit() {
-        ChoiceExerciseAnswer exerciseAnswer = new ChoiceExerciseAnswer(new ArrayList<String>(answers));
-//        if (basicService.writeToServer(exerciseAnswer)) {
-            operationResult.setValue(new OperationResult(true, null));
-//        } else {
-  //          operationResult.setValue(new OperationResult(false, R.string.network_error));
-  //      }
+
+        final Handler handler = new Handler();
+        AsyncTask.execute(() -> {
+
+            ChoiceExerciseAnswer exerciseAnswer = new ChoiceExerciseAnswer(new ArrayList<String>(answers));
+
+            OperationResult tempOperationResult;
+
+            if (basicService.writeToServer(exerciseAnswer)) {
+                tempOperationResult = new OperationResult(true, null);
+            } else {
+                tempOperationResult = new OperationResult(false, R.string.network_error);
+            }
+            handler.post(() -> {
+                operationResult.setValue(tempOperationResult);
+            });
+
+        });
     }
 
     public MutableLiveData<OperationResult> getOperationResult() {
