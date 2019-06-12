@@ -5,16 +5,14 @@ import de.jensd.fx.glyphs.materialicons.MaterialIconView
 import javafx.event.ActionEvent
 import javafx.scene.Node
 import javafx.scene.Parent
+import javafx.scene.control.Label
 import javafx.scene.input.MouseEvent
-import javafx.scene.layout.AnchorPane
-import javafx.scene.layout.BackgroundRepeat
-import javafx.scene.layout.GridPane
 import javafx.scene.layout.StackPane
-import javafx.scene.paint.Color
-import nju.classroomassistant.teacher.TeacherApp
 import nju.classroomassistant.teacher.extensions.PageController
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
+import nju.classroomassistant.teacher.network.GlobalVariables
+import nju.classroomassistant.teacher.network.Server
 import nju.classroomassistant.teacher.views.about.AboutViewController
 import nju.classroomassistant.teacher.views.exercise.ExerciseController
 import nju.classroomassistant.teacher.views.home.HomeController
@@ -34,6 +32,7 @@ class MainView : View() {
     val drawer: Parent by fxid()
     val titleBar: Parent by fxid()
     val bottomBar: Parent by fxid()
+    val promptLabel: Label by fxid()
 
     lateinit var current: Node
 
@@ -52,6 +51,8 @@ class MainView : View() {
 
         primaryStage.makeDraggable(titleBar)
         primaryStage.makeResizeable()
+
+        promptLabel.textProperty().bind(GlobalVariables.course.stringBinding { "当前课程：${it?.courseName}"})
 
         JFXDepthManager.setDepth(contentPane, DEPTH)
         JFXDepthManager.setDepth(titleBar, DEPTH)
@@ -110,7 +111,8 @@ class MainView : View() {
     }
 
     fun onBtnCloseClicked(mouseEvent: MouseEvent) {
-//        TeacherApp.exit()/
+        Server.stop()
+        primaryStage.close()
 
     }
 

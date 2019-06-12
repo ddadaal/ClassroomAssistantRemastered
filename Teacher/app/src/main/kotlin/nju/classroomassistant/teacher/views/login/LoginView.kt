@@ -59,20 +59,27 @@ class LoginView : View("登录"), Logger {
         }
 
 
-        // filtering options
-        idProperty.addListener { _, old, newValue ->
-            autoCompletePopup.filter { string -> string.toLowerCase().contains(newValue) }
+        idField.setOnMouseClicked {
+            autoCompletePopup.filter { true }
+            autoCompletePopup.show(idField)
+        }
+
+        idField.setOnKeyPressed {
+
+            idField.requestFocus()
+
+            if (it.code == KeyCode.ENTER) {
+                autoCompletePopup.hide()
+                login()
+            }
+
+            autoCompletePopup.filter { string -> string.toLowerCase().contains(idField.text) }
             if (autoCompletePopup.filteredSuggestions.isEmpty()) {
                 autoCompletePopup.hide()
             } else {
                 autoCompletePopup.show(idField)
             }
-        }
 
-
-        idField.setOnMouseClicked {
-            autoCompletePopup.filter { true }
-            autoCompletePopup.show(idField)
         }
 
     }
@@ -99,7 +106,11 @@ class LoginView : View("登录"), Logger {
     }
 
     override val root = vbox {
-//        alignment = Pos.BOTTOM_CENTER
+        alignment = Pos.BOTTOM_CENTER
+
+        prefHeight = 1000.0
+
+        spacing = 200.0
 
         hbox {
             alignment = Pos.CENTER
@@ -121,11 +132,6 @@ class LoginView : View("登录"), Logger {
 
                 enableWhen { loggingInProperty.not() }
 
-                setOnKeyPressed {
-                    if (it.code == KeyCode.ENTER) {
-                        login()
-                    }
-                }
             }
         }
 

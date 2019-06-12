@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
+import nju.classroomassistant.teacher.views.common.MainView
 import tornadofx.*
 import kotlin.reflect.KClass
 
@@ -27,7 +28,10 @@ class LoginCommonView: View() {
 
     private fun findView(view: LoginRelatedPage): Parent {
 
-        return find(view.viewClass, mapOf("switchTo" to this::switch)).root
+        return find(view.viewClass, mapOf(
+                "switchTo" to this::switch,
+                "toMain" to this::toMain
+        )).root
     }
 
     fun switch(view: LoginRelatedPage, direction: ViewTransition.Direction) {
@@ -35,10 +39,11 @@ class LoginCommonView: View() {
 
 
         current.replaceWith(target, ViewTransition.Metro(0.3.seconds, direction), sizeToScene = true, centerOnScreen = true)
-
-        primaryStage.sizeToScene()
-        primaryStage.centerOnScreen()
         current = target
+    }
+
+    fun toMain() {
+        replaceWith<MainView>(sizeToScene = true, centerOnScreen = true)
     }
 
     override fun onDock() {

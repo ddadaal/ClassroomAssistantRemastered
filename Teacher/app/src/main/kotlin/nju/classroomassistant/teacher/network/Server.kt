@@ -3,6 +3,7 @@ package nju.classroomassistant.teacher.network
 import nju.classroomassistant.shared.Config.PORT
 import nju.classroomassistant.shared.log.Logger
 import java.net.ServerSocket
+import java.net.SocketException
 
 object Server: Logger {
 
@@ -11,10 +12,10 @@ object Server: Logger {
     // 学生列表
     val studentMap = StudentMap()
 
-    fun start() {
+    val socketServer = ServerSocket(PORT)
 
+    val thread = Thread {
         try {
-            val socketServer = ServerSocket(PORT)
             verbose("Started server on $PORT")
 
 
@@ -29,9 +30,18 @@ object Server: Logger {
                         )
                 ).start()
             }
-        } catch (e: InterruptedException) {
-            verbose("Interruptted. Exiting...")
+        } catch (e: SocketException) {
+            verbose("Exiting server...")
         }
 
+    }
+
+
+    fun start() {
+        thread.start()
+    }
+
+    fun stop() {
+        socketServer.close()
     }
 }

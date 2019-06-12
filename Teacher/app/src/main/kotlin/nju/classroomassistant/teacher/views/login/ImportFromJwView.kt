@@ -1,6 +1,7 @@
 package nju.classroomassistant.teacher.views.login
 
 import com.jfoenix.controls.JFXButton
+import com.jfoenix.controls.JFXPasswordField
 import com.jfoenix.controls.JFXTextField
 import com.jfoenix.validation.RequiredFieldValidator
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
@@ -9,7 +10,9 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.input.KeyCode
+import javafx.scene.text.Font
 import kfoenix.jfxbutton
+import kfoenix.jfxpasswordfield
 import kfoenix.jfxtextfield
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
@@ -38,7 +41,7 @@ class ImportFromJwView : View("从教务网导入") {
     private val requestingProperty = SimpleBooleanProperty(false)
 
     var idField: JFXTextField by singleAssign()
-    var passwordField: JFXTextField by singleAssign()
+    var passwordField: JFXPasswordField by singleAssign()
 
 
     override fun onDock() {
@@ -47,6 +50,7 @@ class ImportFromJwView : View("从教务网导入") {
 
         idProperty.set(GlobalVariables.teacherId.get())
         passwordProperty.set("")
+        passwordField.requestFocus()
     }
 
 
@@ -61,7 +65,9 @@ class ImportFromJwView : View("从教务网导入") {
         // mock
         CourseInfoRepository.data[GlobalVariables.teacherId.get()] = arrayListOf(
                 CourseInfo("软件测试", "星期一，星期五"),
-                CourseInfo("人机交互", "星期二")
+                CourseInfo("人机交互", "星期二"),
+                CourseInfo("实证软件工程", "星期二，星期四"),
+                CourseInfo("移动互联网", "星期三")
         )
         CourseInfoRepository.save()
 
@@ -77,14 +83,22 @@ class ImportFromJwView : View("从教务网导入") {
     }
 
     override val root = vbox {
+
         alignment = Pos.BOTTOM_CENTER
 
-        prefHeight = 80.0
+        prefHeight = 1000.0
+        spacing = 200.0
 
 
         vbox {
 
-            spacing = 30.0
+            spacing = 40.0
+
+            alignment = Pos.TOP_CENTER
+
+            label("从教务网导入") {
+                font = Font(28.0)
+            }
 
             hbox {
                 alignment = Pos.CENTER
@@ -121,7 +135,11 @@ class ImportFromJwView : View("从教务网导入") {
 
                 this += MaterialIconView(MaterialIcon.LOCK, "32")
 
-                passwordField = jfxtextfield(this@ImportFromJwView.passwordProperty, "密码", true) {
+                passwordField = jfxpasswordfield(this@ImportFromJwView.passwordProperty) {
+
+                    isLabelFloat = true
+                    promptText = "密码"
+
                     validators.add(passwordValidator)
 
                     prefHeight = 32.0
@@ -129,7 +147,7 @@ class ImportFromJwView : View("从教务网导入") {
 
                     focusedProperty().addListener { _, _, newValue ->
                         if (!newValue) {
-                            this@jfxtextfield.validate()
+                            this@jfxpasswordfield.validate()
                         }
                     }
 

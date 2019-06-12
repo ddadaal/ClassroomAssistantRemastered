@@ -1,8 +1,10 @@
 package nju.classroomassistant.teacher.network
 
+import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage
 import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
+import nju.classroomassistant.teacher.models.CourseInfo
 import tornadofx.*
 import kotlin.properties.Delegates
 
@@ -44,7 +46,8 @@ object GlobalVariables {
     // 老师ID
     var teacherId = SimpleStringProperty("")
 
-    // 老师姓名
+    // 已选择的课程
+    var course = SimpleObjectProperty<CourseInfo>(null)
 
 
 }
