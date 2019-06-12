@@ -63,7 +63,7 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap) : 
                         verbose("User sends the message ${message.content} to server")
                         if (GlobalVariables.discussionStart) {
                             // Add this message to the queue
-                            GlobalVariables.currentDiscussionQueue.add(message.content)
+                            GlobalVariables.addDiscussionMessage(studentId, message)
                         }
                     }
 

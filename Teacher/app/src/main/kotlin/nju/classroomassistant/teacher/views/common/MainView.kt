@@ -16,6 +16,7 @@ import nju.classroomassistant.teacher.extensions.PageController
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
 import nju.classroomassistant.teacher.views.about.AboutViewController
+import nju.classroomassistant.teacher.views.discussion.DiscussionController
 import nju.classroomassistant.teacher.views.exercise.ExerciseController
 import nju.classroomassistant.teacher.views.home.HomeController
 import nju.classroomassistant.teacher.views.question.QuestionController
@@ -67,7 +68,7 @@ class MainView : View() {
         HOME(HomeController::class, "主界面"),
         EXERCISE(ExerciseController::class,"练习"),
         QUESTION(QuestionController::class,"提问"),
-        DISCUSSION(null,"讨论"),
+        DISCUSSION(DiscussionController::class,"讨论"),
         ABOUT(AboutViewController::class, "关于")
     }
 
