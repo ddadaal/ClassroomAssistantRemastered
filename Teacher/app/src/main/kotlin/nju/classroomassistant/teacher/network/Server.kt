@@ -10,7 +10,7 @@ import java.net.ServerSocket
 import java.net.SocketException
 
 
-const val MOCK = true
+const val MOCK = false
 
 object Server: Logger {
 
@@ -43,15 +43,16 @@ object Server: Logger {
 
     }
 
-    fun writeToAllStudentsAsync(message: Message): Task<Unit> {
-        return FXTask {
+    fun writeToAllStudentsAsync(message: Message) {
+
+        Thread {
             if (!MOCK) {
                 studentMap.allStudents.forEach {
                     it.handler.writeMessage(message)
+                    verbose("send message: " + message + "to" + it.studentId)
                 }
             }
-
-        }
+        }.start()
 
 
     }

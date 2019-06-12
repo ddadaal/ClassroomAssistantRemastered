@@ -68,7 +68,7 @@ class CollectingView : View("Collecting View") {
     private fun finish() {
         // 结束本session，通知所有客户端
         GlobalVariables.exerciseSession?.finish()
-        Server.writeToAllStudentsAsync(ExerciseEndMessage())
+  //      Server.writeToAllStudentsAsync(ExerciseEndMessage())
         controller.to<ResultView>()
     }
 }

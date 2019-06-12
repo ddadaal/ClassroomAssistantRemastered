@@ -63,7 +63,7 @@ public class PractiseActivity extends AppCompatActivity {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     gapFillingPractiseViewModel.updateCanCommit(
-                            gapFillContent.getText().toString().length() == 0);
+                            gapFillContent.getText().toString().length() != 0);
 
                 }
             });
@@ -105,11 +105,13 @@ public class PractiseActivity extends AppCompatActivity {
             GlobalVariables.getInExercise().observe(this, new Observer<Boolean>() {
                 @Override
                 public void onChanged(@Nullable Boolean aBoolean) {
-                    commit.setEnabled(false);
-                    gapFillContent.setEnabled(false);
-                    Toast.makeText(PractiseActivity.this, R.string.practise_finish, Toast.LENGTH_SHORT)
-                            .show();
-                    finish();
+                    if (aBoolean == null || !aBoolean) {
+                        commit.setEnabled(false);
+                        gapFillContent.setEnabled(false);
+                        Toast.makeText(PractiseActivity.this, R.string.practise_finish, Toast.LENGTH_SHORT)
+                                .show();
+                        finish();
+                    }
                 }
             });
 
