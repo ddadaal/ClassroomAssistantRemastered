@@ -10,7 +10,8 @@ import javafx.scene.control.SelectionMode
 import javafx.scene.control.TextArea
 import javafx.scene.effect.BlurType
 import javafx.scene.effect.DropShadow
-import javafx.scene.effect.Effect
+import javafx.scene.layout.Border
+import javafx.scene.layout.BorderStroke
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
@@ -29,10 +30,14 @@ class DiscussionView : View("讨论") {
 
     override val root = borderpane {
 
+        paddingAll = 50.0
+
+        setPrefSize(600.0, 600.0)
+
         importStylesheet("/css/main.css")
 
         val discussionTitle = jfxtextfield {
-            text = "暂无标题"
+            text = "点击开始按钮开始一个讨论"
             isLabelFloat = true
             isDisable = !GlobalVariables.discussionStart
 
@@ -54,8 +59,8 @@ class DiscussionView : View("讨论") {
                 selectionModel.selectionMode = SelectionMode.SINGLE
 
                 style {
-                    effect = DropShadow(BlurType.THREE_PASS_BOX, Color.rgb(0, 0, 0, 0.8), 10.0, 0.0, 0.0, 0.0)
-                    backgroundRadius += box(5.px)
+                    effect = DropShadow(BlurType.THREE_PASS_BOX, Color.rgb(0, 0, 0, 0.8), 5.0, 0.0, 0.0, 0.0)
+//                    backgroundRadius += box(5.px)
                 }
 
             }
@@ -114,11 +119,11 @@ class DiscussionView : View("讨论") {
     }
 }
 
-class DiscussionItem(message: StudentSendDiscussionMessage, private val studentId: String?) {
+class DiscussionItem(message: StudentSendDiscussionMessage, private val nickname: String?) {
     private val content = message.content
 
     override fun toString(): String {
-        return "$studentId $content"
+        return "[$nickname] $content"
     }
 }
 

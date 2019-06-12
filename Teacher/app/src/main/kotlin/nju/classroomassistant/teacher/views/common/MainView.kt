@@ -2,25 +2,27 @@ package nju.classroomassistant.teacher.views.common
 
 import com.jfoenix.effects.JFXDepthManager
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
+import javafx.beans.property.SimpleStringProperty
 import javafx.event.ActionEvent
 import javafx.scene.Node
 import javafx.scene.Parent
+import javafx.scene.control.Label
 import javafx.scene.input.MouseEvent
-import javafx.scene.layout.AnchorPane
-import javafx.scene.layout.BackgroundRepeat
-import javafx.scene.layout.GridPane
 import javafx.scene.layout.StackPane
-import javafx.scene.paint.Color
-import nju.classroomassistant.teacher.TeacherApp
+import javafx.scene.text.Text
+import kfoenix.jfxsnackbar
 import nju.classroomassistant.teacher.extensions.PageController
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
+import nju.classroomassistant.teacher.network.GlobalVariables
+import nju.classroomassistant.teacher.network.Server
 import nju.classroomassistant.teacher.views.about.AboutViewController
 import nju.classroomassistant.teacher.views.discussion.DiscussionController
 import nju.classroomassistant.teacher.views.exercise.ExerciseController
 import nju.classroomassistant.teacher.views.home.HomeController
 import nju.classroomassistant.teacher.views.question.QuestionController
 import tornadofx.*
+import java.time.LocalDateTime
 import kotlin.reflect.KClass
 
 class MainView : View() {
@@ -35,8 +37,11 @@ class MainView : View() {
     val drawer: Parent by fxid()
     val titleBar: Parent by fxid()
     val bottomBar: Parent by fxid()
+    val promptLabel: Label by fxid()
+    val titleText: Text by fxid()
 
-    lateinit var current: Node
+    var current: Node = find(find(HomeController::class).view).root
+    val functionName = SimpleStringProperty("主页")
 
     override fun onDock() {
         maximizeButtonGlyph.glyphNameProperty().bind(
@@ -49,10 +54,15 @@ class MainView : View() {
                 }
         )
 
-        current = contentPane.childrenUnmodifiable[0]
+        contentPane.children.clear()
+        contentPane.children.add(current)
 
         primaryStage.makeDraggable(titleBar)
         primaryStage.makeResizeable()
+
+        promptLabel.textProperty().bind(GlobalVariables.course.stringBinding { "当前课程：${it?.courseName}"})
+
+        titleText.textProperty().bind(functionName)
 
         JFXDepthManager.setDepth(contentPane, DEPTH)
         JFXDepthManager.setDepth(titleBar, DEPTH)
@@ -65,7 +75,7 @@ class MainView : View() {
     }
 
     enum class Page(val controller: KClass<out PageController>?, val title: String) {
-        HOME(HomeController::class, "主界面"),
+        HOME(HomeController::class, "主页"),
         EXERCISE(ExerciseController::class,"练习"),
         QUESTION(QuestionController::class,"提问"),
         DISCUSSION(DiscussionController::class,"讨论"),
@@ -77,7 +87,7 @@ class MainView : View() {
         if (target != current) {
             current.replaceWith(target, ViewTransition.Metro(0.3.seconds), true, true)
             current = target
-
+            functionName.set(page.title)
         }
 
     }
@@ -111,8 +121,14 @@ class MainView : View() {
     }
 
     fun onBtnCloseClicked(mouseEvent: MouseEvent) {
-//        TeacherApp.exit()/
+        Server.stop()
+        primaryStage.close()
 
+    }
+
+    fun onBtnExportClicked(actionEvent: ActionEvent) {
+        val filename = "${GlobalVariables.course.get().courseName}-${LocalDateTime.now()}.xlsx"
+        jfxsnackbar("已导出课堂信息到桌面：$filename", root)
     }
 
 

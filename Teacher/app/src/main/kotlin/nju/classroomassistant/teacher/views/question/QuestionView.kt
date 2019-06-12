@@ -3,21 +3,19 @@ package nju.classroomassistant.teacher.views.question
 import com.jfoenix.controls.JFXButton
 import javafx.geometry.Pos
 import javafx.scene.paint.Color
-import javafx.scene.text.TextAlignment
 import kfoenix.jfxbutton
 import kfoenix.jfxlistview
 import kfoenix.jfxtextfield
 import kfoenix.jfxtogglebutton
 import nju.classroomassistant.teacher.extensions.PageController
-import nju.classroomassistant.teacher.network.GlobalVariables
+import nju.classroomassistant.teacher.network.QuestionSession
 import tornadofx.*
-import java.time.LocalDateTime
 
 class QuestionView : View("提问") {
 
     private val controller: QuestionController by inject()
 
-    private val questionList = GlobalVariables.questionList
+    private val questionList = QuestionSession.questionList
 
     override val root = borderpane {
 
@@ -71,6 +69,7 @@ class QuestionView : View("提问") {
                 prefHeight = 30.0
 
                 action {
+                    QuestionSession.isNotificationOpen = !QuestionSession.isNotificationOpen
                     if (isSelected) {
                         // Open message notification
                     } else {
@@ -101,19 +100,7 @@ class QuestionView : View("提问") {
             spacing = 10.0
         }
     }
-
-    private fun JFXButton.commonStyle() {
-        style {
-            textAlignment = TextAlignment.LEFT
-        }
-    }
 }
 
 class QuestionController : PageController(QuestionView::class)
 
-data class QuestionItem(
-    val content: String,
-    val studentId: String?,
-    val time: LocalDateTime,
-    var isVisited: Boolean = false
-)

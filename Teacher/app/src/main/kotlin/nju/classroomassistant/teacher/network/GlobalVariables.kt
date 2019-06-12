@@ -1,12 +1,13 @@
 package nju.classroomassistant.teacher.network
 
+import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleStringProperty
 import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage
 import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
 import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
+import nju.classroomassistant.teacher.models.CourseInfo
 import nju.classroomassistant.teacher.views.discussion.DiscussionItem
-import nju.classroomassistant.teacher.views.question.QuestionItem
 import tornadofx.*
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
@@ -43,16 +44,6 @@ object GlobalVariables {
         )
     }.observable()
 
-    var questionAlert = false
-
-    val questionList = ArrayList<QuestionItem>().apply {
-        addAll(
-            Collections.nCopies(
-                DISCUSSION_INITIAL_SIZE,
-                QuestionItem("Test content", "StudentTest", LocalDateTime.now())
-            )
-        )
-    }.observable()
 
     fun addDiscussionMessage(studentId: String?, message: StudentSendDiscussionMessage) {
         currentDiscussionQueue.add(DiscussionItem(message, studentId))
@@ -70,4 +61,8 @@ object GlobalVariables {
             s.handler.writeMessage(DiscussionStartMessage())
         }
     }
+
+    // 登录信息
+    val teacherId = SimpleStringProperty()
+    val course = SimpleObjectProperty<CourseInfo>()
 }

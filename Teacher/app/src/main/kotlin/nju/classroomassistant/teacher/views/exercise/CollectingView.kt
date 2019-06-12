@@ -22,7 +22,7 @@ class CollectingView : View("Collecting View") {
     override val root = borderpane {
 
             center= vbox{
-                jfxspinner() {
+                jfxspinner {
                     progress = progressProperty.value
                     setPrefSize(200.0, 200.0)
                     addClass(MainCss.`blue-spinner`)
