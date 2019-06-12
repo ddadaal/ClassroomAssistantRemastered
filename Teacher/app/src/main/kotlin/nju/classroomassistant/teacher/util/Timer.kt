@@ -5,10 +5,11 @@ import java.util.*
 
 fun executeLater(ms: Long, op: () -> Unit) {
 
-    Timer().schedule(object: TimerTask() {
-        override fun run() {
-            runLater(op)
+    Thread {
+        Thread.sleep(ms)
+        runLater {
+            op()
         }
-    }, ms)
+    }.start()
 
 }

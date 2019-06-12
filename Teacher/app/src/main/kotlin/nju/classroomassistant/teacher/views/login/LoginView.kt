@@ -31,7 +31,6 @@ import tornadofx.Stylesheet.Companion.textField
 class LoginView : View("登录"), Logger {
 
 
-
     val idValidator = RequiredFieldValidator().apply {
         message = "请输入教师ID"
     }
@@ -79,7 +78,6 @@ class LoginView : View("登录"), Logger {
     }
 
 
-
     fun login() {
 
         if (!idField.validate()) {
@@ -101,9 +99,7 @@ class LoginView : View("登录"), Logger {
     }
 
     override val root = vbox {
-        alignment = Pos.BOTTOM_CENTER
-
-            prefHeight = 80.0
+//        alignment = Pos.BOTTOM_CENTER
 
         hbox {
             alignment = Pos.CENTER
@@ -113,8 +109,6 @@ class LoginView : View("登录"), Logger {
 
             idField = jfxtextfield(this@LoginView.idProperty, "学号", true) {
                 validators.add(idValidator)
-
-
 
                 prefHeight = 32.0
                 prefWidth = 300.0
@@ -140,7 +134,13 @@ class LoginView : View("登录"), Logger {
 
             paddingTop = 80.0
 
-            jfxbutton(loggingInProperty.stringBinding { if (it == true) { "登录中" } else { "登录"} }) {
+            jfxbutton(loggingInProperty.stringBinding {
+                if (it == true) {
+                    "登录中"
+                } else {
+                    "登录"
+                }
+            }) {
                 setOnAction {
                     login()
                 }

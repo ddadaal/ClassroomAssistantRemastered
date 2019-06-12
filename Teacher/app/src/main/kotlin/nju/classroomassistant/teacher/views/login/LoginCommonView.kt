@@ -50,6 +50,8 @@ class LoginCommonView: View() {
 
         setMinSize(0.0, 0.0)
 
+        prefHeight = 700.0
+
         style {
             borderColor += box(c("#1A237E"))
             borderWidth += box(1.px)
