@@ -144,7 +144,7 @@ class LoginView : View("登录"), Logger {
                 if (it == true) {
                     "登录中"
                 } else {
-                    "登录"
+                    "登录 (Enter)"
                 }
             }) {
                 setOnAction {

@@ -2,12 +2,14 @@ package nju.classroomassistant.teacher.views.common
 
 import com.jfoenix.effects.JFXDepthManager
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
+import javafx.beans.property.SimpleStringProperty
 import javafx.event.ActionEvent
 import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.Label
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
+import javafx.scene.text.Text
 import nju.classroomassistant.teacher.extensions.PageController
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
@@ -33,8 +35,10 @@ class MainView : View() {
     val titleBar: Parent by fxid()
     val bottomBar: Parent by fxid()
     val promptLabel: Label by fxid()
+    val titleText: Text by fxid()
 
-    lateinit var current: Node
+    var current: Node = find(find(HomeController::class).view).root
+    val functionName = SimpleStringProperty("主页")
 
     override fun onDock() {
         maximizeButtonGlyph.glyphNameProperty().bind(
@@ -47,12 +51,15 @@ class MainView : View() {
                 }
         )
 
-        current = contentPane.childrenUnmodifiable[0]
+        contentPane.children.clear()
+        contentPane.children.add(current)
 
         primaryStage.makeDraggable(titleBar)
         primaryStage.makeResizeable()
 
         promptLabel.textProperty().bind(GlobalVariables.course.stringBinding { "当前课程：${it?.courseName}"})
+
+        titleText.textProperty().bind(functionName)
 
         JFXDepthManager.setDepth(contentPane, DEPTH)
         JFXDepthManager.setDepth(titleBar, DEPTH)
@@ -65,7 +72,7 @@ class MainView : View() {
     }
 
     enum class Page(val controller: KClass<out PageController>?, val title: String) {
-        HOME(HomeController::class, "主界面"),
+        HOME(HomeController::class, "主页"),
         EXERCISE(ExerciseController::class,"练习"),
         QUESTION(QuestionController::class,"提问"),
         DISCUSSION(null,"讨论"),
@@ -77,7 +84,7 @@ class MainView : View() {
         if (target != current) {
             current.replaceWith(target, ViewTransition.Metro(0.3.seconds), true, true)
             current = target
-
+            functionName.set(page.title)
         }
 
     }

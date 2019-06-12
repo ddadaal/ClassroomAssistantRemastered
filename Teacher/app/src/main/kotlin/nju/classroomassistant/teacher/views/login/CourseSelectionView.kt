@@ -76,6 +76,7 @@ class CourseSelectionView : View("选择课程") {
 
         }
 
+
         // get course info
         courses.clear()
         CourseInfoRepository.data.computeIfAbsent(GlobalVariables.teacherId.get()) { arrayListOf() }.forEach {
@@ -85,7 +86,6 @@ class CourseSelectionView : View("选择课程") {
         if (courses.isNotEmpty()) {
             table.selectFirst()
         }
-
     }
 
 
@@ -117,7 +117,7 @@ class CourseSelectionView : View("选择课程") {
         vbox {
             spacing = 20.0
 
-            jfxbutton("选择") {
+            jfxbutton("选择 (Enter)") {
                 setOnAction {
                     select()
                 }
@@ -156,7 +156,7 @@ class CourseSelectionView : View("选择课程") {
                 }
             }
 
-            jfxbutton("返回登录", JFXButton.ButtonType.RAISED) {
+            jfxbutton("返回登录 (Esc)", JFXButton.ButtonType.RAISED) {
                 setOnAction {
                     switchTo(LoginRelatedPage.LOGIN, ViewTransition.Direction.RIGHT)
                 }

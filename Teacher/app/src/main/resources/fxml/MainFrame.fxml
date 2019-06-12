@@ -143,7 +143,7 @@
 
 
                         <HBox alignment="CENTER" GridPane.columnIndex="0">
-                            <JFXButton onAction="#onLogButtonClicked" text="日志" />
+                            <JFXButton onAction="#onLogButtonClicked" text="呼出热键：Control H" />
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" spacing="5" GridPane.columnIndex="2">
                             <MaterialIconView glyphName="SIGNAL_CELLULAR_4_BAR" glyphSize="16" glyphStyle="-fx-background-color: #DDDDDD" />

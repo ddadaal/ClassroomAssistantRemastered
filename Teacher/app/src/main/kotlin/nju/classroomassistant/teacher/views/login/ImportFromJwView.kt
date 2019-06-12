@@ -124,6 +124,8 @@ class ImportFromJwView : View("从教务网导入") {
                     setOnKeyPressed {
                         if (it.code == KeyCode.ENTER) {
                             login()
+                        } else if (it.code == KeyCode.ESCAPE) {
+                            switchTo(LoginRelatedPage.COURSE_SELECTION, ViewTransition.Direction.RIGHT)
                         }
                     }
                 }
@@ -173,7 +175,7 @@ class ImportFromJwView : View("从教务网导入") {
                 if (it == true) {
                     "登录中"
                 } else {
-                    "登录"
+                    "登录 (Enter)"
                 }
             }) {
                 setOnAction {
@@ -194,7 +196,7 @@ class ImportFromJwView : View("从教务网导入") {
                 }
             }
 
-            jfxbutton("返回课程选择", JFXButton.ButtonType.RAISED) {
+            jfxbutton("返回课程选择 (Esc)", JFXButton.ButtonType.RAISED) {
                 setOnAction {
                     switchTo(LoginRelatedPage.COURSE_SELECTION, ViewTransition.Direction.RIGHT)
                 }
