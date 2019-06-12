@@ -127,3 +127,6 @@
     -fx-padding: 0 0 0 12;
 }
 
+.text-input:disabled {
+    -fx-opacity: 1.0;
+}

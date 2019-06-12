@@ -53,12 +53,6 @@ class DiscussionView : View("讨论") {
             jfxlistview(chatItems) {
                 selectionModel.selectionMode = SelectionMode.SINGLE
 
-                // The codes below implements a bubble-like style but is ugly
-//                setCellFactory {
-//                    ChatCellFactory(this.scene)
-//                }
-
-                
                 style {
                     effect = DropShadow(BlurType.THREE_PASS_BOX, Color.rgb(0, 0, 0, 0.8), 10.0, 0.0, 0.0, 0.0)
                     backgroundRadius += box(5.px)
@@ -117,45 +111,6 @@ class DiscussionView : View("讨论") {
 
         maxWidth = 1000.0
         maxHeight = 1000.0
-    }
-}
-
-class ChatCellFactory(root: Scene) : ListCell<Pair<String?, String>>() {
-
-    override fun updateItem(value: Pair<String?, String>?, empty: Boolean) {
-        if (graphic == null && value != null) {
-            val textArea = TextArea()
-            val grid = GridPane()
-            val root = HBox()
-            val nameBar = HBox()
-
-            nameBar.alignment = Pos.TOP_LEFT
-            nameBar.maxWidth = 20.0
-            nameBar.add(Label(value.first))
-            grid.add(nameBar, 0, 0)
-            grid.add(textArea, 0, 1, 5, 1)
-            root.add(nameBar)
-            root.add(textArea)
-
-//            textArea.maxWidthProperty().bind(widthProperty().minus(100))
-            textArea.minHeight = 1.0
-            textArea.prefHeight = 30.0
-            textArea.isWrapText = true
-            textArea.isEditable = false
-            textArea.text = value.second
-            setMine(grid)
-            graphic = grid
-        }
-    }
-
-    private fun setMine(hBox: GridPane) {
-        hBox.alignment = Pos.BASELINE_RIGHT
-        for (child in hBox.children) {
-            if (child is TextArea) {
-                child.style = "-fx-control-inner-background: #F5F6F8;"
-                break
-            }
-        }
     }
 }
 
