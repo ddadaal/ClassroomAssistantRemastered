@@ -1,8 +1,14 @@
 package nju.classroomassistant.teacher.views.question
 
 import com.jfoenix.controls.JFXButton
+import com.jfoenix.controls.JFXListView
+import com.jfoenix.svg.SVGGlyph
+import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.input.MouseEvent
+import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
+import javafx.scene.text.FontWeight
 import kfoenix.jfxbutton
 import kfoenix.jfxlistview
 import kfoenix.jfxtextfield
@@ -13,78 +19,101 @@ import tornadofx.*
 
 class QuestionView : View("提问") {
 
-    private val controller: QuestionController by inject()
-
     private val session = GlobalVariables.questionSession
+
+    private val minusCircleSVGPath = "M694.857 402.286v73.143q0 14.857-10.857 25.714t-25.714 10.857h-438.857q-14.857" +
+            " 0-25.714-10.857t-10.857-25.714v-73.143q0-14.857 10.857-25.714t25.714-10." +
+            "857h438.857q14.857 0 25.714 10.857t10.857 25.714zM877.714 438.857q0-119.429" +
+            "-58.857-220.286t-159.714-159.714-220.286-58.857-220.286 58.857-159.714 " +
+            "159.714-58.857 220.286 58.857 220.286 159.714 159.714 220.286 58.857 " +
+            "220.286-58.857 159.714-159.714 58.857-220.286z"
 
     override val root = borderpane {
 
-        importStylesheet("/css/main.css")
-
         center = jfxlistview(session.questionList) {
+            println("question list is ${session.questionList}")
+            paddingAll = 20.0
 
             cellFormat {
                 graphic = cache {
-                    form {
-                        fieldset {
-                            field("学生") {
-                                label(it.studentId ?: "Unknown")
-                            }
+                    stackpane {
 
-                            field("问题") {
-                                jfxtextfield {
-                                    isEditable = false
-                                    text = it.content
+                        // Show student id and question's content
+                        form {
+                            fieldset {
+                                field("学生") {
+                                    label(it.studentId ?: "Unknown")
+                                }
 
-                                    style {
-                                        fontSize = 16.px
+                                field("问题") {
+                                    jfxtextfield {
+                                        isEditable = false
+                                        text = it.content
 
+                                        style {
+                                            fontSize = 18.px
+                                            fontWeight = FontWeight.BOLD
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                }
 
-                graphic.setOnMouseClicked {
-                    setOnMouseClicked {
-                        if (it.clickCount == 2) {
-                            // Use lower opacity to show that this cell has been visited
-                            selectionModel.selectedItem.isVisited = true
-                            opacity = 0.5
+                        // Delete button
+                        val button = jfxbutton(btnType = JFXButton.ButtonType.RAISED) {
+                            ripplerFill = c("C74C48")
+                            scaleX = 1.0
+                            scaleY = 1.0
 
-                            // TODO: Open a new window to show the details of this problem
+                            // Set svg image
+                            val glyph = SVGGlyph(-1, "minus-circle", minusCircleSVGPath, c("C74C48"))
+                            setPrefSize(15.0, 15.0)
+                            glyph.setSize(20.0, 20.0)
+                            graphic = glyph
+
+                            action {
+                                println("Current cell index is $index")
+                                this@jfxlistview.items.removeAt(index)
+                            }
+
+                            style {
+                                backgroundRadius += box(40.px)
+                            }
+
                         }
+
+                        StackPane.setMargin(button, Insets(0.0, 10.0, 0.0, 0.0))
+                        StackPane.setAlignment(button, Pos.TOP_RIGHT)
+
                     }
                 }
+
+                graphic.addEventFilter(MouseEvent.MOUSE_CLICKED) {
+                    opacity = 0.5
+                    // TODO: open a new window to show question
+                }
+
             }
-
-
         }
 
         bottom = hbox {
+            spacing = 10.0
+            alignment = Pos.CENTER
+
             jfxtogglebutton {
                 text = "启用提问提醒"
                 alignment = Pos.CENTER
                 prefHeight = 30.0
-
-                action {
-                    if (isSelected) {
-                        // Open message notification
-                    } else {
-                        // Close message notification
-                    }
-                }
+                session.isNotificationOpen.bind(selectedProperty())
             }
 
             jfxbutton("清空", JFXButton.ButtonType.RAISED) {
-                prefHeight = 30.0
-                prefWidth = 300.0
+                setPrefSize(300.0, 30.0)
 
                 action {
                     // Clear all questions
                     session.questionList.clear()
-                    center.getChildList()!!.clear()
+                    (center as JFXListView<*>).items.clear()
                 }
 
                 style {
@@ -93,10 +122,6 @@ class QuestionView : View("提问") {
                     alignment = Pos.CENTER
                 }
             }
-
-            alignment = Pos.CENTER
-
-            spacing = 10.0
         }
     }
 }

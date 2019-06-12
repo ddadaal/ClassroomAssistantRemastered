@@ -1,7 +1,6 @@
 package nju.classroomassistant.teacher.network.session
 
 import javafx.beans.property.SimpleBooleanProperty
-import javafx.geometry.NodeOrientation
 import nju.classroomassistant.shared.messages.raisequestion.NotificationSettingChangeMessage
 import nju.classroomassistant.teacher.network.Server
 import tornadofx.*
@@ -16,43 +15,33 @@ import kotlin.collections.ArrayList
  */
 class QuestionSession {
 
-    var isNotificationOpen = SimpleBooleanProperty(false)
-
-    val questionList = ArrayList<QuestionItem>().apply {
-        addAll(
-            Collections.nCopies(
-                30,
-                QuestionItem(
-                    "Test content",
-                    "StudentTest",
-                    LocalDateTime.now()
-                )
-            )
-        )
-    }.observable()
-
-    fun toggle() {
-        if (isNotificationOpen.get()) {
-            close()
-        } else {
-            open()
+    /**
+     * To indicate whether the notification is open
+     */
+    var isNotificationOpen = SimpleBooleanProperty(false).apply {
+        addListener { _, _, _ ->
+            toggle()
         }
     }
 
-    private fun open() {
-        isNotificationOpen.set(true)
-        Server.writeToAllStudentsAsync(NotificationSettingChangeMessage(true))
-    }
+    /**
+     * Questions' list
+     */
+    val questionList = ArrayList<QuestionItem>().apply {
+        for (i in 1..30)
+            add(QuestionItem("Test content $i", "Student $i"))
+    }.observable()
 
-    private fun close() {
-        isNotificationOpen.set(false)
-        Server.writeToAllStudentsAsync(NotificationSettingChangeMessage(false))
+    /**
+     * Send NotificationSettingChangeMessage to students' clients
+     */
+    private fun toggle() {
+        Server.writeToAllStudentsAsync(NotificationSettingChangeMessage(isNotificationOpen.get()))
     }
 }
 
 data class QuestionItem(
     val content: String,
     val studentId: String?,
-    val time: LocalDateTime,
-    var isVisited: Boolean = false
+    val time: LocalDateTime = LocalDateTime.now()
 )

@@ -1,7 +1,7 @@
 package nju.classroomassistant.teacher.network
 
 import nju.classroomassistant.shared.log.Logger
-import nju.classroomassistant.shared.messages.*
+import nju.classroomassistant.shared.messages.Message
 import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
 import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
 import nju.classroomassistant.shared.messages.exercise.ExerciseStartMessage
@@ -10,7 +10,6 @@ import nju.classroomassistant.shared.messages.login.LoginMessage
 import nju.classroomassistant.shared.messages.login.LoginResponseMessage
 import nju.classroomassistant.shared.messages.login.LogoutMessage
 import nju.classroomassistant.shared.messages.raisequestion.NotificationSettingChangeMessage
-import nju.classroomassistant.teacher.network.session.QuestionSession
 import java.io.Closeable
 import java.io.IOException
 import java.io.ObjectInputStream
@@ -54,7 +53,7 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap) : 
                         }
 
                         // 4. 发一个NotificationSettingChangeMessage，告诉客户端目前实时提醒是否已经打开
-                        writeMessage(NotificationSettingChangeMessage(QuestionSession.isNotificationOpen))
+                        writeMessage(NotificationSettingChangeMessage(GlobalVariables.questionSession.isNotificationOpen.get()))
 
                         // 记录登录信息
                         student = studentMap.login(message.studentId, this)
