@@ -20,6 +20,7 @@ import nju.classroomassistant.teacher.models.CourseInfo
 import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.repository.CourseInfoRepository
 import nju.classroomassistant.teacher.repository.TeacherIdHistoryRepository
+import nju.classroomassistant.teacher.services.LoginService
 import nju.classroomassistant.teacher.util.executeLater
 import tornadofx.*
 
@@ -63,12 +64,7 @@ class ImportFromJwView : View("从教务网导入") {
         requestingProperty.set(true)
 
         // mock
-        CourseInfoRepository.data[GlobalVariables.teacherId.get()] = arrayListOf(
-                CourseInfo("软件测试", "星期一，星期五"),
-                CourseInfo("人机交互", "星期二"),
-                CourseInfo("实证软件工程", "星期二，星期四"),
-                CourseInfo("移动互联网", "星期三")
-        )
+        CourseInfoRepository.data[GlobalVariables.teacherId.get()] = ArrayList(LoginService.importFromJw(idProperty.get(), passwordProperty.get()))
         CourseInfoRepository.save()
 
 

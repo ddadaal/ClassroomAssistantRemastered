@@ -2,9 +2,10 @@ package nju.classroomassistant.teacher.network
 
 import nju.classroomassistant.shared.log.Logger
 import nju.classroomassistant.shared.messages.*
-import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage
 import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
 import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
+import nju.classroomassistant.shared.messages.exercise.ExerciseStartMessage
+import nju.classroomassistant.shared.messages.exercise.ExerciseSubmitMessage
 import nju.classroomassistant.shared.messages.login.LoginMessage
 import nju.classroomassistant.shared.messages.login.LoginResponseMessage
 import nju.classroomassistant.shared.messages.login.LogoutMessage
@@ -24,7 +25,7 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap) : 
     private val `in` = ObjectInputStream(socketClient.getInputStream())
     private val out = ObjectOutputStream(socketClient.getOutputStream())
 
-    var studentId: String? = null
+    var student: StudentInfo? = null
 
     var terminated = false
 
@@ -41,30 +42,45 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap) : 
                         writeMessage(LoginResponseMessage(LoginResponseMessage.Response.OK))
 
                         // 2. 如果目前讨论正在进行，发一个DiscussionStartMessage通知客户端；如果没有（客户端默认没有开始），就什么都不发
-                        if (GlobalVariables.discussionStart) {
+                        if (GlobalVariables.discussionSession.started.get()) {
                             writeMessage(DiscussionStartMessage())
                         }
 
                         // 3. 如果目前做题正在进行，发一个ExerciseStartMessage通知客户端；如果没有进行（客户端默认没有进行），就什么都不发
+                        if (GlobalVariables.exerciseSession.started) {
+                            writeMessage(ExerciseStartMessage(GlobalVariables.exerciseSession.exercise))
+                        }
 
                         // 4. 发一个NotificationSettingChangeMessage，告诉客户端目前实时提醒是否已经打开
 
 
                         // 记录登录信息
-                        studentId = message.studentId
-                        studentMap.login(message.studentId, this)
+                        student = studentMap.login(message.studentId, this)
                     }
                     is LogoutMessage -> {
-                        studentMap.logout(studentId!!)
+                        student?.let {
+                            studentMap.logout(it.studentId)
+                        }
                     }
                     // login message handler here
 
                     is StudentSendDiscussionMessage -> {
-                        verbose("User sends the message ${message.content} to server")
-                        if (GlobalVariables.discussionStart) {
-                            // Add this message to the queue
-                            GlobalVariables.addDiscussionMessage(studentId, message)
+                        verbose("$student sends the message ${message.content} to server")
+                        student?.let {
+                            if (GlobalVariables.discussionSession.started.get()) {
+                                // Add this message to the queue
+                                GlobalVariables.discussionSession.add(it, message)
+                            }
                         }
+
+                    }
+                    is ExerciseSubmitMessage -> {
+                        verbose("$student submits exercise answer")
+
+                        student?.let {
+                            GlobalVariables.exerciseSession.add(it, message.answer)
+                        }
+
                     }
 
                     else -> error("Non-supported message type: ${message.javaClass.simpleName}")
@@ -72,8 +88,10 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap) : 
             } catch (e: IOException) {
                 // 客户端断了，算登出
 
-                verbose("User $studentId disconnected unexpectedly")
-                studentMap.logout(studentId!!)
+                verbose("User $student disconnected unexpectedly")
+                student?.let {
+                    studentMap.logout(it.studentId)
+                }
                 terminated = true
             }
 

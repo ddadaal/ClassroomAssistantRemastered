@@ -25,10 +25,10 @@ import tornadofx.*
 
 class DiscussionView : View("讨论") {
 
-    // Discussion messages list
-    private val chatItems = GlobalVariables.currentDiscussionQueue
+    val session = GlobalVariables.discussionSession
 
     override val root = borderpane {
+
 
         paddingAll = 50.0
 
@@ -36,10 +36,11 @@ class DiscussionView : View("讨论") {
 
         importStylesheet("/css/main.css")
 
-        val discussionTitle = jfxtextfield {
+        val discussionTitle = jfxtextfield(session.title) {
             text = "点击开始按钮开始一个讨论"
             isLabelFloat = true
-            isDisable = !GlobalVariables.discussionStart
+
+            editableProperty().bind(session.started)
 
             style {
                 fontSize = 20.px
@@ -55,7 +56,7 @@ class DiscussionView : View("讨论") {
 
             paddingTop = 50
 
-            jfxlistview(chatItems) {
+            jfxlistview(session.discussionItems) {
                 selectionModel.selectionMode = SelectionMode.SINGLE
 
                 // The codes below implements a bubble-like style but is ugly
@@ -63,7 +64,7 @@ class DiscussionView : View("讨论") {
 //                    ChatCellFactory(this.scene)
 //                }
 
-                
+
                 style {
                     effect = DropShadow(BlurType.THREE_PASS_BOX, Color.rgb(0, 0, 0, 0.8), 5.0, 0.0, 0.0, 0.0)
 //                    backgroundRadius += box(5.px)
@@ -75,55 +76,51 @@ class DiscussionView : View("讨论") {
 
         bottom = vbox(spacing = 20) {
             padding = Insets(30.0, 5.0, 30.0, 5.0)
+            alignment = Pos.CENTER
+            maxWidth = 1000.0
+            maxHeight = 1000.0
 
-            jfxbutton(value = "开始", btnType = JFXButton.ButtonType.RAISED) {
-                setPrefSize(100.0, 40.0)
-                // set on action here
-                action {
-                    GlobalVariables.discussionStart = !GlobalVariables.discussionStart
-                    val isStart = GlobalVariables.discussionStart
-
-                    if (isStart) {
-                        // Clear text, disable inputting title and set new default title
-                        discussionTitle.text = ""
-                        discussionTitle.isDisable = false
-                        text = "结束"
-                        discussionTitle.text = "讨论${GlobalVariables.discussionCount}"
-
-                        style {
-                            backgroundColor += c("C74C48")
-                            textFill = Color.WHITE
-                            prefWidth = 300.px
-                            prefHeight = 30.px
+            jfxbutton(
+                    session.started.stringBinding {
+                        if (it == true) {
+                            "结束"
+                        } else {
+                            "开始"
                         }
-                    } else {
-                        discussionTitle.isDisable = true
-                        text = "开始"
+                    },
+                    btnType = JFXButton.ButtonType.RAISED
+            ) {
+                setPrefSize(300.0, 30.0)
+                textFill = Color.WHITE
+                // set on action here
 
-                        style {
-                            backgroundColor += c("5264AE")
-                            textFill = Color.WHITE
-                            prefWidth = 300.px
-                            prefHeight = 30.px
+
+                session.started.addListener { _, _, newValue ->
+                    style {
+                        backgroundColor += if (newValue) {
+                            c("C74C48")
+                        } else {
+                            c("5263AE")
                         }
                     }
                 }
 
+
                 style {
-                    backgroundColor += c("5264AE")
-                    textFill = Color.WHITE
-                    prefWidth = 300.px
-                    prefHeight = 30.px
+                    backgroundColor += c("5263AE")
+                }
+
+                action {
+                    session.toggle()
+
                 }
             }
 
-            alignment = Pos.CENTER
         }
 
-        maxWidth = 1000.0
-        maxHeight = 1000.0
     }
 }
+
 
 class ChatCellFactory(root: Scene) : ListCell<Pair<String?, String>>() {
 
@@ -161,14 +158,6 @@ class ChatCellFactory(root: Scene) : ListCell<Pair<String?, String>>() {
                 break
             }
         }
-    }
-}
-
-class DiscussionItem(message: StudentSendDiscussionMessage, private val nickname: String?) {
-    private val content = message.content
-
-    override fun toString(): String {
-        return "[$nickname] $content"
     }
 }
 

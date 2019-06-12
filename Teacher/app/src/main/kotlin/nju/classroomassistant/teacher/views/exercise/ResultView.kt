@@ -34,7 +34,7 @@ class ResultView : View("My View") {
     val controller: ExerciseController by inject()
 
     override val root = borderpane {
-        top = barchart("练习结果", NumberAxis(), CategoryAxis()) {
+        center = barchart("练习结果", NumberAxis(), CategoryAxis()) {
             series("") {
                 resultMap.forEach {
                     data(it.value, it.key)
