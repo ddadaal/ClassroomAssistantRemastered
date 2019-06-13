@@ -33,6 +33,16 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
+        viewModel.getLoggingIn().observe(this, (loggingIn) -> {
+            if (loggingIn == true) {
+                usernameEditText.setEnabled(false);
+                loginButton.setEnabled(false);
+            } else {
+                usernameEditText.setEnabled(true);
+                loginButton.setEnabled(true);
+            }
+        });
+
         viewModel.getLoginFormError().observe(this, new Observer<LoginFormError>() {
             @Override
             public void onChanged(@Nullable LoginFormError loginFormError) {

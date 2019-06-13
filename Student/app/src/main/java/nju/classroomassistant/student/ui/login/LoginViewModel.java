@@ -19,6 +19,11 @@ public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<OperationResult> loginResult = new MutableLiveData<>();
 
+    private MutableLiveData<Boolean> loggingIn = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getLoggingIn() {
+        return loggingIn;
+    }
 
     MutableLiveData<LoginFormError> getLoginFormError() {
         return loginFormError;
@@ -33,12 +38,15 @@ public class LoginViewModel extends ViewModel {
 
         final Handler handler = new Handler();
 
+        loggingIn.setValue(true);
+
 
         AsyncTask.execute(() -> {
             final LoginResponseMessage.Response response = basicService.login(username);
 
             handler.post(() -> {
 
+                loggingIn.setValue(false);
                 switch (response) {
                     case OK:
                         loginResult.setValue(new OperationResult(true, null));
