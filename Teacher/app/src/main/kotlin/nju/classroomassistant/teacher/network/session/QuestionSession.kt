@@ -2,10 +2,10 @@ package nju.classroomassistant.teacher.network.session
 
 import javafx.beans.property.SimpleBooleanProperty
 import nju.classroomassistant.shared.messages.raisequestion.NotificationSettingChangeMessage
+import nju.classroomassistant.teacher.models.StudentInfo
 import nju.classroomassistant.teacher.network.Server
 import tornadofx.*
 import java.time.LocalDateTime
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -31,6 +31,12 @@ class QuestionSession {
         for (i in 1..30)
             add(QuestionItem("Test content $i", "Student $i"))
     }.observable()
+
+    fun addQuestion(content: String, studentId: String) {
+        runLater {
+            questionList.add(QuestionItem(content, studentId))
+        }
+    }
 
     /**
      * Send NotificationSettingChangeMessage to students' clients

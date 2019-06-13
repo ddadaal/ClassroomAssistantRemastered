@@ -6,7 +6,7 @@ import nju.classroomassistant.shared.messages.exercise.ExerciseStartMessage
 import nju.classroomassistant.shared.messages.exercise.answer.ExerciseAnswer
 import nju.classroomassistant.shared.messages.exercise.type.ExerciseType
 import nju.classroomassistant.teacher.network.Server
-import nju.classroomassistant.teacher.network.StudentInfo
+import nju.classroomassistant.teacher.network.StudentItem
 import tornadofx.*
 
 class ExerciseSession {
@@ -17,7 +17,7 @@ class ExerciseSession {
     var started = false
         private set
 
-    val answers = FXCollections.observableHashMap<StudentInfo, ExerciseAnswer>()!!
+    val answers = FXCollections.observableHashMap<StudentItem, ExerciseAnswer>()!!
 
     fun start(exercise: ExerciseType) {
         started = true
@@ -31,9 +31,9 @@ class ExerciseSession {
         Server.writeToAllStudentsAsync(ExerciseEndMessage())
     }
 
-    fun add(studentInfo: StudentInfo, answer: ExerciseAnswer) {
+    fun add(studentItem: StudentItem, answer: ExerciseAnswer) {
         runLater {
-            answers[studentInfo] = answer
+            answers[studentItem] = answer
         }
     }
 }

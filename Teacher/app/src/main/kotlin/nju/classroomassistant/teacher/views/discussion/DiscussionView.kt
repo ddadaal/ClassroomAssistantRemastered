@@ -21,6 +21,7 @@ import kfoenix.jfxlistview
 import kfoenix.jfxtextfield
 import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
 import nju.classroomassistant.teacher.extensions.PageController
+import nju.classroomassistant.teacher.extensions.asLargeAsPossible
 import nju.classroomassistant.teacher.network.GlobalVariables
 import tornadofx.*
 
@@ -39,9 +40,11 @@ class DiscussionView : View("讨论") {
 
         alignment = Pos.CENTER
 
-        paddingAll = 50.0
+        spacing = 16.0
 
-        setPrefSize(600.0, 600.0)
+        paddingAll = 16.0
+
+        asLargeAsPossible()
 
         importStylesheet("/css/main.css")
 
@@ -61,7 +64,9 @@ class DiscussionView : View("讨论") {
 
         stackpane {
 
-            paddingTop = 50
+            asLargeAsPossible()
+
+//            paddingTop = 50
 
             jfxlistview(session.discussionItems) {
                 selectionModel.selectionMode = SelectionMode.SINGLE

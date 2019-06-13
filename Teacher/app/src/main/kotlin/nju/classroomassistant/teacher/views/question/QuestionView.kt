@@ -14,6 +14,7 @@ import kfoenix.jfxlistview
 import kfoenix.jfxtextfield
 import kfoenix.jfxtogglebutton
 import nju.classroomassistant.teacher.extensions.PageController
+import nju.classroomassistant.teacher.extensions.asLargeAsPossible
 import nju.classroomassistant.teacher.network.GlobalVariables
 import tornadofx.*
 
@@ -29,6 +30,8 @@ class QuestionView : View("提问") {
             "220.286-58.857 159.714-159.714 58.857-220.286z"
 
     override val root = borderpane {
+
+        asLargeAsPossible()
 
         center = jfxlistview(session.questionList) {
             println("question list is ${session.questionList}")
