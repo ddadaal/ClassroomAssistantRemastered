@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
+import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.views.common.MainView
 import tornadofx.*
 import kotlin.reflect.KClass
@@ -44,6 +45,10 @@ class LoginCommonView: View() {
 
     fun toMain() {
         replaceWith<MainView>(sizeToScene = true, centerOnScreen = true)
+
+        // set teacher notification initial value
+        GlobalVariables.questionSession.isNotificationOpen.set(GlobalVariables.teacherInfo.get().questionNotification)
+
     }
 
     override fun onDock() {

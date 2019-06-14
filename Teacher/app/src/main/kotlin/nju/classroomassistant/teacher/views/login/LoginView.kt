@@ -12,20 +12,12 @@ import javafx.scene.input.KeyCode
 import kfoenix.jfxbutton
 import kfoenix.jfxtextfield
 import nju.classroomassistant.shared.log.Logger
-import nju.classroomassistant.teacher.TeacherApp
-import nju.classroomassistant.teacher.extensions.makeDraggable
-import nju.classroomassistant.teacher.extensions.makeResizeable
-import nju.classroomassistant.teacher.views.common.MainView
+import nju.classroomassistant.teacher.models.TeacherInfo
 import tornadofx.*
-import java.util.*
-import com.sun.javaws.ui.SplashScreen.hide
-import java.util.Collections.addAll
-import com.jfoenix.controls.JFXAutoCompletePopup
-import nju.classroomassistant.shared.util.HistoryQueue
 import nju.classroomassistant.teacher.network.GlobalVariables
+import nju.classroomassistant.teacher.repository.Repository
 import nju.classroomassistant.teacher.repository.TeacherIdHistoryRepository
-import nju.classroomassistant.teacher.util.executeLater
-import tornadofx.Stylesheet.Companion.textField
+import nju.classroomassistant.teacher.repository.TeacherInfoRepository
 
 
 class LoginView : View("登录"), Logger {
@@ -99,7 +91,16 @@ class LoginView : View("登录"), Logger {
         loggingInProperty.set(false)
 
         // 登录，设置全局变量，跳到课程选择界面
-        GlobalVariables.teacherId.set(idProperty.get())
+
+        GlobalVariables.teacherInfo.set(TeacherInfoRepository.data.computeIfAbsent(idProperty.get()) {
+            TeacherInfo(it, it, false, arrayListOf())
+        })
+
+        verbose("Selected teacher ${GlobalVariables.teacherInfo.get()}")
+
+        TeacherInfoRepository.save()
+        // 初始化Session
+
         switchTo(LoginRelatedPage.COURSE_SELECTION, ViewTransition.Direction.LEFT)
     }
 

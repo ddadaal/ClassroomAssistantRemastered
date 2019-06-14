@@ -22,6 +22,7 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
+import javafx.stage.StageStyle
 import javafx.util.Duration
 import kfoenix.jfxbutton
 import kfoenix.jfxsnackbar
@@ -35,6 +36,8 @@ import nju.classroomassistant.teacher.views.about.AboutViewController
 import nju.classroomassistant.teacher.views.discussion.DiscussionController
 import nju.classroomassistant.teacher.views.exercise.ExerciseController
 import nju.classroomassistant.teacher.views.home.HomeController
+import nju.classroomassistant.teacher.views.question.DialogFragment
+import nju.classroomassistant.teacher.views.question.NotificationDialog
 import nju.classroomassistant.teacher.views.question.QuestionController
 import tornadofx.*
 import java.time.LocalDateTime
@@ -356,6 +359,11 @@ class MainView : View() {
 
         }
 
+        // register notification open
+        GlobalVariables.questionSession.openNotificationDialog = {
+            find<NotificationDialog>(NotificationDialog::questionItem to it).openWindow(StageStyle.TRANSPARENT)
+        }
+
 
 //         TIME
         val timeline = Timeline(
@@ -364,8 +372,8 @@ class MainView : View() {
         )
         timeline.cycleCount = Animation.INDEFINITE
         timeline.play()
-
     }
+
 
     fun inFrontOf(page1: Page, page2: Page): Boolean {
         return Page.values().indexOf(page1) - Page.values().indexOf(page2) < 0

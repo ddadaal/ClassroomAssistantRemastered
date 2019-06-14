@@ -17,7 +17,7 @@ import kfoenix.jfxbutton
 import nju.classroomassistant.teacher.models.CourseInfo
 import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.network.Server
-import nju.classroomassistant.teacher.repository.CourseInfoRepository
+import nju.classroomassistant.teacher.repository.TeacherInfoRepository
 import tornadofx.*
 
 
@@ -85,7 +85,7 @@ class CourseSelectionView : View("选择课程") {
 
         // get course info
         courses.clear()
-        CourseInfoRepository.data.computeIfAbsent(GlobalVariables.teacherId.get()) { arrayListOf() }.forEach {
+        GlobalVariables.teacherInfo.get().courses.forEach {
             courses.add(CourseInfoObservable(it))
         }
 
@@ -107,7 +107,7 @@ class CourseSelectionView : View("选择课程") {
 
         alignment = Pos.TOP_CENTER
 
-        label(GlobalVariables.teacherId.stringBinding { "欢迎，$it" }) {
+        label(GlobalVariables.teacherInfo.stringBinding { "欢迎，${it?.teacherName}" }) {
             font = Font(28.0)
         }
 

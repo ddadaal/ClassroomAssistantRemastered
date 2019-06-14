@@ -38,10 +38,6 @@ class QuestionView : View("提问") {
             "159.714-58.857 220.286 58.857 220.286 159.714 159.714 220.286 58.857 " +
             "220.286-58.857 159.714-159.714 58.857-220.286z"
 
-    fun deleteQuestion(questionItem: QuestionItem) {
-        session.questionList.remove(questionItem)
-    }
-
     override val root = borderpane {
 
         asLargeAsPossible()
@@ -60,11 +56,7 @@ class QuestionView : View("提问") {
                         }
 
                         onDoubleClick {
-
-                            find<DialogFragment>(mapOf(
-                                    DialogFragment::questionItem to it,
-                                    DialogFragment::delete to this@QuestionView::deleteQuestion
-                            )).openWindow(StageStyle.TRANSPARENT)
+                            find<DialogFragment>(DialogFragment::questionItem to it).openWindow(StageStyle.TRANSPARENT)
                         }
 
                         // Show student id and question's content
@@ -126,7 +118,7 @@ class QuestionView : View("提问") {
                 text = "启用提问实时提醒"
                 alignment = Pos.CENTER
                 prefHeight = 30.0
-                session.isNotificationOpen.bind(selectedProperty())
+                selectedProperty().bindBidirectional(session.isNotificationOpen)
             }
 
             jfxbutton("清空", JFXButton.ButtonType.RAISED) {
