@@ -9,6 +9,8 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.input.KeyCode
+import javafx.scene.layout.StackPane
+import kfoenix.jfxbadge
 import kfoenix.jfxbutton
 import kfoenix.jfxtextfield
 import nju.classroomassistant.shared.log.Logger
@@ -18,6 +20,7 @@ import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.repository.Repository
 import nju.classroomassistant.teacher.repository.TeacherIdHistoryRepository
 import nju.classroomassistant.teacher.repository.TeacherInfoRepository
+import nju.classroomassistant.teacher.views.common.MainCss
 
 
 class LoginView : View("登录"), Logger {

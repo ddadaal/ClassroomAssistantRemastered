@@ -1,5 +1,6 @@
 package nju.classroomassistant.teacher.views.common
 
+import com.jfoenix.controls.JFXBadge
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXDialog
 import com.jfoenix.controls.JFXDialogLayout
@@ -10,34 +11,34 @@ import javafx.animation.Animation
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
 import javafx.beans.binding.Binding
+import javafx.beans.binding.IntegerBinding
 import javafx.beans.property.SimpleObjectProperty
 import javafx.event.EventHandler
+import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.ContentDisplay
 import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
-import javafx.scene.layout.BackgroundRepeat
 import javafx.scene.layout.BorderPane
+import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
-import javafx.scene.text.FontWeight
 import javafx.stage.StageStyle
 import javafx.util.Duration
+import kfoenix.jfxbadge
 import kfoenix.jfxbutton
 import kfoenix.jfxsnackbar
 import nju.classroomassistant.teacher.extensions.PageController
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
-import nju.classroomassistant.teacher.extensions.shadowedstackpane
 import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.network.Server
-import nju.classroomassistant.teacher.util.executeLater
 import nju.classroomassistant.teacher.views.about.AboutViewController
 import nju.classroomassistant.teacher.views.discussion.DiscussionController
 import nju.classroomassistant.teacher.views.exercise.ExerciseController
 import nju.classroomassistant.teacher.views.home.HomeController
-import nju.classroomassistant.teacher.views.question.DialogFragment
 import nju.classroomassistant.teacher.views.question.NotificationDialog
 import nju.classroomassistant.teacher.views.question.QuestionController
 import tornadofx.*
@@ -81,9 +82,9 @@ class MainView : View() {
         }
     }
 
-    fun navItem(text: String, icon: MaterialIcon, targetPage: Page): JFXButton {
-        return jfxbutton(text) {
+    fun navItem(text: String, icon: MaterialIcon, targetPage: Page, tipBinding: IntegerBinding? = null): Node {
 
+        val button = JFXButton(text).apply {
             prefHeight = HEADER_HEIGHT
             paddingHorizontal = 32.0
 
@@ -96,6 +97,27 @@ class MainView : View() {
 
             setOnAction { currentPageProperty.set(targetPage) }
         }
+
+        if (tipBinding == null) {
+            return button
+        } else {
+            return JFXBadge().apply {
+                textProperty().bind(tipBinding.stringBinding { "$it"})
+
+                setEnabled(tipBinding.get() > 0)
+
+                tipBinding.addListener { _, _, newValue ->
+                    setEnabled(newValue.toInt() > 0)
+                    refreshBadge()
+                }
+
+                addClass(MainCss.`icons-badge`)
+
+                control = button
+            }
+        }
+
+
     }
 
     fun navItem(text: String, icon: MaterialIcon, onClick: () -> Unit): JFXButton {
@@ -198,7 +220,7 @@ class MainView : View() {
 
                         this += navItem("主页", MaterialIcon.HOME, Page.HOME)
 
-                        this += navItem("提问", MaterialIcon.PAN_TOOL, Page.QUESTION)
+                        this += navItem("提问", MaterialIcon.PAN_TOOL, Page.QUESTION, GlobalVariables.questionSession.questionList.sizeProperty)
 
 
                         this += navItem("讨论", MaterialIcon.COMMENT, Page.DISCUSSION)
