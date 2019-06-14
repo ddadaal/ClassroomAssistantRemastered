@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
+import javafx.stage.StageStyle
 import kfoenix.jfxbutton
 import kfoenix.jfxlistview
 import kfoenix.jfxtextfield
@@ -17,6 +18,13 @@ import nju.classroomassistant.teacher.extensions.PageController
 import nju.classroomassistant.teacher.extensions.asLargeAsPossible
 import nju.classroomassistant.teacher.network.GlobalVariables
 import tornadofx.*
+import javafx.scene.Scene
+import com.sun.javafx.robot.impl.FXRobotHelper.getChildren
+import javafx.scene.control.Button
+import javafx.scene.layout.AnchorPane
+import javafx.stage.Stage
+import nju.classroomassistant.teacher.network.session.QuestionItem
+
 
 class QuestionView : View("提问") {
 
@@ -29,6 +37,10 @@ class QuestionView : View("提问") {
             "159.714-58.857 220.286 58.857 220.286 159.714 159.714 220.286 58.857 " +
             "220.286-58.857 159.714-159.714 58.857-220.286z"
 
+    fun deleteQuestion(questionItem: QuestionItem) {
+        session.questionList.remove(questionItem)
+    }
+
     override val root = borderpane {
 
         asLargeAsPossible()
@@ -38,21 +50,31 @@ class QuestionView : View("提问") {
             paddingAll = 20.0
 
             cellFormat {
-                graphic = cache {
+                graphic = cache(it) {
+
                     stackpane {
+
+                        setOnMouseClicked {
+                            opacity = 0.5
+                        }
+
+                        onDoubleClick {
+
+                            find<DialogFragment>(mapOf(
+                                    DialogFragment::questionItem to it,
+                                    DialogFragment::delete to this@QuestionView::deleteQuestion
+                            )).openWindow(StageStyle.TRANSPARENT)
+                        }
 
                         // Show student id and question's content
                         form {
                             fieldset {
                                 field("学生") {
-                                    label(it.studentId ?: "Unknown")
+                                    label(it.studentNickname)
                                 }
 
                                 field("问题") {
-                                    jfxtextfield {
-                                        isEditable = false
-                                        text = it.content
-
+                                    label(it.content) {
                                         style {
                                             fontSize = 18.px
                                             fontWeight = FontWeight.BOLD
@@ -63,10 +85,14 @@ class QuestionView : View("提问") {
                         }
 
                         // Delete button
-                        val button = jfxbutton(btnType = JFXButton.ButtonType.RAISED) {
+                        jfxbutton(btnType = JFXButton.ButtonType.RAISED) {
                             ripplerFill = c("C74C48")
                             scaleX = 1.0
                             scaleY = 1.0
+
+                            StackPane.setMargin(this, Insets(0.0, 10.0, 0.0, 0.0))
+                            StackPane.setAlignment(this, Pos.TOP_RIGHT)
+
 
                             // Set svg image
                             val glyph = SVGGlyph(-1, "minus-circle", minusCircleSVGPath, c("C74C48"))
@@ -76,7 +102,7 @@ class QuestionView : View("提问") {
 
                             action {
                                 println("Current cell index is $index")
-                                this@jfxlistview.items.removeAt(index)
+                                session.questionList.removeAt(index)
                             }
 
                             style {
@@ -85,18 +111,10 @@ class QuestionView : View("提问") {
 
                         }
 
-                        StackPane.setMargin(button, Insets(0.0, 10.0, 0.0, 0.0))
-                        StackPane.setAlignment(button, Pos.TOP_RIGHT)
-
                     }
                 }
-
-                graphic.addEventFilter(MouseEvent.MOUSE_CLICKED) {
-                    opacity = 0.5
-                    // TODO: open a new window to show question
-                }
-
             }
+
         }
 
         bottom = hbox {
@@ -104,7 +122,7 @@ class QuestionView : View("提问") {
             alignment = Pos.CENTER
 
             jfxtogglebutton {
-                text = "启用提问提醒"
+                text = "启用提问实时提醒"
                 alignment = Pos.CENTER
                 prefHeight = 30.0
                 session.isNotificationOpen.bind(selectedProperty())
@@ -116,7 +134,6 @@ class QuestionView : View("提问") {
                 action {
                     // Clear all questions
                     session.questionList.clear()
-                    (center as JFXListView<*>).items.clear()
                 }
 
                 style {

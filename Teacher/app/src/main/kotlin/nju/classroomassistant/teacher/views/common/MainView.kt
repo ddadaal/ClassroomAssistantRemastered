@@ -17,6 +17,7 @@ import javafx.scene.Parent
 import javafx.scene.control.ContentDisplay
 import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
+import javafx.scene.layout.BackgroundRepeat
 import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
@@ -124,7 +125,7 @@ class MainView : View() {
         closeDialog = JFXDialog()
         closeDialog.content = JFXDialogLayout().apply {
             heading += label("确定要导出课堂信息、下课并退出吗？") {
-                font = Font(20.0)
+                font = Font(18.0)
 
                 style {
                     fontWeight = FontWeight.BOLD
@@ -143,7 +144,7 @@ class MainView : View() {
 
                 ripplerFill = Color.RED
 
-                addClass("dialog-accept");
+                addClass("dialog-accept")
                 setOnAction { exit() }
                 graphic = MaterialIconView(MaterialIcon.EXIT_TO_APP, "24")
                 font = Font(18.0)
@@ -155,7 +156,6 @@ class MainView : View() {
         this += closeDialog
 
         rootPane = borderpane {
-
 
             prefWidth = 700.0
             prefHeight = 700.0

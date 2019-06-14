@@ -5,12 +5,13 @@ import javafx.scene.text.Font
 import javafx.scene.text.TextAlignment
 import kfoenix.jfxspinner
 import nju.classroomassistant.teacher.extensions.PageController
+import nju.classroomassistant.teacher.network.GlobalVariables
 import tornadofx.*
 
 class HomeView : View() {
     override val root = borderpane {
-        top = stackpane() {
-            label("《人机交互》")
+        top = stackpane {
+            label(GlobalVariables.course.stringBinding { it?.courseName })
             style {
                 fontSize = 36.px
             }
@@ -20,7 +21,7 @@ class HomeView : View() {
             top = vbox {
                 jfxspinner() {
                     progress = 0.4
-                    setPrefSize(150.0, 150.0)42
+                    setPrefSize(150.0, 150.0)
                     addClass("no-text-spinner")
                 }
                 label("出勤:  80人"){

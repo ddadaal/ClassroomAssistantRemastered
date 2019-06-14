@@ -49,6 +49,9 @@ class CollectingView : View("Collecting View") {
         }
 
         center = jfxspinner {
+
+//            paddingAll = 32.0
+
             progressProperty().bind(Bindings.createDoubleBinding(Callable { session.answers.size.toDouble() / Server.studentMap.size },
                     session.answers, Server.studentMap.studentMapObservable))
             setPrefSize(200.0, 200.0)
@@ -80,7 +83,7 @@ class CollectingView : View("Collecting View") {
 
     private fun finish() {
         // 结束本session，通知所有客户端
-        GlobalVariables.exerciseSession?.finish()
+        GlobalVariables.exerciseSession.finish()
   //      Server.writeToAllStudentsAsync(ExerciseEndMessage())
         controller.to<ResultView>()
     }

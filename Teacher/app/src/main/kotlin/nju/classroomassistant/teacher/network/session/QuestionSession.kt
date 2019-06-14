@@ -1,9 +1,11 @@
 package nju.classroomassistant.teacher.network.session
 
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.collections.FXCollections
 import nju.classroomassistant.shared.messages.raisequestion.NotificationSettingChangeMessage
 import nju.classroomassistant.teacher.models.StudentInfo
 import nju.classroomassistant.teacher.network.Server
+import nju.classroomassistant.teacher.network.StudentItem
 import tornadofx.*
 import java.time.LocalDateTime
 import kotlin.collections.ArrayList
@@ -27,15 +29,18 @@ class QuestionSession {
     /**
      * Questions' list
      */
-    val questionList = ArrayList<QuestionItem>().apply {
+    val questionList = FXCollections.observableArrayList<QuestionItem>()!!.apply {
         for (i in 1..30)
-            add(QuestionItem("Test content $i", "Student $i"))
-    }.observable()
+            add(QuestionItem("Test content $i", "Nickname"))
+    }
 
     fun addQuestion(content: String, studentId: String) {
-        runLater {
-            questionList.add(QuestionItem(content, studentId))
+        Server.studentMap.getStudentById(studentId)?.let {
+            runLater {
+                questionList.add(QuestionItem(content, it.nickname))
+            }
         }
+
     }
 
     /**
@@ -47,7 +52,7 @@ class QuestionSession {
 }
 
 data class QuestionItem(
-    val content: String,
-    val studentId: String?,
-    val time: LocalDateTime = LocalDateTime.now()
+        val content: String,
+        val studentNickname: String,
+        val time: LocalDateTime = LocalDateTime.now()
 )
