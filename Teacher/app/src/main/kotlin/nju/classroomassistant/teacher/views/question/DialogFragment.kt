@@ -21,9 +21,7 @@ import nju.classroomassistant.teacher.network.session.QuestionItem
 import tornadofx.*
 import java.time.format.DateTimeFormatter
 import javafx.stage.Screen.getPrimary
-
-
-
+import nju.classroomassistant.teacher.extensions.shadowedstackpane
 
 
 class DialogFragment : Fragment("My Fragment") {
@@ -42,17 +40,7 @@ class DialogFragment : Fragment("My Fragment") {
 
     val questionItem: QuestionItem by param()
 
-    override val root = stackpane {
-
-        paddingAll = 12.0
-
-//        opacity = 0.1
-
-        background = Background(BackgroundFill(Color.WHITE, CornerRadii(2.0), null))
-
-        style {
-            backgroundColor += Color.TRANSPARENT
-        }
+    override val root = shadowedstackpane {
 
         this += JFXDialogLayout().apply {
 
@@ -62,7 +50,7 @@ class DialogFragment : Fragment("My Fragment") {
 
             JFXDepthManager.setDepth(this, 4)
 
-            setHeading(label("${questionItem.studentNickname} 于 ${questionItem.time.format(DateTimeFormatter.ofPattern("HH:mm:ss"))} 提出了一个问题："))
+            setHeading(label("${questionItem.studentNickname} 于 ${questionItem.simpleTime} 提出了一个问题："))
 
             setBody(label(questionItem.content))
 

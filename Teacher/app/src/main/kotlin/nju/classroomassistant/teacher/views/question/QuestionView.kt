@@ -46,6 +46,8 @@ class QuestionView : View("提问") {
             println("question list is ${session.questionList}")
             paddingAll = 20.0
 
+            placeholder = label("暂时没有问题。")
+
             cellFormat {
                 graphic = cache(it) {
 
@@ -66,7 +68,7 @@ class QuestionView : View("提问") {
 
                             spacing = 8.0
 
-                            label("${it.studentNickname} 于 ${it.time.format(DateTimeFormatter.ofPattern("HH:mm:ss"))} 提出问题：") {
+                            label("${it.studentNickname} 于 ${it.simpleTime} 提出问题：") {
 
                             }
                             label(it.content) {

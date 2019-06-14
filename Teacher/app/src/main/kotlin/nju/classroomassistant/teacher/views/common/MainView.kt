@@ -29,6 +29,7 @@ import kfoenix.jfxsnackbar
 import nju.classroomassistant.teacher.extensions.PageController
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
+import nju.classroomassistant.teacher.extensions.shadowedstackpane
 import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.network.Server
 import nju.classroomassistant.teacher.util.executeLater
@@ -124,6 +125,8 @@ class MainView : View() {
     }
 
     override val root = stackpane {
+
+        addClass(MainCss.exteriorLine)
 
         closeDialog = JFXDialog()
         closeDialog.content = JFXDialogLayout().apply {

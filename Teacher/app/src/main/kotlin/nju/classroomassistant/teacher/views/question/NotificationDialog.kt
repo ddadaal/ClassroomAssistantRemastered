@@ -15,6 +15,7 @@ import javafx.stage.StageStyle
 import kfoenix.jfxbutton
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
+import nju.classroomassistant.teacher.extensions.shadowedstackpane
 import nju.classroomassistant.teacher.network.session.QuestionItem
 import nju.classroomassistant.teacher.util.executeLater
 import tornadofx.*
@@ -45,17 +46,7 @@ class NotificationDialog: Fragment() {
 
     val questionItem: QuestionItem by param()
 
-    override val root = stackpane {
-
-        paddingAll = 12.0
-
-//        opacity = 0.1
-
-        background = Background(BackgroundFill(Color.WHITE, CornerRadii(2.0), null))
-
-        style {
-            backgroundColor += Color.TRANSPARENT
-        }
+    override val root = shadowedstackpane {
 
         this += JFXDialogLayout().apply {
 
@@ -65,7 +56,7 @@ class NotificationDialog: Fragment() {
 
             JFXDepthManager.setDepth(this, 4)
 
-            setHeading(label("${questionItem.studentNickname} 于 ${questionItem.time.format(DateTimeFormatter.ofPattern("HH:mm:ss"))} 提出了一个问题："))
+            setHeading(label("${questionItem.studentNickname} 于 ${questionItem.simpleTime} 提出了一个问题："))
 
             setBody(label(questionItem.abstract))
 

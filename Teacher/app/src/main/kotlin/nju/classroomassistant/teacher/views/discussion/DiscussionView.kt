@@ -2,6 +2,7 @@ package nju.classroomassistant.teacher.views.discussion
 
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXTextField
+import javafx.collections.ListChangeListener
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Scene
@@ -69,12 +70,25 @@ class DiscussionView : View("讨论") {
 //            paddingTop = 50
 
             jfxlistview(session.discussionItems) {
+
+                placeholder = label(session.started.stringBinding {
+                    if (it == true) {
+                        "暂时没有讨论内容。"
+                    } else {
+                        "请点击开始按钮以开始一次讨论。"
+                    }
+                })
+
                 selectionModel.selectionMode = SelectionMode.SINGLE
 
-                style {
-                    effect = DropShadow(BlurType.THREE_PASS_BOX, Color.rgb(0, 0, 0, 0.8), 5.0, 0.0, 0.0, 0.0)
-//                    backgroundRadius += box(5.px)
-                }
+                session.discussionItems.addListener(ListChangeListener {
+                    this.scrollTo(it.list.size - 1)
+                })
+
+//                style {
+//                    effect = DropShadow(BlurType.THREE_PASS_BOX, Color.rgb(0, 0, 0, 0.8), 5.0, 0.0, 0.0, 0.0)
+////                    backgroundRadius += box(5.px)
+//                }
 
             }
         }

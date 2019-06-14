@@ -14,6 +14,7 @@ import nju.classroomassistant.teacher.views.question.DialogFragment
 import nju.classroomassistant.teacher.views.question.NotificationDialog
 import tornadofx.*
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
 
 /**
@@ -81,4 +82,7 @@ data class QuestionItem(
         } else {
             content
         }
+
+    val simpleTime
+        get() = time.format(DateTimeFormatter.ofPattern("HH:mm:ss"))!!
 }
