@@ -7,6 +7,7 @@ import javafx.geometry.Pos
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.scene.text.TextAlignment
+import javafx.stage.StageStyle
 import kfoenix.jfxbutton
 import kfoenix.jfxcombobox
 import kfoenix.jfxradiobutton
