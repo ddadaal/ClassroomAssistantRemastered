@@ -10,6 +10,7 @@ import nju.classroomassistant.shared.messages.login.LoginMessage
 import nju.classroomassistant.shared.messages.login.LoginResponseMessage
 import nju.classroomassistant.shared.messages.login.LogoutMessage
 import nju.classroomassistant.shared.messages.raisequestion.NotificationSettingChangeMessage
+import nju.classroomassistant.shared.messages.raisequestion.StudentRaiseQuestionMessage
 import java.io.Closeable
 import java.io.IOException
 import java.io.ObjectInputStream
@@ -82,6 +83,14 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap) : 
                             GlobalVariables.exerciseSession.add(it, message.answer)
                         }
 
+                    }
+
+                    is StudentRaiseQuestionMessage -> {
+                        verbose("$student raises a question")
+
+                        student?.let {
+                            GlobalVariables.questionSession.add(it, message.question)
+                        }
                     }
 
                     else -> error("Non-supported message type: ${message.javaClass.simpleName}")

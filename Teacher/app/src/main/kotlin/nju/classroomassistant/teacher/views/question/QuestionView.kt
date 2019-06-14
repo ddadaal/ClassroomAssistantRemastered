@@ -100,6 +100,7 @@ class QuestionView : View("提问") {
             spacing = 10.0
             alignment = Pos.CENTER
 
+            // Notification setting button
             jfxtogglebutton {
                 text = "启用提问提醒"
                 alignment = Pos.CENTER
@@ -107,6 +108,7 @@ class QuestionView : View("提问") {
                 session.isNotificationOpen.bind(selectedProperty())
             }
 
+            // The button for clearing question list
             jfxbutton("清空", JFXButton.ButtonType.RAISED) {
                 setPrefSize(300.0, 30.0)
 

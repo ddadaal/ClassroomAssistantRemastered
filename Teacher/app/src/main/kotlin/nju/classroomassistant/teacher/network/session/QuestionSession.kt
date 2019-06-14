@@ -3,6 +3,7 @@ package nju.classroomassistant.teacher.network.session
 import javafx.beans.property.SimpleBooleanProperty
 import nju.classroomassistant.shared.messages.raisequestion.NotificationSettingChangeMessage
 import nju.classroomassistant.teacher.network.Server
+import nju.classroomassistant.teacher.network.StudentInfo
 import tornadofx.*
 import java.time.LocalDateTime
 import java.util.*
@@ -31,6 +32,10 @@ class QuestionSession {
         for (i in 1..30)
             add(QuestionItem("Test content $i", "Student $i"))
     }.observable()
+
+    fun add(student: StudentInfo, question: String) {
+        questionList.add(QuestionItem(student.studentId, question))
+    }
 
     /**
      * Send NotificationSettingChangeMessage to students' clients
