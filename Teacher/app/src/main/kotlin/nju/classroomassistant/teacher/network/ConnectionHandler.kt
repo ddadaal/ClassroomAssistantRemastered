@@ -27,7 +27,7 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap) : 
     private val `in` = ObjectInputStream(socketClient.getInputStream())
     private val out = ObjectOutputStream(socketClient.getOutputStream())
 
-    var student: StudentInfo? = null
+    var student: StudentItem? = null
 
     var terminated = false
 
@@ -86,10 +86,9 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap) : 
                     }
 
                     is StudentRaiseQuestionMessage -> {
-                        verbose("$student raises a question")
-
+                        verbose("$student raised a question: ${message.question}")
                         student?.let {
-                            GlobalVariables.questionSession.add(it, message.question)
+                            GlobalVariables.questionSession.addQuestion(message.question, it.studentId)
                         }
                     }
 

@@ -1,6 +1,7 @@
 package nju.classroomassistant.teacher.extensions
 
 import javafx.scene.Node
+import javafx.scene.layout.Region
 import nju.classroomassistant.teacher.views.exercise.ExerciseController
 import nju.classroomassistant.teacher.views.question.QuestionController
 import tornadofx.*
@@ -15,3 +16,6 @@ abstract class PageController(initial: KClass<out View>): Controller() {
     }
 }
 
+fun Region.asLargeAsPossible() {
+    setPrefSize(10000.0, 10000.0)
+}

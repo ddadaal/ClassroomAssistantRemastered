@@ -13,6 +13,7 @@ import nju.classroomassistant.teacher.network.session.DiscussionSession
 import nju.classroomassistant.teacher.network.session.ExerciseSession
 import nju.classroomassistant.teacher.network.session.QuestionSession
 import tornadofx.*
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
@@ -36,6 +37,9 @@ object GlobalVariables {
 
     // 提问信息
     val questionSession = QuestionSession()
+
+    // 当前时间
+    var currentTime = SimpleObjectProperty<LocalDateTime>(LocalDateTime.now())
 }
 
 

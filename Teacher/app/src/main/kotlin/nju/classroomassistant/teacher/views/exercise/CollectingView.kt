@@ -9,6 +9,7 @@ import javafx.scene.text.TextAlignment
 import kfoenix.jfxbutton
 import kfoenix.jfxspinner
 import nju.classroomassistant.shared.messages.exercise.ExerciseEndMessage
+import nju.classroomassistant.teacher.extensions.asLargeAsPossible
 import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.network.Server
 import nju.classroomassistant.teacher.views.common.MainCss
@@ -25,40 +26,52 @@ class CollectingView : View("Collecting View") {
     val session = GlobalVariables.exerciseSession
 
 
-    override val root = vbox {
+    override val root = borderpane {
 
-        alignment = Pos.CENTER
+        paddingAll = 16.0
 
-        maxWidth = 500.0
-        maxHeight = 500.0
-        spacing = 40.0
+//        maxWidth = 400.0
+//        maxHeight = 500.0
 
-        borderpane {
+//        setPrefSize(1000.0, 1000.0)
+
+        asLargeAsPossible()
+
+        top = borderpane {
             left = label("作答人数")
             right = label(Bindings.createStringBinding(Callable { "${session.answers.size} / ${Server.studentMap.size}"  },
                     session.answers, Server.studentMap.studentMapObservable))
             style {
                 fontSize = 16.px
             }
+
+
         }
 
-        jfxspinner {
+        center = jfxspinner {
             progressProperty().bind(Bindings.createDoubleBinding(Callable { session.answers.size.toDouble() / Server.studentMap.size },
                     session.answers, Server.studentMap.studentMapObservable))
             setPrefSize(200.0, 200.0)
             addClass("blue-spinner")
+
+            setMaxSize(600.0, 600.0)
         }
 
-        jfxbutton("结束", JFXButton.ButtonType.RAISED) {
-            setOnAction {
-                finish()
-            }
-            prefWidth = 300.0
-            prefHeight = 30.0
+        bottom = hbox {
+            alignment = Pos.CENTER
 
-            style {
-                backgroundColor += c("#D63333")
-                textFill = Color.WHITE
+
+            jfxbutton("结束", JFXButton.ButtonType.RAISED) {
+                setOnAction {
+                    finish()
+                }
+                prefWidth = 300.0
+                prefHeight = 30.0
+
+                style {
+                    backgroundColor += c("#D63333")
+                    textFill = Color.WHITE
+                }
             }
         }
 

@@ -1,16 +1,13 @@
 package nju.classroomassistant.teacher.network.session
 
 import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import nju.classroomassistant.shared.messages.discussion.DiscussionEndMessage
 import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
 import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
-import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.network.Server
-import nju.classroomassistant.teacher.network.StudentInfo
+import nju.classroomassistant.teacher.network.StudentItem
 import tornadofx.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 class DiscussionSession {
@@ -41,9 +38,9 @@ class DiscussionSession {
         }
     }
 
-    fun add(studentInfo: StudentInfo, message: StudentSendDiscussionMessage) {
+    fun add(studentItem: StudentItem, message: StudentSendDiscussionMessage) {
         runLater {
-            discussionItems.add(DiscussionItem(message, studentInfo.studentId))
+            discussionItems.add(DiscussionItem(message, studentItem.studentId))
         }
     }
 }

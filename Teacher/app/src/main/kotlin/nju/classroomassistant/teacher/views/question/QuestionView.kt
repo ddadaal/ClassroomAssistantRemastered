@@ -9,11 +9,13 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
+import javafx.stage.StageStyle
 import kfoenix.jfxbutton
 import kfoenix.jfxlistview
 import kfoenix.jfxtextfield
 import kfoenix.jfxtogglebutton
 import nju.classroomassistant.teacher.extensions.PageController
+import nju.classroomassistant.teacher.extensions.asLargeAsPossible
 import nju.classroomassistant.teacher.network.GlobalVariables
 import tornadofx.*
 
@@ -30,6 +32,8 @@ class QuestionView : View("提问") {
 
     override val root = borderpane {
 
+        asLargeAsPossible()
+
         center = jfxlistview(session.questionList) {
             println("question list is ${session.questionList}")
             paddingAll = 20.0
@@ -37,12 +41,11 @@ class QuestionView : View("提问") {
             cellFormat {
                 graphic = cache {
                     stackpane {
-
                         // Show student id and question's content
                         form {
                             fieldset {
                                 field("学生") {
-                                    label(it.studentId ?: "Unknown")
+                                    label(it.student ?: "Unknown")
                                 }
 
                                 field("问题") {
@@ -72,8 +75,7 @@ class QuestionView : View("提问") {
                             graphic = glyph
 
                             action {
-                                println("Current cell index is $index")
-                                this@jfxlistview.items.removeAt(index)
+                                session.questionList.removeAt(index)
                             }
 
                             style {
@@ -90,7 +92,16 @@ class QuestionView : View("提问") {
 
                 graphic.addEventFilter(MouseEvent.MOUSE_CLICKED) {
                     opacity = 0.5
-                    // TODO: open a new window to show question
+                }
+
+                graphic.setOnMouseClicked {
+                    // TODO:
+                    find<DialogFragment>(
+                        mapOf(
+                            DialogFragment::content to item.content,
+                            DialogFragment::dialogTitle to "${item.student}:"
+                        )
+                    ).openWindow(StageStyle.UNDECORATED)
                 }
 
             }

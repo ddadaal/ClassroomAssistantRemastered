@@ -14,6 +14,7 @@ import javafx.scene.chart.NumberAxis
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import kfoenix.jfxbutton
+import nju.classroomassistant.teacher.extensions.asLargeAsPossible
 import tornadofx.*
 import java.util.concurrent.Callable
 import kotlin.reflect.KCallable
@@ -34,6 +35,9 @@ class ResultView : View("My View") {
     val controller: ExerciseController by inject()
 
     override val root = borderpane {
+
+        asLargeAsPossible()
+
         center = barchart("练习结果", NumberAxis(), CategoryAxis()) {
             series("") {
                 resultMap.forEach {

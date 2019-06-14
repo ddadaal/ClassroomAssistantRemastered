@@ -4,5 +4,5 @@ import java.io.Serializable
 
 data class StudentInfo(
         val studentName: String,
-        val studentNo: String
+        val studentId: String
 ): Serializable
