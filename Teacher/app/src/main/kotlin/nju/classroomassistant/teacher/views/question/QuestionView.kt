@@ -24,6 +24,7 @@ import javafx.scene.control.Button
 import javafx.scene.layout.AnchorPane
 import javafx.stage.Stage
 import nju.classroomassistant.teacher.network.session.QuestionItem
+import java.time.format.DateTimeFormatter
 
 
 class QuestionView : View("提问") {
@@ -67,22 +68,23 @@ class QuestionView : View("提问") {
                         }
 
                         // Show student id and question's content
-                        form {
-                            fieldset {
-                                field("学生") {
-                                    label(it.studentNickname)
-                                }
+                        vbox {
 
-                                field("问题") {
-                                    label(it.content) {
-                                        style {
-                                            fontSize = 18.px
-                                            fontWeight = FontWeight.BOLD
-                                        }
-                                    }
+                            paddingAll = 8.0
+
+                            spacing = 8.0
+
+                            label("${it.studentNickname} 于 ${it.time.format(DateTimeFormatter.ofPattern("HH:mm:ss"))} 提出问题：") {
+
+                            }
+                            label(it.content) {
+                                style {
+                                    fontSize = 18.px
+                                    fontWeight = FontWeight.BOLD
                                 }
                             }
                         }
+
 
                         // Delete button
                         jfxbutton(btnType = JFXButton.ButtonType.RAISED) {
@@ -101,7 +103,6 @@ class QuestionView : View("提问") {
                             graphic = glyph
 
                             action {
-                                println("Current cell index is $index")
                                 session.questionList.removeAt(index)
                             }
 
@@ -114,8 +115,8 @@ class QuestionView : View("提问") {
                     }
                 }
             }
-
         }
+
 
         bottom = hbox {
             spacing = 10.0

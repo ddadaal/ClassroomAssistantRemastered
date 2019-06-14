@@ -16,6 +16,7 @@ import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
 import nju.classroomassistant.teacher.network.session.QuestionItem
 import tornadofx.*
+import java.time.format.DateTimeFormatter
 
 class DialogFragment : Fragment("My Fragment") {
 
@@ -50,7 +51,7 @@ class DialogFragment : Fragment("My Fragment") {
 
             JFXDepthManager.setDepth(this, 4)
 
-            setHeading(label("${questionItem.studentNickname} 提出了一个问题："))
+            setHeading(label("${questionItem.studentNickname} 于 ${questionItem.time.format(DateTimeFormatter.ofPattern("HH:mm:ss"))} 提出了一个问题："))
 
             setBody(label(questionItem.content))
 

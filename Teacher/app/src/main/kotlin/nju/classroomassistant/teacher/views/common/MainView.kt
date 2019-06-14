@@ -124,20 +124,16 @@ class MainView : View() {
 
         closeDialog = JFXDialog()
         closeDialog.content = JFXDialogLayout().apply {
-            heading += label("确定要导出课堂信息、下课并退出吗？") {
-                font = Font(18.0)
-
-                style {
-                    fontWeight = FontWeight.BOLD
-                }
+            heading += label("确定要导出课堂信息到桌面、下课并退出吗？") {
+                font = Font("System Bold", 18.0)
             }
             actions += jfxbutton("取消") {
 
                 ripplerFill = Color.ALICEBLUE
 
                 setOnAction { closeDialog.close() }
-                graphic = MaterialIconView(MaterialIcon.CLOSE, "24")
-                font = Font(18.0)
+                graphic = MaterialIconView(MaterialIcon.CLOSE, "20")
+                font = Font(16.0)
 
             }
             actions += jfxbutton("确定") {
@@ -146,8 +142,8 @@ class MainView : View() {
 
                 addClass("dialog-accept")
                 setOnAction { exit() }
-                graphic = MaterialIconView(MaterialIcon.EXIT_TO_APP, "24")
-                font = Font(18.0)
+                graphic = MaterialIconView(MaterialIcon.EXIT_TO_APP, "20")
+                font = Font(16.0)
 
             }
         }
@@ -163,7 +159,7 @@ class MainView : View() {
             top = hbox {
 
                 alignment = Pos.CENTER
-
+                JFXDepthManager.setDepth(this, DEPTH)
 
                 style {
                     backgroundColor += c("#232e5f")
@@ -280,6 +276,7 @@ class MainView : View() {
 
                         contentPane = vbox {
 
+                            JFXDepthManager.setDepth(this, DEPTH)
 
                             this += find(find(Page.HOME.controller).view)
 
@@ -300,6 +297,7 @@ class MainView : View() {
 
                 bottom = hbox {
 
+                    JFXDepthManager.setDepth(this, DEPTH)
 
                     alignment = Pos.CENTER
 
@@ -334,10 +332,6 @@ class MainView : View() {
         primaryStage.makeDraggable(rootPane.top)
 
         primaryStage.makeResizeable()
-
-        JFXDepthManager.setDepth(contentPane, DEPTH)
-        JFXDepthManager.setDepth(rootPane.bottom, DEPTH)
-        JFXDepthManager.setDepth(rootPane.top, DEPTH)
 
         (btnMaximize.graphic as MaterialIconView).glyphNameProperty().bind(primaryStage.maximizedProperty().stringBinding {
             if (it == true) {

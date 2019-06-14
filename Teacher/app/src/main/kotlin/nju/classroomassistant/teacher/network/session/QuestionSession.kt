@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections
 import nju.classroomassistant.shared.messages.raisequestion.NotificationSettingChangeMessage
 import nju.classroomassistant.teacher.models.StudentInfo
+import nju.classroomassistant.teacher.network.MOCK
 import nju.classroomassistant.teacher.network.Server
 import nju.classroomassistant.teacher.network.StudentItem
 import tornadofx.*
@@ -30,14 +31,17 @@ class QuestionSession {
      * Questions' list
      */
     val questionList = FXCollections.observableArrayList<QuestionItem>()!!.apply {
-        for (i in 1..30)
-            add(QuestionItem("Test content $i", "Nickname"))
+        if (MOCK) {
+            for (i in 1..30)
+                add(QuestionItem("Test content $i", "Nickname"))
+        }
+
     }
 
     fun addQuestion(content: String, studentId: String) {
         Server.studentMap.getStudentById(studentId)?.let {
             runLater {
-                questionList.add(QuestionItem(content, it.nickname))
+                questionList.add(0, QuestionItem(content, it.nickname))
             }
         }
 
