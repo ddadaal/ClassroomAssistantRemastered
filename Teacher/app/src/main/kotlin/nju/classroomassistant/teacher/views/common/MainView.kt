@@ -50,7 +50,7 @@ enum class Page(val controller: KClass<out PageController>, val title: String) {
 }
 
 const val HEADER_HEIGHT = 64.0
-const val CONTENT_MAX_WIDTH = 900.0
+const val CONTENT_MAX_WIDTH = 1024.0
 
 
 class MainView : View() {

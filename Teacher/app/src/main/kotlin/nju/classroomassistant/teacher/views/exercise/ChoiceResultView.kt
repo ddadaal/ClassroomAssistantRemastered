@@ -6,67 +6,65 @@ import com.jfoenix.svg.SVGGlyphLoader
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
 import javafx.beans.binding.Bindings
+import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.chart.CategoryAxis
 import javafx.scene.chart.NumberAxis
+import javafx.scene.chart.XYChart
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import kfoenix.jfxbutton
+import nju.classroomassistant.shared.messages.exercise.type.ChoiceExerciseType
 import nju.classroomassistant.teacher.extensions.asLargeAsPossible
+import nju.classroomassistant.teacher.network.GlobalVariables
 import tornadofx.*
 import java.util.concurrent.Callable
 import kotlin.reflect.KCallable
 
-class ResultView : View("My View") {
-    val resultMap = mapOf<String, Number>(
-            Pair("192.168.1.7", 1),
-            Pair("192.168.1.6", 1),
-            Pair("192.168.1.5", 1),
-            Pair("192.168.0.1", 12),
-            Pair("127.0.0.1", 5),
-            Pair("192.168.10.3", 20),
-            Pair("这是一个超级长长长长长长长长长长长长\n长长长长长长长长长长长长的答案", 1),
-            Pair("192.168.1.3", 1)
+class ChoiceResultView : View("My View") {
 
-    )
+
+    val data = FXCollections.observableArrayList<XYChart.Data<Number, String>>()
 
     val controller: ExerciseController by inject()
 
+    override fun onDock() {
+        val numbers = arrayListOf(9,20,15,3,5,10)
+
+        GlobalVariables.exerciseSession.exercise?.let {
+            with (it as ChoiceExerciseType) {
+                data.clear()
+                for( i in it.optionsCount-1 downTo 0){
+                    data.add(XYChart.Data(numbers[i],('A'+i)+""))
+                }
+            }
+        }
+    }
+
     override val root = borderpane {
+        importStylesheet("/css/main.css")
 
         asLargeAsPossible()
 
         center = barchart("练习结果", NumberAxis(), CategoryAxis()) {
-            series("") {
-                resultMap.forEach {
-                    data(it.value, it.key)
-                }
-            }
+            series("", this@ChoiceResultView.data)
+
             legendVisibleProperty().set(false)
             horizontalGridLinesVisibleProperty().set(false)
             horizontalZeroLineVisibleProperty().set(false)
-            cssclass()
-
+            barGap = 30.0
+            yAxis.paddingRight=8.0
+            addClass("choice-bar")
+            animated=false
             style {
-                //                tickLabelFont = Font.font(14.0)
-//                tickLength=0.px
+                tickLabelFont = Font.font(14.0)
             }
 
         }
 
         bottom = borderpane {
-            left =  hbox{
-                label("其他答案")
-                jfxbutton( graphic=MaterialIconView(MaterialIcon.REFRESH, "20"))
-                label("0.0.0.0"){
-                    style{
-                        paddingLeft = 20
-                    }
-                }
-                alignment = Pos.CENTER_LEFT
-            }
             right = jfxbutton("发布新练习", JFXButton.ButtonType.RAISED) {
 
                 setOnAction {
@@ -81,5 +79,17 @@ class ResultView : View("My View") {
         }
 
         paddingAll = 20
+    }
+}
+
+class ChoiceResultStyle: Stylesheet(){
+    companion object{
+        val chartBar by cssclass()
+    }
+
+    init{
+        chartBar{
+            translateY=30.px
+        }
     }
 }

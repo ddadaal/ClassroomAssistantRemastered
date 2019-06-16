@@ -16,6 +16,7 @@ import nju.classroomassistant.shared.messages.exercise.type.ChoiceExerciseType
 import nju.classroomassistant.shared.messages.exercise.type.FillBlankExerciseType
 import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.network.Server
+import nju.classroomassistant.teacher.views.question.DialogFragment
 import tornadofx.*
 
 
