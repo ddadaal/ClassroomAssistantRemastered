@@ -113,7 +113,7 @@ class DiscussionView : View("讨论") {
             label(fontSizeProperty.stringBinding { "字体大小：${it?.toInt()}" })
 
             jfxslider(orientation = Orientation.HORIZONTAL) {
-                min = 16.0
+                min = 12.0
                 max = 48.0
                 valueProperty().bindBidirectional(fontSizeProperty)
             }
