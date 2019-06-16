@@ -16,6 +16,7 @@ import kfoenix.jfxbutton
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
 import nju.classroomassistant.teacher.extensions.shadowedstackpane
+import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.network.session.QuestionItem
 import nju.classroomassistant.teacher.util.executeLater
 import tornadofx.*
@@ -50,6 +51,11 @@ class NotificationDialog: Fragment() {
 
         this += JFXDialogLayout().apply {
 
+            setOnMouseClicked {
+                find<DialogFragment>(DialogFragment::questionItem to questionItem).openWindow(StageStyle.TRANSPARENT)
+                close()
+            }
+
             style {
                 background = Background(BackgroundFill(Color.rgb(255, 255, 255, 1.0), null, null))
             }
@@ -61,23 +67,24 @@ class NotificationDialog: Fragment() {
             setBody(label(questionItem.abstract))
 
             setActions(
-                    jfxbutton("关闭") {
+                    jfxbutton("关闭实时提醒并关闭窗口") {
+                        action {
+                            GlobalVariables.questionSession.isNotificationOpen.set(false)
+                            close()
+                        }
+
+                        graphic = MaterialIconView(MaterialIcon.NOTIFICATIONS, "20")
+                        font = Font(16.0)
+                    },
+                    jfxbutton("关闭窗口") {
                         action {
                             close()
                         }
 
                         graphic = MaterialIconView(MaterialIcon.REMOVE, "20")
                         font = Font(16.0)
-                    },
-                    jfxbutton("查看详细") {
-                        action {
-                            find<DialogFragment>(DialogFragment::questionItem to questionItem).openWindow(StageStyle.TRANSPARENT)
-                            close()
-                        }
-
-                        graphic = MaterialIconView(MaterialIcon.CHECK, "20")
-                        font = Font(16.0)
-                    })
+                    }
+            )
 
         }
     }

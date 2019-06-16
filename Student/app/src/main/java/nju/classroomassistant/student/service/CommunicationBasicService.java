@@ -18,6 +18,7 @@ import nju.classroomassistant.shared.messages.raisequestion.NotificationSettingC
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class CommunicationBasicService {
@@ -37,9 +38,6 @@ public class CommunicationBasicService {
         public void run() {
 
             while (!terminated) {
-
-
-
                 try {
                     Log.i(CommunicationBasicService.class.getName(), "wait for message from server...");
                     Message obj = (Message) in.readObject();
@@ -84,14 +82,15 @@ public class CommunicationBasicService {
 
     public void tryConnect() {
         try {
-            socket = new Socket("10.0.2.2", Config.PORT);
+            socket = new Socket();
+            socket.connect(new InetSocketAddress("10.0.2.2", Config.PORT), 3000);
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
             connected = true;
         } catch (IOException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
     }
 
     private CommunicationBasicService() {
@@ -146,16 +145,17 @@ public class CommunicationBasicService {
     }
 
     public LoginResponseMessage.Response login(String username) {
-        if (!isConnected())
-            tryConnect();
 
-        LoginMessage loginMessage = new LoginMessage(username);
         try {
+            if (!isConnected()) {
+                tryConnect();
+            }
+            LoginMessage loginMessage = new LoginMessage(username);
             out.writeObject(loginMessage);
             LoginResponseMessage.Response response = ((LoginResponseMessage) in.readObject()).getResponse();
             start();
             return response;
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return LoginResponseMessage.Response.ERROR;

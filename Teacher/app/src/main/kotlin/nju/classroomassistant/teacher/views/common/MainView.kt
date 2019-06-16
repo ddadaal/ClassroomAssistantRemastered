@@ -55,7 +55,7 @@ enum class Page(val controller: KClass<out PageController>, val title: String) {
 }
 
 const val HEADER_HEIGHT = 64.0
-const val CONTENT_MAX_WIDTH = 900.0
+const val CONTENT_MAX_WIDTH = 1024.0
 
 
 class MainView : View() {
@@ -153,16 +153,7 @@ class MainView : View() {
         closeDialog = JFXDialog()
         closeDialog.content = JFXDialogLayout().apply {
             heading += label("确定要导出课堂信息到桌面、下课并退出吗？") {
-                font = Font("System Bold", 18.0)
-            }
-            actions += jfxbutton("取消") {
-
-                ripplerFill = Color.ALICEBLUE
-
-                setOnAction { closeDialog.close() }
-                graphic = MaterialIconView(MaterialIcon.CLOSE, "20")
                 font = Font(16.0)
-
             }
             actions += jfxbutton("确定") {
 
@@ -174,6 +165,16 @@ class MainView : View() {
                 font = Font(16.0)
 
             }
+            actions += jfxbutton("取消") {
+
+                ripplerFill = Color.ALICEBLUE
+
+                setOnAction { closeDialog.close() }
+                graphic = MaterialIconView(MaterialIcon.CLOSE, "20")
+                font = Font(16.0)
+
+            }
+
         }
 
 

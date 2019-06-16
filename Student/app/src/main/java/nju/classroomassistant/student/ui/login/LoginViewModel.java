@@ -43,9 +43,7 @@ public class LoginViewModel extends ViewModel {
 
         AsyncTask.execute(() -> {
             final LoginResponseMessage.Response response = basicService.login(username);
-
             handler.post(() -> {
-
                 loggingIn.setValue(false);
                 switch (response) {
                     case OK:
@@ -79,7 +77,7 @@ public class LoginViewModel extends ViewModel {
         if (username == null) {
             return false;
         }
-        for (char c: username.toCharArray()) {
+        for (char c : username.toCharArray()) {
             if (c > '9' || c < '0') {
                 return false;
             }

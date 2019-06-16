@@ -45,8 +45,8 @@ class DiscussionSession {
     }
 }
 
-class DiscussionItem(message: StudentSendDiscussionMessage, private val nickname: String?) {
-    private val content = message.content
+class DiscussionItem(message: StudentSendDiscussionMessage, val nickname: String?) {
+    val content = message.content
 
     override fun toString(): String {
         return "[$nickname] $content"

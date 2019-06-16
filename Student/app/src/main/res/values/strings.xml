@@ -24,7 +24,7 @@
     <string name="practise_active">练习(进行中)</string>
 
     <!-- common -->
-    <string name="network_error">网络连接失败</string>
+    <string name="network_error">网络连接失败。请确认您已经连接到NJU-WLAN，以及老师端已经启动。</string>
     <string name="commit">提交</string>
     <string name="commit_success">提交成功</string>
 

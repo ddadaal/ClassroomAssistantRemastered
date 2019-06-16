@@ -140,3 +140,7 @@
 .jfx-spinner .track {
     -fx-stroke: #d0d0d0;
 }
+
+.choice-bar .chart-bar{
+    -fx-translate-y: 30px;
+}

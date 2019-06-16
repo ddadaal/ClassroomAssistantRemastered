@@ -10,6 +10,7 @@ class MainCss : Stylesheet() {
         val exteriorLine by cssclass()
         val chartBar by cssclass()
         val noTextSpinner by cssclass()
+        val homeTable by cssclass()
         val `icons-badge` by cssclass()
         val `badge-pane` by cssclass()
     }
@@ -24,10 +25,13 @@ class MainCss : Stylesheet() {
             barFill = c("#5264AE")
         }
 
-        noTextSpinner{
-            text{
-                visibility=FXVisibility.HIDDEN
+        noTextSpinner {
+            text {
+                visibility = FXVisibility.HIDDEN
             }
+        }
+        homeTable {
+
         }
 
         `icons-badge` {
@@ -45,5 +49,10 @@ class MainCss : Stylesheet() {
                 textFill = Color.WHITE
             }
         }
+
+
+
+
+
     }
 }
