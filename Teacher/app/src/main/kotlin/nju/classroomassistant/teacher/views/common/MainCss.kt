@@ -8,6 +8,7 @@ class MainCss : Stylesheet() {
         val exteriorLine by cssclass()
         val chartBar by cssclass()
         val noTextSpinner by cssclass()
+        val homeTable by cssclass()
     }
 
     init {
@@ -20,10 +21,13 @@ class MainCss : Stylesheet() {
             barFill = c("#5264AE")
         }
 
-        noTextSpinner{
-            text{
-                visibility=FXVisibility.HIDDEN
+        noTextSpinner {
+            text {
+                visibility = FXVisibility.HIDDEN
             }
+        }
+        Companion.homeTable {
+
         }
 
     }

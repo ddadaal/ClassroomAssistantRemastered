@@ -9,6 +9,7 @@ import javafx.scene.text.TextAlignment
 import kfoenix.jfxbutton
 import kfoenix.jfxspinner
 import nju.classroomassistant.shared.messages.exercise.ExerciseEndMessage
+import nju.classroomassistant.shared.messages.exercise.type.ChoiceExerciseType
 import nju.classroomassistant.teacher.extensions.asLargeAsPossible
 import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.network.Server
@@ -82,6 +83,10 @@ class CollectingView : View("Collecting View") {
         // 结束本session，通知所有客户端
         GlobalVariables.exerciseSession?.finish()
   //      Server.writeToAllStudentsAsync(ExerciseEndMessage())
-        controller.to<ResultView>()
+        if(GlobalVariables.exerciseSession.exercise is ChoiceExerciseType){
+            controller.to<ChoiceResultView>()
+        }else{
+            controller.to<ResultView>()
+        }
     }
 }
