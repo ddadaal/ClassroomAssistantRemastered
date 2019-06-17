@@ -17,6 +17,7 @@
     <string name="quit_login">登出</string>
 
     <!-- main -->
+    <string name="main_title">主页</string>
     <string name="question">提问</string>
     <string name="discussion_inactive">讨论</string>
     <string name="discussion_active">参与讨论</string>

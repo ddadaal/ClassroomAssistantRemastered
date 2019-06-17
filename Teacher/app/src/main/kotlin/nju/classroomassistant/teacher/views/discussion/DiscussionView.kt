@@ -91,11 +91,11 @@ class DiscussionView : View("讨论") {
                 })
 
                 cellFormat {
-                    graphic = cache {
-                        label("[${it.nickname}] ${it.content}") {
-                            fontProperty().bind(fontBinding)
-                        }
-                    }
+                    graphic =
+                            label("[${it.nickname}] ${it.content}") {
+                                fontProperty().bind(fontBinding)
+                            }
+
                 }
 
 //                style {

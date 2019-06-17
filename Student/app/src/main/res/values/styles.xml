@@ -1,36 +1,47 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme1" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppThemeQuestion" parent="Theme.AppCompat.Light.DarkActionBar">
 
         <item name="android:windowNoTitle">true</item>    
-        <item name="android:windowFullscreen">true</item>   
+        <item name="android:windowFullscreen">false</item>   
         <item name="android:windowIsTranslucent">true</item>
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorRed</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorRed</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme2" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppThemeDiscussion" parent="Theme.AppCompat.Light.DarkActionBar">
 
         <item name="android:windowNoTitle">true</item>    
-        <item name="android:windowFullscreen">true</item>   
+        <item name="android:windowFullscreen">false</item>   
         <item name="android:windowIsTranslucent">true</item>
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorOrange</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorOrange</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme3" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppThemePractiseActivity" parent="Theme.AppCompat.Light.DarkActionBar">
 
         <item name="android:windowNoTitle">true</item>    
-        <item name="android:windowFullscreen">true</item>   
+        <item name="android:windowFullscreen">false</item>   
         <item name="android:windowIsTranslucent">true</item>
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorYellow</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorYellow</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppThemeHome" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="android:windowNoTitle">true</item>    
+        <item name="android:windowFullscreen">false</item>   
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorRedder</item>
+        <item name="colorPrimaryDark">@color/colorRedder</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 

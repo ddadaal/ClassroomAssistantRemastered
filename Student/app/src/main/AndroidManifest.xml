@@ -10,13 +10,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true">
         <activity android:name=".ui.question.QuestionActivity"
-            android:theme="@style/AppTheme1"></activity>
+            android:theme="@style/AppThemeQuestion"></activity>
         <activity android:name=".ui.discussion.DiscussionActivity"
-            android:theme="@style/AppTheme2"/>
+            android:theme="@style/AppThemeDiscussion"/>
         <activity android:name=".ui.practise.PractiseActivity"
-            android:theme="@style/AppTheme3"/>
+            android:theme="@style/AppThemePractiseActivity"/>
         <activity android:name=".ui.main.MainActivity"
-            android:theme="@style/FullSceneTheme">
+            android:theme="@style/AppThemeHome">
 
         </activity>
         <activity
