@@ -9,6 +9,7 @@ import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMe
 import nju.classroomassistant.shared.messages.exercise.answer.ExerciseAnswer
 import nju.classroomassistant.shared.messages.exercise.type.ExerciseType
 import nju.classroomassistant.teacher.models.CourseInfo
+import nju.classroomassistant.teacher.models.TeacherInfo
 import nju.classroomassistant.teacher.network.session.DiscussionSession
 import nju.classroomassistant.teacher.network.session.ExerciseSession
 import nju.classroomassistant.teacher.network.session.QuestionSession
@@ -26,7 +27,7 @@ import kotlin.properties.Delegates
 object GlobalVariables {
 
     // 登录信息
-    val teacherId = SimpleStringProperty()
+    val teacherInfo = SimpleObjectProperty<TeacherInfo>()
     val course = SimpleObjectProperty<CourseInfo>()
 
     // 练习信息

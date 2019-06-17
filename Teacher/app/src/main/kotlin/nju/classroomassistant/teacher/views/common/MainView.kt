@@ -1,5 +1,6 @@
 package nju.classroomassistant.teacher.views.common
 
+import com.jfoenix.controls.JFXBadge
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXDialog
 import com.jfoenix.controls.JFXDialogLayout
@@ -10,19 +11,23 @@ import javafx.animation.Animation
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
 import javafx.beans.binding.Binding
+import javafx.beans.binding.IntegerBinding
 import javafx.beans.property.SimpleObjectProperty
 import javafx.event.EventHandler
+import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.ContentDisplay
 import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
-import javafx.scene.layout.BackgroundRepeat
 import javafx.scene.layout.BorderPane
+import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
-import javafx.scene.text.FontWeight
+import javafx.stage.StageStyle
 import javafx.util.Duration
+import kfoenix.jfxbadge
 import kfoenix.jfxbutton
 import kfoenix.jfxsnackbar
 import nju.classroomassistant.teacher.extensions.PageController
@@ -30,11 +35,11 @@ import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
 import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.network.Server
-import nju.classroomassistant.teacher.util.executeLater
 import nju.classroomassistant.teacher.views.about.AboutViewController
 import nju.classroomassistant.teacher.views.discussion.DiscussionController
 import nju.classroomassistant.teacher.views.exercise.ExerciseController
 import nju.classroomassistant.teacher.views.home.HomeController
+import nju.classroomassistant.teacher.views.question.NotificationDialog
 import nju.classroomassistant.teacher.views.question.QuestionController
 import tornadofx.*
 import java.time.LocalDateTime
@@ -50,7 +55,7 @@ enum class Page(val controller: KClass<out PageController>, val title: String) {
 }
 
 const val HEADER_HEIGHT = 64.0
-const val CONTENT_MAX_WIDTH = 900.0
+const val CONTENT_MAX_WIDTH = 800.0
 
 
 class MainView : View() {
@@ -77,9 +82,9 @@ class MainView : View() {
         }
     }
 
-    fun navItem(text: String, icon: MaterialIcon, targetPage: Page): JFXButton {
-        return jfxbutton(text) {
+    fun navItem(text: String, icon: MaterialIcon, targetPage: Page, tipBinding: IntegerBinding? = null): Node {
 
+        val button = JFXButton(text).apply {
             prefHeight = HEADER_HEIGHT
             paddingHorizontal = 32.0
 
@@ -92,6 +97,27 @@ class MainView : View() {
 
             setOnAction { currentPageProperty.set(targetPage) }
         }
+
+        if (tipBinding == null) {
+            return button
+        } else {
+            return JFXBadge().apply {
+                textProperty().bind(tipBinding.stringBinding { "$it"})
+
+                setEnabled(tipBinding.get() > 0)
+
+                tipBinding.addListener { _, _, newValue ->
+                    setEnabled(newValue.toInt() > 0)
+                    refreshBadge()
+                }
+
+                addClass(MainCss.`icons-badge`)
+
+                control = button
+            }
+        }
+
+
     }
 
     fun navItem(text: String, icon: MaterialIcon, onClick: () -> Unit): JFXButton {
@@ -122,23 +148,12 @@ class MainView : View() {
 
     override val root = stackpane {
 
+        addClass(MainCss.exteriorLine)
+
         closeDialog = JFXDialog()
         closeDialog.content = JFXDialogLayout().apply {
-            heading += label("确定要导出课堂信息、下课并退出吗？") {
-                font = Font(18.0)
-
-                style {
-                    fontWeight = FontWeight.BOLD
-                }
-            }
-            actions += jfxbutton("取消") {
-
-                ripplerFill = Color.ALICEBLUE
-
-                setOnAction { closeDialog.close() }
-                graphic = MaterialIconView(MaterialIcon.CLOSE, "24")
-                font = Font(18.0)
-
+            heading += label("确定要导出课堂信息到桌面、下课并退出吗？") {
+                font = Font(16.0)
             }
             actions += jfxbutton("确定") {
 
@@ -146,10 +161,20 @@ class MainView : View() {
 
                 addClass("dialog-accept")
                 setOnAction { exit() }
-                graphic = MaterialIconView(MaterialIcon.EXIT_TO_APP, "24")
-                font = Font(18.0)
+                graphic = MaterialIconView(MaterialIcon.EXIT_TO_APP, "20")
+                font = Font(16.0)
 
             }
+            actions += jfxbutton("取消") {
+
+                ripplerFill = Color.ALICEBLUE
+
+                setOnAction { closeDialog.close() }
+                graphic = MaterialIconView(MaterialIcon.CLOSE, "20")
+                font = Font(16.0)
+
+            }
+
         }
 
 
@@ -163,7 +188,7 @@ class MainView : View() {
             top = hbox {
 
                 alignment = Pos.CENTER
-
+                JFXDepthManager.setDepth(this, DEPTH)
 
                 style {
                     backgroundColor += c("#232e5f")
@@ -196,7 +221,7 @@ class MainView : View() {
 
                         this += navItem("主页", MaterialIcon.HOME, Page.HOME)
 
-                        this += navItem("提问", MaterialIcon.PAN_TOOL, Page.QUESTION)
+                        this += navItem("提问", MaterialIcon.PAN_TOOL, Page.QUESTION, GlobalVariables.questionSession.questionList.sizeProperty)
 
 
                         this += navItem("讨论", MaterialIcon.COMMENT, Page.DISCUSSION)
@@ -280,6 +305,7 @@ class MainView : View() {
 
                         contentPane = vbox {
 
+                            JFXDepthManager.setDepth(this, DEPTH)
 
                             this += find(find(Page.HOME.controller).view)
 
@@ -300,6 +326,7 @@ class MainView : View() {
 
                 bottom = hbox {
 
+                    JFXDepthManager.setDepth(this, DEPTH)
 
                     alignment = Pos.CENTER
 
@@ -335,10 +362,6 @@ class MainView : View() {
 
         primaryStage.makeResizeable()
 
-        JFXDepthManager.setDepth(contentPane, DEPTH)
-        JFXDepthManager.setDepth(rootPane.bottom, DEPTH)
-        JFXDepthManager.setDepth(rootPane.top, DEPTH)
-
         (btnMaximize.graphic as MaterialIconView).glyphNameProperty().bind(primaryStage.maximizedProperty().stringBinding {
             if (it == true) {
                 MaterialIcon.KEYBOARD_ARROW_DOWN.name
@@ -362,6 +385,11 @@ class MainView : View() {
 
         }
 
+        // register notification open
+        GlobalVariables.questionSession.openNotificationDialog = {
+            find<NotificationDialog>(NotificationDialog::questionItem to it).openWindow(StageStyle.TRANSPARENT)
+        }
+
 
 //         TIME
         val timeline = Timeline(
@@ -370,8 +398,8 @@ class MainView : View() {
         )
         timeline.cycleCount = Animation.INDEFINITE
         timeline.play()
-
     }
+
 
     fun inFrontOf(page1: Page, page2: Page): Boolean {
         return Page.values().indexOf(page1) - Page.values().indexOf(page2) < 0

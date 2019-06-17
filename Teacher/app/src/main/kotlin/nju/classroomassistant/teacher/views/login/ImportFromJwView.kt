@@ -16,10 +16,8 @@ import kfoenix.jfxpasswordfield
 import kfoenix.jfxtextfield
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
-import nju.classroomassistant.teacher.models.CourseInfo
 import nju.classroomassistant.teacher.network.GlobalVariables
-import nju.classroomassistant.teacher.repository.CourseInfoRepository
-import nju.classroomassistant.teacher.repository.TeacherIdHistoryRepository
+import nju.classroomassistant.teacher.repository.TeacherInfoRepository
 import nju.classroomassistant.teacher.services.LoginService
 import nju.classroomassistant.teacher.util.executeLater
 import tornadofx.*
@@ -49,7 +47,7 @@ class ImportFromJwView : View("从教务网导入") {
         primaryStage.makeResizeable()
         primaryStage.makeDraggable(root)
 
-        idProperty.set(GlobalVariables.teacherId.get())
+        idProperty.set(GlobalVariables.teacherInfo.get().teacherId)
         passwordProperty.set("")
         passwordField.requestFocus()
     }
@@ -64,8 +62,8 @@ class ImportFromJwView : View("从教务网导入") {
         requestingProperty.set(true)
 
         // mock
-        CourseInfoRepository.data[GlobalVariables.teacherId.get()] = ArrayList(LoginService.importFromJw(idProperty.get(), passwordProperty.get()))
-        CourseInfoRepository.save()
+        GlobalVariables.teacherInfo.get().courses = ArrayList(LoginService.importFromJw(idProperty.get(), passwordProperty.get()))
+        TeacherInfoRepository.save()
 
 
         executeLater(500) {

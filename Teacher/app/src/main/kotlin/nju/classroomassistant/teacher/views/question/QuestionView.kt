@@ -24,6 +24,7 @@ import javafx.scene.control.Button
 import javafx.scene.layout.AnchorPane
 import javafx.stage.Stage
 import nju.classroomassistant.teacher.network.session.QuestionItem
+import java.time.format.DateTimeFormatter
 
 
 class QuestionView : View("提问") {
@@ -37,10 +38,6 @@ class QuestionView : View("提问") {
             "159.714-58.857 220.286 58.857 220.286 159.714 159.714 220.286 58.857 " +
             "220.286-58.857 159.714-159.714 58.857-220.286z"
 
-    fun deleteQuestion(questionItem: QuestionItem) {
-        session.questionList.remove(questionItem)
-    }
-
     override val root = borderpane {
 
         asLargeAsPossible()
@@ -48,6 +45,8 @@ class QuestionView : View("提问") {
         center = jfxlistview(session.questionList) {
             println("question list is ${session.questionList}")
             paddingAll = 20.0
+
+            placeholder = label("暂时没有问题。")
 
             cellFormat {
                 graphic = cache(it) {
@@ -59,30 +58,27 @@ class QuestionView : View("提问") {
                         }
 
                         onDoubleClick {
-
-                            find<DialogFragment>(mapOf(
-                                    DialogFragment::questionItem to it,
-                                    DialogFragment::delete to this@QuestionView::deleteQuestion
-                            )).openWindow(StageStyle.TRANSPARENT)
+                            find<DialogFragment>(DialogFragment::questionItem to it).openWindow(StageStyle.TRANSPARENT)
                         }
 
                         // Show student id and question's content
-                        form {
-                            fieldset {
-                                field("学生") {
-                                    label(it.studentNickname)
-                                }
+                        vbox {
 
-                                field("问题") {
-                                    label(it.content) {
-                                        style {
-                                            fontSize = 18.px
-                                            fontWeight = FontWeight.BOLD
-                                        }
-                                    }
+                            paddingAll = 8.0
+
+                            spacing = 8.0
+
+                            label("${it.studentNickname} 于 ${it.simpleTime} 提出问题：") {
+
+                            }
+                            label(it.content) {
+                                style {
+                                    fontSize = 18.px
+                                    fontWeight = FontWeight.BOLD
                                 }
                             }
                         }
+
 
                         // Delete button
                         jfxbutton(btnType = JFXButton.ButtonType.RAISED) {
@@ -101,7 +97,6 @@ class QuestionView : View("提问") {
                             graphic = glyph
 
                             action {
-                                println("Current cell index is $index")
                                 session.questionList.removeAt(index)
                             }
 
@@ -114,8 +109,8 @@ class QuestionView : View("提问") {
                     }
                 }
             }
-
         }
+
 
         bottom = hbox {
             spacing = 10.0
@@ -125,7 +120,7 @@ class QuestionView : View("提问") {
                 text = "启用提问实时提醒"
                 alignment = Pos.CENTER
                 prefHeight = 30.0
-                session.isNotificationOpen.bind(selectedProperty())
+                selectedProperty().bindBidirectional(session.isNotificationOpen)
             }
 
             jfxbutton("清空", JFXButton.ButtonType.RAISED) {
