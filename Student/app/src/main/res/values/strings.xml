@@ -19,9 +19,9 @@
     <!-- main -->
     <string name="question">提问</string>
     <string name="discussion_inactive">讨论</string>
-    <string name="discussion_active">讨论(进行中)</string>
+    <string name="discussion_active">参与讨论</string>
     <string name="practise_inactive">练习</string>
-    <string name="practise_active">练习(进行中)</string>
+    <string name="practise_active">做练习</string>
 
     <!-- common -->
     <string name="network_error">网络连接失败。请确认您已经连接到NJU-WLAN，以及老师端已经启动。</string>

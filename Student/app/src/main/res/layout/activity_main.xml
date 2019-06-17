@@ -6,36 +6,42 @@
     <Button
         android:id="@+id/question"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:background="@drawable/button_bg"
         android:textSize="24sp"
         android:gravity="center"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="96dp"
-        android:layout_marginEnd="48dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="24dp"
+        android:layout_height="100dp"
         android:text="@string/question" />
 
     <Button
         android:id="@+id/discussion"
         android:layout_width="match_parent"
+        android:background="@drawable/button_bg"
         android:enabled="false"
         android:text="@string/discussion_inactive"
         android:textSize="24sp"
         android:gravity="center"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="96dp"
-        android:layout_marginEnd="48dp"
-        android:layout_height="wrap_content" />
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="24dp"
+        android:layout_height="100dp" />
 
     <Button
         android:id="@+id/practise"
         android:enabled="false"
         android:text="@string/practise_inactive"
+        android:background="@drawable/button_bg"
         android:layout_width="match_parent"
         android:textSize="24sp"
         android:gravity="center"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="96dp"
-        android:layout_marginEnd="48dp"
-        android:layout_height="wrap_content" />
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="24dp"
+        android:layout_height="100dp" />
 
 </LinearLayout>
