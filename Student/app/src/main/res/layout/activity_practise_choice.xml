@@ -3,70 +3,65 @@
     android:layout_height="match_parent"
     android:id="@+id/practise_choice_layout">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <CheckBox
+        android:id="@+id/choice_a"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="48dp"
+        android:textSize="24sp"
+        android:text="@string/a"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <CheckBox
-            android:id="@+id/choice_a"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="48dp"
-            android:textSize="24sp"
-            android:text="@string/a"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />
 
-        <CheckBox
-            android:id="@+id/choice_b"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="48dp"
-            android:textSize="24sp"
-            android:text="@string/b"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/choice_b"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="48dp"
+        android:textSize="24sp"
+        android:text="@string/b"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <CheckBox
-            android:id="@+id/choice_c"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="48dp"
-            android:textSize="24sp"
-            android:text="@string/c"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/choice_c"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="48dp"
+        android:textSize="24sp"
+        android:text="@string/c"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <CheckBox
-            android:id="@+id/choice_d"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="48dp"
-            android:textSize="24sp"
-            android:text="@string/d"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/choice_d"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="48dp"
+        android:textSize="24sp"
+        android:text="@string/d"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <CheckBox
-            android:id="@+id/choice_e"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="48dp"
-            android:textSize="24sp"
-            android:text="@string/e"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/choice_e"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="48dp"
+        android:textSize="24sp"
+        android:text="@string/e"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <CheckBox
-            android:id="@+id/choice_f"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="48dp"
-            android:textSize="24sp"
-            android:text="@string/f"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+    <CheckBox
+        android:id="@+id/choice_f"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="48dp"
+        android:textSize="24sp"
+        android:text="@string/f"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/submit_choice"

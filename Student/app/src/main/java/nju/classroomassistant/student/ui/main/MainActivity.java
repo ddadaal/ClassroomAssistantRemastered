@@ -79,9 +79,11 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (aBoolean == null || !aBoolean) {
                     practiseButton.setEnabled(false);
+       //             practiseButton.setBackgroundColor(getColor(R.color.colorGray));
                     practiseButton.setText(R.string.practise_inactive);
                 } else {
                     practiseButton.setEnabled(true);
+        //            practiseButton.setBackgroundColor(getColor(R.color.colorYellow));
                     practiseButton.setText(R.string.practise_active);
                 }
 

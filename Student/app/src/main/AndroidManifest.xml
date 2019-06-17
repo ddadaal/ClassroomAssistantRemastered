@@ -8,15 +8,20 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".ui.practise.PractiseActivity"></activity>
-        <activity android:name=".ui.discussion.DiscussionActivity" />
-        <activity android:name=".ui.question.QuestionActivity" />
-        <activity android:name=".ui.main.MainActivity" />
+        android:supportsRtl="true">
+        <activity android:name=".ui.question.QuestionActivity"
+            android:theme="@style/AppTheme1"></activity>
+        <activity android:name=".ui.discussion.DiscussionActivity"
+            android:theme="@style/AppTheme2"/>
+        <activity android:name=".ui.practise.PractiseActivity"
+            android:theme="@style/AppTheme3"/>
+        <activity android:name=".ui.main.MainActivity"
+            android:theme="@style/FullSceneTheme">
+
+        </activity>
         <activity
             android:name=".ui.login.LoginActivity"
-            android:theme="@style/LoginTheme">
+            android:theme="@style/FullSceneTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

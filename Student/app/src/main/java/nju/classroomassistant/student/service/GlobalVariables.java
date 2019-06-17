@@ -1,6 +1,8 @@
 package nju.classroomassistant.student.service;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.util.Log;
+
 import nju.classroomassistant.shared.messages.exercise.answer.ExerciseAnswer;
 import nju.classroomassistant.shared.messages.exercise.type.ChoiceExerciseType;
 import nju.classroomassistant.shared.messages.exercise.type.ExerciseType;
@@ -67,6 +69,14 @@ public class GlobalVariables {
 
     static void setExercise(ExerciseType exerciseType) {
         exercise = exerciseType;
+        if (exercise == null)
+            return;
+        if (exercise instanceof FillBlankExerciseType) {
+            Log.d(GlobalVariables.class.getName(), "setExercise: fill blank" );
+        }
+        if (exercise instanceof ChoiceExerciseType) {
+            Log.d(GlobalVariables.class.getName(), "setExercise: choice " + ((ChoiceExerciseType) exerciseType).getOptionsCount() );
+        }
     }
 
     public static void setExerciseAnswer(ExerciseAnswer exerciseAnswer) {

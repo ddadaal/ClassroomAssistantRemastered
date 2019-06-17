@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="true">
+        <shape >
+
+            <corners
+                android:bottomLeftRadius="7dp"
+                android:bottomRightRadius="7dp"
+                android:topLeftRadius="7dp"
+                android:topRightRadius="7dp" />
+
+
+            <!-- 设置填充颜色 -->
+            <solid android:color="@color/colorRed" />
+            <stroke
+                android:width="0.5dp"
+                android:color="#FFFFFF"/>
+        </shape>
+    </item>
+    <item android:state_enabled="false">
+        <shape >
+
+            <corners
+                android:bottomLeftRadius="7dp"
+                android:bottomRightRadius="7dp"
+                android:topLeftRadius="7dp"
+                android:topRightRadius="7dp" />
+
+
+            <!-- 设置填充颜色 -->
+            <solid android:color="@color/colorGray" />
+            <stroke
+                android:width="0.5dp"
+                android:color="#FFFFFF"/>
+        </shape>
+    </item>
+</selector>
