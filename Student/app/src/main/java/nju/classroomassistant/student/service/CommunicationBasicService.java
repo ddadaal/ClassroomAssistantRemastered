@@ -90,6 +90,7 @@ public class CommunicationBasicService {
             connected = true;
         } catch (IOException e) {
             e.printStackTrace();
+            connected = false;
         }
 
     }
@@ -148,6 +149,9 @@ public class CommunicationBasicService {
     public LoginResponseMessage.Response login(String username) {
         if (!isConnected())
             tryConnect();
+
+        if (!isConnected())
+            return LoginResponseMessage.Response.ERROR;
 
         LoginMessage loginMessage = new LoginMessage(username);
         try {
