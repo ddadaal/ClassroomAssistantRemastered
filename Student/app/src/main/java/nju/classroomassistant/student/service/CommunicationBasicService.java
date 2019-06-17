@@ -83,7 +83,7 @@ public class CommunicationBasicService {
     public void tryConnect() {
         try {
             socket = new Socket();
-            socket.connect(new InetSocketAddress("10.0.2.2", Config.PORT), 3000);
+            socket.connect(new InetSocketAddress("10.0.2.2", Config.PORT), 9000);
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
             connected = true;

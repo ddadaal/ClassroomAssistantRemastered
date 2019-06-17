@@ -25,6 +25,7 @@ class TeacherApp: App(LoginCommonView::class, MainCss::class){
         provider.register(KeyStroke.getKeyStroke("control H")) {
 
             runLater {
+                stage.isIconified = false
                 stage.isAlwaysOnTop = true
                 stage.requestFocus()
                 stage.isAlwaysOnTop = false

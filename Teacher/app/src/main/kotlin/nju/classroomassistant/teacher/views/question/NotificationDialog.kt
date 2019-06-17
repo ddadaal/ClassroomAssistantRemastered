@@ -11,7 +11,9 @@ import javafx.scene.layout.CornerRadii
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.stage.Screen
+import javafx.stage.Stage
 import javafx.stage.StageStyle
+import javafx.stage.Window
 import kfoenix.jfxbutton
 import nju.classroomassistant.teacher.extensions.makeDraggable
 import nju.classroomassistant.teacher.extensions.makeResizeable
@@ -19,10 +21,13 @@ import nju.classroomassistant.teacher.extensions.shadowedstackpane
 import nju.classroomassistant.teacher.network.GlobalVariables
 import nju.classroomassistant.teacher.network.session.QuestionItem
 import nju.classroomassistant.teacher.util.executeLater
+import nju.classroomassistant.teacher.views.common.MainView
+import nju.classroomassistant.teacher.views.common.Page
 import tornadofx.*
 import java.time.format.DateTimeFormatter
 
-class NotificationDialog: Fragment() {
+class NotificationDialog : Fragment() {
+
     override fun onDock() {
 
         // show at the right top corner
@@ -47,14 +52,26 @@ class NotificationDialog: Fragment() {
 
     val questionItem: QuestionItem by param()
 
+
+    val mainView: MainView by inject()
+
     override val root = shadowedstackpane {
 
         this += JFXDialogLayout().apply {
 
             setOnMouseClicked {
-                find<DialogFragment>(DialogFragment::questionItem to questionItem).openWindow(StageStyle.TRANSPARENT)
+
+
+                mainView.currentStage?.let {
+                    find<DialogFragment>(DialogFragment::questionItem to questionItem).openWindow(StageStyle.TRANSPARENT, owner = Stage())
+                    if (!it.isIconified) {
+                        mainView.currentPageProperty.set(Page.QUESTION)
+                    }
+                }
+
                 close()
             }
+
 
             style {
                 background = Background(BackgroundFill(Color.rgb(255, 255, 255, 1.0), null, null))

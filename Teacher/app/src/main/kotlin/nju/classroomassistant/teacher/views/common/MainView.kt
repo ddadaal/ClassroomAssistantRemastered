@@ -62,7 +62,7 @@ class MainView : View() {
 
     private val DEPTH = 3
 
-    private val currentPageProperty = SimpleObjectProperty<Page>(Page.HOME)
+    val currentPageProperty = SimpleObjectProperty<Page>(Page.HOME)
 
     private var btnMaximize by singleAssign<JFXButton>()
 
