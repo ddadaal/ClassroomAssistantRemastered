@@ -25,6 +25,7 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
+import javafx.stage.FileChooser
 import javafx.stage.StageStyle
 import javafx.util.Duration
 import kfoenix.jfxbadge
@@ -42,8 +43,11 @@ import nju.classroomassistant.teacher.views.home.HomeController
 import nju.classroomassistant.teacher.views.question.NotificationDialog
 import nju.classroomassistant.teacher.views.question.QuestionController
 import tornadofx.*
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import javax.swing.filechooser.FileSystemView
 import kotlin.reflect.KClass
 
 enum class Page(val controller: KClass<out PageController>, val title: String) {
@@ -102,7 +106,7 @@ class MainView : View() {
             return button
         } else {
             return JFXBadge().apply {
-                textProperty().bind(tipBinding.stringBinding { "$it"})
+                textProperty().bind(tipBinding.stringBinding { "$it" })
 
                 setEnabled(tipBinding.get() > 0)
 
@@ -406,7 +410,14 @@ class MainView : View() {
     }
 
     fun export() {
-        val filename = "${GlobalVariables.course.get().courseName}-${LocalDateTime.now()}.xlsx"
+        val filename = "${GlobalVariables.course.get().courseName}-${LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-dd HHmmss"))}.xlsx"
+
+        var path = "${FileSystemView.getFileSystemView().homeDirectory}/$filename"
+
+        resources.stream("/xlsx/export.xlsx").use {
+            Files.copy(it, Paths.get(path));
+        }
+
         jfxsnackbar("已导出课堂信息到桌面：$filename", root)
     }
 }
