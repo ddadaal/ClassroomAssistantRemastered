@@ -31,12 +31,13 @@ class ChoiceResultView : View("My View") {
     val controller: ExerciseController by inject()
 
     override fun onDock() {
-        val numbers = arrayListOf(9,20,15,3,5,10)
+        val numbers = arrayListOf(8, 4, 2, 20, 1, 5)
 
         GlobalVariables.exerciseSession.exercise?.let {
             with (it as ChoiceExerciseType) {
                 data.clear()
-                for( i in it.optionsCount-1 downTo 0){
+
+                for(i in it.optionsCount-1 downTo 0){
                     data.add(XYChart.Data(numbers[i],('A'+i)+""))
                 }
             }

@@ -23,11 +23,11 @@ import kotlin.reflect.KCallable
 
 class ResultView : View("My View") {
     val resultMap = mapOf<String, Number>(
-            "3" to 2,
-            "8" to 4,
-            "6" to 5,
-            "4" to 10,
-            "5" to 50
+            " 3 " to 2,
+            " 8 " to 4,
+            " 6 " to 5,
+            " 4 " to 10,
+            " 5 " to 50
     )
 
     val controller: ExerciseController by inject()
@@ -50,7 +50,7 @@ class ResultView : View("My View") {
             cssclass()
 
             style {
-                //                tickLabelFont = Font.font(14.0)
+                                tickLabelFont = Font.font(14.0)
 //                tickLength=0.px
             }
 

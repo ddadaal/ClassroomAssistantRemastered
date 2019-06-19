@@ -39,6 +39,7 @@
     <string name="question_hint">输入您的问题</string>
     <string name="discussion_hint">输入您的看法</string>
     <string name="practise_hint">输入您的答案</string>
+    <string name="submit_remainder">提交后不可修改，请谨慎回答。</string>
 
     <!-- 讨论 -->
     <string name="discussion_finish">讨论已结束</string>
