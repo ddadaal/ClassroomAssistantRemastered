@@ -125,7 +125,7 @@ class DiscussionView : View("讨论") {
                         if (it == true) {
                             "结束"
                         } else {
-                            "开始"
+                            "开始新的讨论"
                         }
                     },
                     btnType = JFXButton.ButtonType.RAISED

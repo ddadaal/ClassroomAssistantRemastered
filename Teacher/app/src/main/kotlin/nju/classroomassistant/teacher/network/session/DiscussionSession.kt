@@ -19,6 +19,7 @@ class DiscussionSession {
     var discussionItems = ArrayList<DiscussionItem>().observable()
 
     fun start() {
+        discussionItems.clear()
         started.set(true)
         title.set("讨论${discussionCount++}")
         Server.writeToAllStudentsAsync(DiscussionStartMessage())
@@ -26,7 +27,6 @@ class DiscussionSession {
 
     fun stop() {
         started.set(false)
-        discussionItems.clear()
         Server.writeToAllStudentsAsync(DiscussionEndMessage())
     }
 
@@ -40,7 +40,7 @@ class DiscussionSession {
 
     fun add(studentItem: StudentItem, message: StudentSendDiscussionMessage) {
         runLater {
-            discussionItems.add(DiscussionItem(message, studentItem.studentId))
+            discussionItems.add(DiscussionItem(message, studentItem.nickname))
         }
     }
 }

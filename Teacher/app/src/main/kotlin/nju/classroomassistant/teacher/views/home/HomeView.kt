@@ -1,5 +1,6 @@
 package nju.classroomassistant.teacher.views.home
 
+import javafx.beans.binding.Bindings
 import javafx.geometry.Pos
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
@@ -7,12 +8,15 @@ import javafx.scene.text.TextAlignment
 import kfoenix.jfxspinner
 import nju.classroomassistant.teacher.extensions.PageController
 import nju.classroomassistant.teacher.extensions.asLargeAsPossible
+import nju.classroomassistant.teacher.network.GlobalVariables
+import nju.classroomassistant.teacher.network.Server
 import nju.classroomassistant.teacher.views.question.DialogFragment
 import tornadofx.*
+import java.util.concurrent.Callable
 
 class HomeView : View() {
     override val root = stackpane {
-//        maxWidth = 400.0
+        //        maxWidth = 400.0
 //        maxHeight = 400.0
 
         asLargeAsPossible()
@@ -34,13 +38,18 @@ class HomeView : View() {
 
             vbox {
 
-                jfxspinner() {
-                    progress = 0.7
+                jfxspinner {
+                    progressProperty().bind(
+                            Bindings.createDoubleBinding(Callable {
+                                Server.studentMap.size / GlobalVariables.course.get().studentList.size.toDouble()
+                            }, Server.studentMap.studentMapObservable, GlobalVariables.course))
                     setPrefSize(150.0, 150.0)
                     addClass("no-text-spinner")
                 }
                 vbox {
-                    label("140 / 200") {
+                    label(Bindings.createStringBinding(Callable {
+                        "${Server.studentMap.size} / ${GlobalVariables.course.get().studentList.size}"
+                    }, Server.studentMap.studentMapObservable, GlobalVariables.course)) {
                         font = Font.font(16.0)
                     }
                     label("出勤") {

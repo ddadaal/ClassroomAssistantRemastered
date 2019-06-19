@@ -52,7 +52,9 @@ class DialogFragment : Fragment("My Fragment") {
 
             setHeading(label("${questionItem.studentNickname} 于 ${questionItem.simpleTime} 提出了一个问题："))
 
-            setBody(label(questionItem.content))
+            setBody(label(questionItem.content) {
+                font = Font(24.0)
+            })
 
             setActions(
                     jfxbutton("关闭并删除问题") {

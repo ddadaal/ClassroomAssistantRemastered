@@ -81,7 +81,8 @@ class NotificationDialog : Fragment() {
 
             setHeading(label("${questionItem.studentNickname} 于 ${questionItem.simpleTime} 提出了一个问题："))
 
-            setBody(label(questionItem.abstract))
+            setBody(label(questionItem.content) {
+            })
 
             setActions(
                     jfxbutton("关闭实时提醒并关闭窗口") {
