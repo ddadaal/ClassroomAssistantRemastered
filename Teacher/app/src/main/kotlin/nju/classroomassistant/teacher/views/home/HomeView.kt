@@ -23,7 +23,7 @@ class HomeView : View() {
         vbox {
 
             alignment = Pos.CENTER
-            spacing = 20.0
+            spacing = 30.0
 
             stackpane() {
                 label("人机交互")

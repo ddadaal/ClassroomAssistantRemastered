@@ -22,14 +22,17 @@ class TeacherApp: App(LoginCommonView::class, MainCss::class){
         super.start(stage)
 
         val provider = Provider.getCurrentProvider(false)
-        provider.register(KeyStroke.getKeyStroke("control H")) {
+        provider.register(KeyStroke.getKeyStroke("alt H")) {
 
             runLater {
-                stage.isIconified = false
-                stage.isAlwaysOnTop = true
-                stage.requestFocus()
-                stage.isAlwaysOnTop = false
-
+                if (stage.isFocused) {
+                    stage.isIconified = true
+                } else {
+                    stage.isIconified = false
+                    stage.isAlwaysOnTop = true
+                    stage.requestFocus()
+                    stage.isAlwaysOnTop = false
+                }
             }
         }
     }

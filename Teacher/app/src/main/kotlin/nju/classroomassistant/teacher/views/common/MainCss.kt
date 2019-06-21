@@ -17,6 +17,9 @@ class MainCss : Stylesheet() {
         val `list-view` by cssclass()
         val `scroll-bar` by cssclass()
         val `horizontal` by csspseudoclass()
+        val blueSpinner by cssclass()
+        val arc by cssclass()
+        val thickArc by cssclass()
 
     }
 
@@ -73,6 +76,18 @@ class MainCss : Stylesheet() {
                     padding = box(0.px)
                 }
 
+            }
+        }
+
+        blueSpinner{
+            arc{
+                stroke=c("#5264AE")
+            }
+        }
+
+        thickArc{
+            arc{
+                strokeWidth =14.px
             }
         }
 

@@ -345,7 +345,7 @@ class MainView : View() {
                         maxWidth = CONTENT_MAX_WIDTH
                         prefWidth = CONTENT_MAX_WIDTH
 
-                        left = label("热键：Control H")
+                        left = label("热键：Alt H")
 
                         lbTime = label(GlobalVariables.currentTime.stringBinding { it?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")) })
 

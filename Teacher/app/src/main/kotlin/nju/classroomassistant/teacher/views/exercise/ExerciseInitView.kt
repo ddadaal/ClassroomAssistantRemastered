@@ -74,7 +74,7 @@ class ExerciseInitView : View("练习") {
             action {
                 publish()
             }
-            prefWidth = 300.0
+            prefWidth = 10000.0
             prefHeight = 30.0
 
             style {
@@ -84,7 +84,7 @@ class ExerciseInitView : View("练习") {
         }
 
 
-        maxWidth = 400.0
+        maxWidth = 300.0
 //        maxHeight = 400.0
         spacing = 40.0
 

@@ -5,6 +5,7 @@ import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.geometry.Pos
 import javafx.scene.paint.Color
+import javafx.scene.text.FontWeight
 import javafx.scene.text.TextAlignment
 import kfoenix.jfxbutton
 import kfoenix.jfxspinner
@@ -31,10 +32,6 @@ class CollectingView : View("Collecting View") {
 
         paddingAll = 16.0
 
-//        maxWidth = 400.0
-//        maxHeight = 500.0
-
-//        setPrefSize(1000.0, 1000.0)
 
         asLargeAsPossible()
 
@@ -43,7 +40,7 @@ class CollectingView : View("Collecting View") {
             right = label(Bindings.createStringBinding(Callable { "${session.answers.size} / ${Server.studentMap.size}"  },
                     session.answers, Server.studentMap.studentMapObservable))
             style {
-                fontSize = 16.px
+                fontSize = 20.px
             }
 
 
@@ -56,14 +53,13 @@ class CollectingView : View("Collecting View") {
             progressProperty().bind(Bindings.createDoubleBinding(Callable { session.answers.size.toDouble() / Server.studentMap.size },
                     session.answers, Server.studentMap.studentMapObservable))
             setPrefSize(200.0, 200.0)
-            addClass("blue-spinner")
+            addClass("blue-spinner","thick-arc")
 
             setMaxSize(300.0, 300.0)
         }
 
         bottom = hbox {
-            alignment = Pos.CENTER
-
+            alignment = Pos.TOP_CENTER
 
             jfxbutton("结束", JFXButton.ButtonType.RAISED) {
                 setOnAction {
@@ -75,6 +71,7 @@ class CollectingView : View("Collecting View") {
                 style {
                     backgroundColor += c("#D63333")
                     textFill = Color.WHITE
+                    fontSize=16.px
                 }
             }
         }
