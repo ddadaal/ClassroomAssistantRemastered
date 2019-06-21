@@ -1,5 +1,6 @@
 package nju.classroomassistant.teacher.views.common
 
+import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
@@ -13,6 +14,10 @@ class MainCss : Stylesheet() {
         val homeTable by cssclass()
         val `icons-badge` by cssclass()
         val `badge-pane` by cssclass()
+        val `list-view` by cssclass()
+        val `scroll-bar` by cssclass()
+        val `horizontal` by csspseudoclass()
+
     }
 
     init {
@@ -50,8 +55,33 @@ class MainCss : Stylesheet() {
             }
         }
 
+        `list-view` {
+            `scroll-bar` and horizontal {
+                incrementArrow {
+                    padding = box(0.px)
+                }
 
+                decrementArrow {
+                    padding = box(0.px)
+                }
 
+                incrementButton {
+                    padding = box(0.px)
+                }
+
+                decrementButton {
+                    padding = box(0.px)
+                }
+
+            }
+        }
+
+//                .list-view .scroll-bar:horizontal .increment-arrow,
+//        .list-view .scroll-bar:horizontal .decrement-arrow,
+//        .list-view .scroll-bar:horizontal .increment-button,
+//        .list-view .scroll-bar:horizontal .decrement-button {
+//            -fx-padding:0;
+//        }
 
 
 

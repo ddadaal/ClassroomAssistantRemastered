@@ -2,7 +2,9 @@ package nju.classroomassistant.student.ui.login;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,12 +24,21 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel viewModel;
 
+    private static final String AUTO_COMPLETE_KEY = "STUIDCOMPLETE";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
 
+        // get auto complete
+        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+
+
+//        // start finding the server
+//        NetworkSniffTask sniffTask = new NetworkSniffTask(getApplicationContext());
+//        sniffTask.execute();
 
         final EditText usernameEditText = findViewById(R.id.username);
         final Button loginButton = findViewById(R.id.login);
@@ -84,7 +95,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                viewModel.loginDataChanged(usernameEditText.getText().toString());
+                String username = usernameEditText.getText().toString();
+                viewModel.loginDataChanged(username);
             }
         };
 
@@ -93,10 +105,21 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String username = usernameEditText.getText().toString();
+                preferences.edit().putString(AUTO_COMPLETE_KEY, username).apply();
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                viewModel.login(usernameEditText.getText().toString());
+                viewModel.login(username);
+
             }
         });
+
+        String savedUsername = preferences.getString(AUTO_COMPLETE_KEY, null);
+        if (savedUsername != null) {
+            usernameEditText.setText(savedUsername);
+            viewModel.loginDataChanged(savedUsername);
+        }
+
+
 
     }
 }

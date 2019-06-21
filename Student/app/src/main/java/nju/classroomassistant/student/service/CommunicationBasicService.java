@@ -1,6 +1,7 @@
 package nju.classroomassistant.student.service;
 
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 
 import nju.classroomassistant.shared.Config;
@@ -10,6 +11,7 @@ import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage;
 import nju.classroomassistant.shared.messages.exercise.ExerciseEndMessage;
 import nju.classroomassistant.shared.messages.exercise.ExerciseStartMessage;
 import nju.classroomassistant.shared.messages.exercise.type.ExerciseType;
+import nju.classroomassistant.shared.messages.login.IsServerResponseMessage;
 import nju.classroomassistant.shared.messages.login.LoginMessage;
 import nju.classroomassistant.shared.messages.login.LoginResponseMessage;
 import nju.classroomassistant.shared.messages.login.LogoutMessage;
@@ -33,6 +35,20 @@ public class CommunicationBasicService {
 
     private final Handler handler = new Handler();
 
+    private String ip = "172.19.188.130";
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public Message readMessage() throws IOException, ClassNotFoundException {
+        return (Message) in.readObject();
+    }
+
     private Thread listener = new Thread(new Runnable() {
         @Override
         public void run() {
@@ -40,7 +56,7 @@ public class CommunicationBasicService {
             while (!terminated) {
                 try {
                     Log.i(CommunicationBasicService.class.getName(), "wait for message from server...");
-                    Message obj = (Message) in.readObject();
+                    Message obj = readMessage();
                     Log.i(CommunicationBasicService.class.getName(), obj.toString() + " " + "o98k");
                     // do something if success
                     handler.post(() -> {
@@ -62,7 +78,6 @@ public class CommunicationBasicService {
                         } else if (obj instanceof DiscussionStartMessage) {
                             GlobalVariables.setDiscussionState(true);
                         } else {
-                            // do nothing
                             Log.d(CommunicationBasicService.class.getName(), "" + obj);
                         }
                     });
@@ -83,7 +98,7 @@ public class CommunicationBasicService {
     public void tryConnect() {
         try {
             socket = new Socket();
-            socket.connect(new InetSocketAddress("10.0.2.2", Config.PORT), 9000);
+            socket.connect(new InetSocketAddress(ip, Config.PORT), 9000);
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
             connected = true;
@@ -107,7 +122,7 @@ public class CommunicationBasicService {
         return instance;
     }
 
-    public void start() {
+    private void start() {
         terminated = false;
         listener.start();
     }

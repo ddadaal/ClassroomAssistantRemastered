@@ -6,9 +6,7 @@ import nju.classroomassistant.shared.messages.discussion.DiscussionStartMessage
 import nju.classroomassistant.shared.messages.discussion.StudentSendDiscussionMessage
 import nju.classroomassistant.shared.messages.exercise.ExerciseStartMessage
 import nju.classroomassistant.shared.messages.exercise.ExerciseSubmitMessage
-import nju.classroomassistant.shared.messages.login.LoginMessage
-import nju.classroomassistant.shared.messages.login.LoginResponseMessage
-import nju.classroomassistant.shared.messages.login.LogoutMessage
+import nju.classroomassistant.shared.messages.login.*
 import nju.classroomassistant.shared.messages.raisequestion.NotificationSettingChangeMessage
 import nju.classroomassistant.shared.messages.raisequestion.StudentRaiseQuestionMessage
 import java.io.Closeable
@@ -75,6 +73,10 @@ class ConnectionHandler(val socketClient: Socket, val studentMap: StudentMap) : 
                             }
                         }
 
+                    }
+                    is IsServerMessage -> {
+                        verbose("Server confirmation request received.")
+                        writeMessage(IsServerResponseMessage())
                     }
                     is ExerciseSubmitMessage -> {
                         verbose("$student submits exercise answer")

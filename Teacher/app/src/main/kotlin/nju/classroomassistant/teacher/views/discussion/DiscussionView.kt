@@ -92,7 +92,8 @@ class DiscussionView : View("讨论") {
 
                 cellFormat {
                     graphic =
-                            label("[${it.nickname}] ${it.content}") {
+                            text("[${it.nickname}] ${it.content.trim()}") {
+                                wrappingWidthProperty().bind(this@jfxlistview.widthProperty().minus(12))
                                 fontProperty().bind(fontBinding)
                             }
 

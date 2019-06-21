@@ -32,6 +32,8 @@ public class GlobalVariables {
 
     private static MutableLiveData<Boolean> reminder;
 
+    private static MutableLiveData<Boolean> serverReady = new MutableLiveData<>();
+
     public static CommunicationBasicService getBasicService() {
         return basicService;
     }
@@ -45,6 +47,7 @@ public class GlobalVariables {
   //      inExercise.setValue(true);
         inExercise.setValue(false);
         exerciseAnswer = null;
+        serverReady.setValue(false);
     }
 
     public static void clear() {
@@ -101,6 +104,11 @@ public class GlobalVariables {
 
     public static void setInExercise(boolean inExercise) {
         GlobalVariables.inExercise.setValue(inExercise);
+    }
+
+    public static void setServerReady(boolean ready) {
+        System.out.println("Server found and ready. IP " + CommunicationBasicService.getInstance().getIp());
+        GlobalVariables.serverReady.setValue(ready);
     }
 
     public static MutableLiveData<Boolean> getInExercise() {
